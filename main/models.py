@@ -17,7 +17,7 @@ class Category(models.Model):
 
 class Month(models.Model):
     month = models.CharField(max_length=20, verbose_name=_("month"))
-    year = models.IntegerField(max_length=4, verbose_name=_("year"))
+    year = models.IntegerField(verbose_name=_("year"))
 
     def __str__(self):
         return " ".join((self.month, str(self.year)))
