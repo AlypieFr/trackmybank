@@ -1,9 +1,15 @@
 {% extends "base.html" %}
 {% load l10n %}
 {% load i18n %}
+{% load static %}
 {% block body %}
 
-    <p>Salut les nazes !</p>
-    <p>{{ view.data.mavar }}</p>
+    <div id="header-menu">
+    <p class="title">Track my bank!</p>
+    <div class="left">
+        <a href="/admin/" class="admin"></a>
+        <a href="/logout/" class="logout"></a>
+    </div>
+    </div>
 
 {% endblock %}

@@ -15,10 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.views.generic.base import RedirectView
+from django.contrib.auth.decorators import login_required
 
-from main.views import IndexView
+from main.views import IndexView, LogoutView
+
+favicon_view = RedirectView.as_view(url='/static/images/favicon.ico', permanent=True)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', IndexView.as_view(), name='login'),
+    url(r'^favicon\.ico$', favicon_view),
+    url(r'^logout/', login_required(LogoutView.as_view(), login_url="/admin/login/"), name='logout'),
+    url(r'^$', login_required(IndexView.as_view(), login_url="/admin/login/"), name='login'),
 ]

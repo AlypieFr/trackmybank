@@ -1,4 +1,6 @@
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
+from django.contrib.auth import logout
+from django.shortcuts import redirect
 
 
 class IndexView(TemplateView):
@@ -9,3 +11,10 @@ class IndexView(TemplateView):
         dat["mavar"] = "Ouais salut connard !"
 
         return dat
+
+
+class LogoutView(View):
+
+    def get(self, request):
+        logout(request)
+        return redirect("/")
