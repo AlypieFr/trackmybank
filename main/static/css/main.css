@@ -53,3 +53,44 @@ html, body {
     background: black url(/static/images/logout.svg) no-repeat 0 10px;
     background-size: 30px 30px;
 }
+
+.relative {
+    position: relative;
+}
+
+h2 {
+    font-size: 14pt;
+}
+
+div.calendar {
+    background: #b0b0b0 url(/static/images/calendar.svg) no-repeat 1.5px 1px;
+    background-size: 21px 21px;
+}
+
+div.item {
+    margin-bottom: 10px;
+}
+
+input, textarea, select {
+    width: 220px;
+}
+
+select {
+    height: 25px;
+}
+
+textarea {
+    resize: none;
+}
+
+input.datepicker {
+    width: 195px;
+}
+
+input.money {
+    width: 207px;
+}
+
+input:focus {
+    border-radius: 0;
+}
