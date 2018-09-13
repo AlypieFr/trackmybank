@@ -2,6 +2,9 @@ trackmybank = {};
 
 trackmybank.init = function () {
     trackmybank.init_date_fields();
+    $("select").select2({
+        placeholder: django.gettext("Select an option")
+    });
 };
 
 trackmybank.init_date_fields = function() {

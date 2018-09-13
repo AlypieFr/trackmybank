@@ -2,13 +2,16 @@ from django.views.generic import TemplateView, View
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 
+from main.models import Category
+
 
 class IndexView(TemplateView):
     template_name = "index.html"
 
     def data(self):
-        dat = {}
-        dat["mavar"] = "Ouais salut connard !"
+        dat = {
+            "categories": Category.objects.all().order_by("name")
+        }
 
         return dat
 

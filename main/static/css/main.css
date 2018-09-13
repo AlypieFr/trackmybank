@@ -6,7 +6,14 @@
 html, body {
     margin: 0;
     padding: 0;
-    background: beige;
+    background: #d4d4d4;
+    height: 100%;
+}
+
+#header-menu-div {
+    position: fixed;
+    width: 100%;
+    top: 0;
 }
 
 #header-menu {
@@ -14,7 +21,7 @@ html, body {
     margin-top: 0;
     height: 50px;
     line-height: 50px;
-    background: navy url(/static/images/trackmybank-logo.svg) no-repeat 30px 5px;
+    background: #0e003e url(/static/images/trackmybank-logo.svg) no-repeat 30px 5px;
     background-size: 40px 40px;
     color: white;
 }
@@ -60,6 +67,33 @@ html, body {
 
 h2 {
     font-size: 14pt;
+    margin-top: 0;
+}
+
+div#add-transaction-div-div {
+    width: 240px;
+    min-height: calc(100% - 51px);
+    background-color: #607270;
+    position: fixed;
+    top: 50px;
+}
+
+div#add-transaction-div {
+    padding-top: 10px;
+    margin-left: 5px;
+}
+
+div#add-transaction-div label, div#add-transaction-div h2 {
+    color: white;
+}
+
+div.main-content {
+    margin-top: 60px;
+    margin-left: 250px;
+}
+
+form#add-transaction {
+    margin-left: 5px;
 }
 
 div.calendar {
@@ -76,7 +110,7 @@ input, textarea, select {
 }
 
 select {
-    height: 25px;
+    height: 30px;
 }
 
 textarea {
@@ -93,4 +127,21 @@ input.money {
 
 input:focus {
     border-radius: 0;
+}
+
+select option:first-child {
+    display: none;
+}
+
+select option {
+    height: 35px;
+    line-height: 35px;
+    display: block;
+}
+
+input.submit-form {
+    margin-top: 20px;
+    width: 100px;
+    border-radius: 10px;
+    margin-left: 55px;
 }
