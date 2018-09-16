@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load l10n %}
+{% load common %}
 {% load i18n %}
 {% load static %}
 {% block body %}
@@ -37,7 +37,7 @@
             <div class="item">
                 <label for="amount">{% trans "Amount" %}</label>
                 <div>
-                    <input class="money" type="number" id="amount" /> €
+                    <input class="money decimal" id="amount" /> <span class="euro">€</span>
                 </div>
             </div>
             <div class="item">
@@ -49,10 +49,10 @@
             <div class="item">
                 <label for="category">{% trans "Category" %}</label>
                 <div>
-                    <select id="category">
+                    <select id="category" class="select2">
                     <option></option>
                         {% for category in view.data.categories %}
-                            <option data-color="red">{{ category.name }}</option>
+                            <option value="{{ category.pk }}">{{ category.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -62,7 +62,57 @@
         </div>
     </div>
     <div class="main-content">
+        <table class="table thead-dark" id="list-tr">
+            <thead>
+                <tr>
+                    <th class="category">
+                        {% trans "Category" %}
+                    </th>
+                    <th class="amount">
+                        {% trans "Amount" %}
+                    </th>
+                    <th class="subject">
+                        {% trans "Subject" %}
+                    </th>
+                    <th class="date">
+                        {% trans "Date" %}
+                    </th>
+                    <th class="bank_date">
+                        {% trans "Bank date" %}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            {% set odd = True %}
+            {% for transaction in view.data.transactions %}
+                {% if odd %}
+                    {% set class = "odd" %}
+                    {% set odd = False %}
+                {% else %}
+                    {% set class = "even" %}
+                    {% set odd = True %}
+                {% endif %}
 
+                <tr id="t_{{ transaction.pk }}" class="{{ class }}">
+                    <td style="background-color: {{ transaction.category.color }}" class="category">
+                        {{ transaction.category.name }}
+                    </td>
+                    <td class="amount">
+                        {{ transaction.amount }} €
+                    </td>
+                    <td class="subject">
+                        {{ transaction.subject }}
+                    </td>
+                    <td class="date_t">
+                        {{ transaction.date_t }}
+                    </td>
+                    <td class="date_b">
+                        {{ transaction.date_bank }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 
 {% endblock %}
