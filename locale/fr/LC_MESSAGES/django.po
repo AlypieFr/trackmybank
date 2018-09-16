@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-13 21:48+0200\n"
-"PO-Revision-Date: 2018-09-13 21:48+0200\n"
+"POT-Creation-Date: 2018-09-16 13:42+0200\n"
+"PO-Revision-Date: 2018-09-16 13:45+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -30,7 +30,7 @@ msgstr "couleur"
 msgid "Is goodies?"
 msgstr "Goodies ?"
 
-#: main/models.py:14 templates/index.html:50
+#: main/models.py:14 templates/index.html:50 templates/index.html:69
 msgid "Category"
 msgstr "Catégorie"
 
@@ -86,7 +86,7 @@ msgstr "Transactions"
 msgid "Add a new transaction"
 msgstr "Ajouter une transaction"
 
-#: templates/index.html:22
+#: templates/index.html:22 templates/index.html:78
 msgid "Date"
 msgstr "Date"
 
@@ -94,17 +94,21 @@ msgstr "Date"
 msgid "Bank added date"
 msgstr "Date relevé bancaire"
 
-#: templates/index.html:38
+#: templates/index.html:38 templates/index.html:72
 msgid "Amount"
 msgstr "Montant"
 
-#: templates/index.html:44
+#: templates/index.html:44 templates/index.html:75
 msgid "Subject"
 msgstr "Sujet"
 
 #: templates/index.html:60
 msgid "Add"
 msgstr "Ajouter"
+
+#: templates/index.html:81
+msgid "Bank date"
+msgstr "Banque"
 
 #~ msgid "Logout"
 #~ msgstr "Se déconnecter"
