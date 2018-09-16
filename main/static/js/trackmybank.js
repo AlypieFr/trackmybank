@@ -1,12 +1,18 @@
 trackmybank = {};
 
-trackmybank.init = function () {
+trackmybank.csrftocken = null;
+trackmybank.current_month = null;
+
+trackmybank.init = function (csrftoken) {
+    trackmybank.csrftocken = csrftoken;
+    trackmybank.current_month = $("select#months").val();
     trackmybank.init_special_fields();
     trackmybank.init_table_click_events();
-    $("select").select2({
+    $("select.select2").select2({
         placeholder: django.gettext("Select an option")
     });
-    $("input.submit-form").on("click", trackmybank.init_submit_form)
+    $("input.submit-form").on("click", trackmybank.init_submit_form);
+    $("select#months").on("change", trackmybank.change_month);
 };
 
 trackmybank.init_special_fields = function() {
@@ -58,6 +64,24 @@ trackmybank.init_table_click_events = function() {
     });
 };
 
+trackmybank.init_submit_form = function () {
+    $("label").removeClass("error");
+
+    let date = $("input#date_t").val();
+    let date_bank = $("input#date_b").val();
+    let amount = $("input#amount").val();
+    let subject = $("textarea#subject").val();
+    let category = $("select#category").val();
+    let month = $("select#months").val();
+
+    if (trackmybank.valid_form(date, date_bank, amount, subject, category)) {
+        console.log("pass");
+    }
+    else {
+        trackmybank.notify(django.gettext("Some required fields are empty"), "danger");
+    }
+};
+
 trackmybank.valid_form = function(date, date_bank, amount, subject, category) {
     let valid = true;
     if (date === "") {
@@ -79,21 +103,24 @@ trackmybank.valid_form = function(date, date_bank, amount, subject, category) {
     return valid
 };
 
-trackmybank.init_submit_form = function () {
-    $("label").removeClass("error");
-
-    let date = $("input#date_t").val();
-    let date_bank = $("input#date_b").val();
-    let amount = $("input#amount").val();
-    let subject = $("textarea#subject").val();
-    let category = $("select#category").val();
-
-    if (trackmybank.valid_form(date, date_bank, amount, subject, category)) {
-        console.log("pass");
-    }
-    else {
-        trackmybank.notify(django.gettext("Some required fields are empty"), "danger");
-    }
+trackmybank.change_month = function(e) {
+    let value = $(this).val();
+    trackmybank.post(
+        url="/select-month/",
+        data={"month": value,
+              csrfmiddlewaretoken: trackmybank.csrftocken},
+        success= function(data, success) {
+            if (success && data["success"]) {
+                $(".main-content").html(data["html"]);
+                trackmybank.current_month = value;
+            }
+            else {
+                $("select#months").val(trackmybank.current_month).trigger("change.select2");
+                trackmybank.notify("message" in data ? data["message"] :
+                    django.gettext("An error has occurred. Please contact the support"))
+            }
+        }
+    );
 };
 
 trackmybank.notify = function(message, type) {
@@ -106,4 +133,37 @@ trackmybank.notify = function(message, type) {
                 exit: 'animated fadeOutUp'
             },
         })
+};
+
+trackmybank.show_loading = function() {
+    $(".loading").show();
+};
+
+trackmybank.hide_loading = function() {
+    $(".loading").hide();
 }
+
+trackmybank.ajax = function(url, data, success, error, method="POST") {
+    $.ajax(url,
+        {
+            method: method,
+            data: data,
+            success: success,
+            error: error || function () {
+                trackmybank.hide_loading();
+                trackmybank.notify("An error occurred! Please contact us to report the bug", "danger");
+            },
+        }
+    );
+};
+
+trackmybank.post = function(url, data, success, error, async=true) {
+    trackmybank.ajax({
+        url: url,
+        data: data,
+        success: success,
+        error: error,
+        type: "POST",
+        async: async
+    });
+};

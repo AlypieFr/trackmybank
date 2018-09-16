@@ -33,6 +33,12 @@ html, body {
     padding-left: 100px;
 }
 
+#header-menu .center {
+    position: absolute;
+    left: 250px;
+    top: 1px;
+}
+
 #header-menu .left {
     position: absolute;
     right: 0;

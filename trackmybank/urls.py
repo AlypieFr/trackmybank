@@ -19,7 +19,7 @@ from django.views.generic.base import RedirectView
 from django.contrib.auth.decorators import login_required
 from django.views.i18n import JavaScriptCatalog
 
-from main.views import IndexView, LogoutView, TransactionView
+from main.views import IndexView, LogoutView, TransactionView, ChangeMonthView
 
 favicon_view = RedirectView.as_view(url='/static/images/favicon.ico', permanent=True)
 
@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^favicon\.ico$', favicon_view),
     url(r'^logout/', login_required(LogoutView.as_view(), login_url="/admin/login/"), name='logout'),
     url(r'^transaction/', TransactionView.as_view(), name='transaction'),
+    url(r'^select-month/', ChangeMonthView.as_view(), name='select_month'),
     url(r'^jsi18n/$', JavaScriptCatalog.as_view(), name='javascript-catalog'),
     url(r'^$', login_required(IndexView.as_view(), login_url="/admin/login/"), name='login'),
 ]

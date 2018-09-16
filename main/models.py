@@ -1,5 +1,9 @@
+import calendar
+
+from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext as _
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -16,22 +20,29 @@ class Category(models.Model):
 
 
 class Month(models.Model):
-    month = models.CharField(max_length=20, verbose_name=_("month"))
+    month = models.IntegerField(verbose_name=_("month"))
     year = models.IntegerField(verbose_name=_("year"))
+    salary = models.FloatField(verbose_name=_("salary"))
 
     def __str__(self):
-        return " ".join((self.month, str(self.year)))
+        with calendar.different_locale(settings.LOCALE) as encoding:
+            return " ".join((calendar.month_name[self.month].capitalize(), str(self.year)))
 
     class Meta:
         verbose_name = _("Month")
         verbose_name_plural = _("Months")
 
 
+class CurrentMonth(models.Model):
+    user = models.OneToOneField(User, primary_key=True)
+    month = models.ForeignKey(Month, verbose_name=_("month"))
+
+
 class Transaction(models.Model):
     date_t = models.DateField(verbose_name=_("transaction date"))
     date_bank = models.DateField(verbose_name=_("bank added date"), blank=True, null=True)
     subject = models.CharField(max_length=255, verbose_name=_("subject"))
-    amount = models.FloatField(verbose_name=_("amount"))
+    amount = models.DecimalField(max_digits=7, decimal_places=2, verbose_name=_("amount"))
     category = models.ForeignKey(Category, verbose_name=_("category"))
     month = models.ForeignKey(Month, verbose_name=_("month"))
 

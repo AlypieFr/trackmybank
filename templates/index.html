@@ -1,12 +1,21 @@
 {% extends "base.html" %}
 {% load common %}
 {% load i18n %}
+{% load l10n %}
 {% load static %}
 {% block body %}
 
     <div id="header-menu-div">
         <div id="header-menu">
         <p class="title">Track my bank!</p>
+        <div class="center">
+            <select id="months" class="select2">
+                {% for month in view.data.months %}
+                    <option value="{{ month.pk }}" {% if view.data.current_month.pk == month.pk %}selected{% endif %}>{{ month }}</option>
+                {% endfor %}
+            </select>
+            <div id="add-month"></div>
+        </div>
         <div class="left">
             <a href="/admin/" class="admin"></a>
             <a href="/logout/" class="logout"></a>
@@ -62,57 +71,7 @@
         </div>
     </div>
     <div class="main-content">
-        <table class="table thead-dark" id="list-tr">
-            <thead>
-                <tr>
-                    <th class="category">
-                        {% trans "Category" %}
-                    </th>
-                    <th class="amount">
-                        {% trans "Amount" %}
-                    </th>
-                    <th class="subject">
-                        {% trans "Subject" %}
-                    </th>
-                    <th class="date">
-                        {% trans "Date" %}
-                    </th>
-                    <th class="bank_date">
-                        {% trans "Bank date" %}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-            {% set odd = True %}
-            {% for transaction in view.data.transactions %}
-                {% if odd %}
-                    {% set class = "odd" %}
-                    {% set odd = False %}
-                {% else %}
-                    {% set class = "even" %}
-                    {% set odd = True %}
-                {% endif %}
-
-                <tr id="t_{{ transaction.pk }}" class="{{ class }}">
-                    <td style="background-color: {{ transaction.category.color }}" class="category">
-                        {{ transaction.category.name }}
-                    </td>
-                    <td class="amount">
-                        {{ transaction.amount }} €
-                    </td>
-                    <td class="subject">
-                        {{ transaction.subject }}
-                    </td>
-                    <td class="date_t">
-                        {{ transaction.date_t }}
-                    </td>
-                    <td class="date_b">
-                        {{ transaction.date_bank }}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        {% include "main_content.html" %}
     </div>
 
 {% endblock %}
