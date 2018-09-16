@@ -71,7 +71,7 @@ h2 {
 }
 
 div#add-transaction-div-div {
-    width: 240px;
+    width: 250px;
     min-height: calc(100% - 51px);
     background-color: #607270;
     position: fixed;
@@ -80,11 +80,17 @@ div#add-transaction-div-div {
 
 div#add-transaction-div {
     padding-top: 10px;
-    margin-left: 5px;
+    margin-left: 10px;
 }
 
-div#add-transaction-div label, div#add-transaction-div h2 {
+div#add-transaction-div label, div#add-transaction-div h2, div#add-transaction-div span.euro {
     color: white;
+}
+
+div#add-transaction-div span.euro {
+    display: inline-block;
+    vertical-align: bottom;
+    height: 22px;
 }
 
 div.main-content {
@@ -144,4 +150,71 @@ input.submit-form {
     width: 100px;
     border-radius: 10px;
     margin-left: 55px;
+}
+
+/* Table: */
+
+th.category {
+    width: 100px;
+}
+
+th.amount {
+    width: 100px;
+}
+
+th.date {
+    width: 100px;
+}
+
+th.bank_date {
+    width: 100px;
+}
+
+tr.odd {
+    background-color: #fff;
+}
+
+tr.even {
+    background-color: #cacaca;
+}
+
+table.thead-dark thead tr {
+    background-color: #000;
+    color: #fff;
+}
+
+tbody tr.selected td {
+    background-color: #2aabd2 !important;
+}
+
+label.error {
+    color: #ff524f !important;
+}
+
+label.error::after {
+    content: " *";
+}
+
+div#add-month {
+    background: url("/static/images/add.svg") no-repeat 0 0;
+    background-size: 100% 100%;
+    width: 28px;
+    height: 28px;
+    display: inline-block;
+    margin-left: 5px;
+    margin-bottom: 12px;
+    vertical-align: bottom;
+    cursor: pointer;
+}
+
+div#add-month:hover {
+    background-image: url("/static/images/add_hover.svg");
+}
+
+div#add-month:active {
+    background-image: url("/static/images/add_click.svg");
+}
+
+input[type=button] {
+    outline: none;
 }
