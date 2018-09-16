@@ -104,23 +104,29 @@ trackmybank.valid_form = function(date, date_bank, amount, subject, category) {
 };
 
 trackmybank.change_month = function(e) {
-    let value = $(this).val();
-    trackmybank.post(
-        url="/select-month/",
-        data={"month": value,
-              csrfmiddlewaretoken: trackmybank.csrftocken},
-        success= function(data, success) {
-            if (success && data["success"]) {
-                $(".main-content").html(data["html"]);
-                trackmybank.current_month = value;
+    trackmybank.show_loading();
+    window.setTimeout(() => {
+        let value = $(this).val();
+        trackmybank.post(
+            url = "/select-month/",
+            data = {
+                "month": value,
+                csrfmiddlewaretoken: trackmybank.csrftocken
+            },
+            success = function (data, success) {
+                if (success && data["success"]) {
+                    $(".main-content").html(data["html"]);
+                    trackmybank.current_month = value;
+                }
+                else {
+                    $("select#months").val(trackmybank.current_month).trigger("change.select2");
+                    trackmybank.notify("message" in data ? data["message"] :
+                        django.gettext("An error has occurred. Please contact the support"))
+                }
+                trackmybank.hide_loading();
             }
-            else {
-                $("select#months").val(trackmybank.current_month).trigger("change.select2");
-                trackmybank.notify("message" in data ? data["message"] :
-                    django.gettext("An error has occurred. Please contact the support"))
-            }
-        }
-    );
+        );
+    }, 0);
 };
 
 trackmybank.notify = function(message, type) {
@@ -137,10 +143,12 @@ trackmybank.notify = function(message, type) {
 
 trackmybank.show_loading = function() {
     $(".loading").show();
+    $(".lds-facebook").show();
 };
 
 trackmybank.hide_loading = function() {
     $(".loading").hide();
+    $(".lds-facebook").hide();
 }
 
 trackmybank.ajax = function(url, data, success, error, method="POST") {
