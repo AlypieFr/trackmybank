@@ -28,7 +28,7 @@
             </thead>
             <tbody>
             {% set odd = True %}
-            {% for transaction in view.data.transactions %}
+            {% for group in view.data.transactions %}
                 {% if odd %}
                     {% set class = "odd" %}
                     {% set odd = False %}
@@ -37,25 +37,38 @@
                     {% set odd = True %}
                 {% endif %}
 
-                <tr id="t_{{ transaction.pk }}" class="{{ class }}">
-                    <td style="background-color: {{ transaction.category.color }}" class="category">
-                        {{ transaction.category.name }}
-                    </td>
-                    <td class="amount">
-                        {% localize on %}
-                        {{ transaction.amount }} €
-                        {% endlocalize %}
-                    </td>
-                    <td class="subject">
-                        {{ transaction.subject }}
-                    </td>
-                    <td class="date_t">
-                        {{ transaction.date_t }}
-                    </td>
-                    <td class="date_b">
-                        {{ transaction.date_bank }}
-                    </td>
-                </tr>
+                {% for transaction in group.transaction_set.all %}
+                    <tr id="t_{{ transaction.pk }}" class="{{ class }}">
+                        <td style="background-color: {{ transaction.category.color }}" class="category">
+                            {{ transaction.category.name }}
+                        </td>
+                        <td class="amount">
+                            {% localize on %}
+                            {{ transaction.amount }} €
+                            {% endlocalize %}
+                        </td>
+                        <td class="subject">
+                            {{ transaction.subject }}
+                        </td>
+                        {% if forloop.first %}
+                            <td class="date_t">
+                                {{ group.date_t }}
+                            </td>
+                            <td class="date_b">
+                                {{ group.date_bank }}
+                            </td>
+                        {% elif forloop.last %}
+                            <td class="total" colspan="2">
+                                {% localize on %}
+                                    <span class="total-label">{% trans "Total:" %}</span> {{ group.total }} €
+                                {% endlocalize %}
+                            </td>
+                        {% else %}
+                            <td></td>
+                            <td></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
             {% endfor %}
             </tbody>
         </table>

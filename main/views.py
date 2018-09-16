@@ -8,14 +8,20 @@ from django.middleware import csrf
 
 import main.functions as functions
 import traceback
-from main.models import Category, Month, Transaction
+from main.models import Category, Month, TransactionGroup
 
 
 def context_data(user):
     current_month = functions.get_current_month(user)
+    transactions = TransactionGroup.objects.filter(month=current_month).order_by("date_t")
+    for group in transactions:
+        total = 0
+        for transaction in group.transaction_set.all():
+            total += transaction.amount
+        group.total = total
     return {
         "categories": Category.objects.all().order_by("name"),
-        "transactions": Transaction.objects.filter(month=current_month).order_by("date_t"),
+        "transactions": transactions,
         "months": sorted(Month.objects.all(), key=lambda m: (-m.year, -m.month)),
         "current_month": current_month
     }

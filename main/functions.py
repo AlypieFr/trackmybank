@@ -11,8 +11,9 @@ def get_current_month(user):
     month = CurrentMonth.objects.filter(user=user).first()
     if month is None:
         month = Month.objects.last()
-        c_month = CurrentMonth(month=month, user=user)
-        c_month.save()
+        if month is not None:
+            c_month = CurrentMonth(month=month, user=user)
+            c_month.save()
         return month
     return month.month
 

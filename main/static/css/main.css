@@ -224,3 +224,15 @@ div#add-month:active {
 input[type=button] {
     outline: none;
 }
+
+td {
+    border-top: none !important;
+}
+
+span.total-label {
+    margin-right: 5px;
+}
+
+td.total {
+    font-weight: bold;
+}
