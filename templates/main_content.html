@@ -4,7 +4,7 @@
 {% load static %}
 
         <div class="header-main">
-            <p>Salary</p>
+            <p>{% trans "Salary" %}</p>
         </div>
         <table class="table thead-dark" id="list-tr">
             <thead>
@@ -39,33 +39,33 @@
 
                 {% for transaction in group.transaction_set.all %}
                     <tr id="t_{{ transaction.pk }}" class="{{ class }}">
-                        <td style="background-color: {{ transaction.category.color }}" class="category">
+                        <td style="background-color: {{ transaction.category.color }}" class="category" value="{{ transaction.category.pk }}">
                             {{ transaction.category.name }}
                         </td>
-                        <td class="amount">
-                            {% localize on %}
+                        {% localize on %}
+                        <td class="amount" value="{{ transaction.amount }}">
                             {{ transaction.amount }} €
-                            {% endlocalize %}
                         </td>
-                        <td class="subject">
+                        {% endlocalize %}
+                        <td class="subject" value="{{ transaction.subject }}">
                             {{ transaction.subject }}
                         </td>
                         {% if forloop.first %}
-                            <td class="date_t">
+                            <td class="date_t" value="{{ group.date_t }}">
                                 {{ group.date_t }}
                             </td>
-                            <td class="date_b">
-                                {{ group.date_bank }}
+                            <td class="date_b" value="{{ group.date_bank|default_if_none:"" }}">
+                                {{ group.date_bank|default_if_none:"" }}
                             </td>
                         {% elif forloop.last %}
-                            <td class="total" colspan="2">
+                            <td class="total" colspan="2" value="{{ group.date_t }} {{ group.date_bank }}">
                                 {% localize on %}
                                     <span class="total-label">{% trans "Total:" %}</span> {{ group.total }} €
                                 {% endlocalize %}
                             </td>
                         {% else %}
-                            <td></td>
-                            <td></td>
+                            <td class="date_t" value="{{ group.date_t }}"></td>
+                            <td class="date_b" value="{{ group.date_bank }}"></td>
                         {% endif %}
                     </tr>
                 {% endfor %}

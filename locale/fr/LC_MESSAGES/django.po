@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-16 13:42+0200\n"
-"PO-Revision-Date: 2018-09-16 13:45+0200\n"
+"POT-Creation-Date: 2018-09-17 21:12+0200\n"
+"PO-Revision-Date: 2018-09-17 21:12+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -18,97 +18,137 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.0.6\n"
 
-#: main/models.py:6
+#: main/models.py:10
 msgid "name"
 msgstr "nom"
 
-#: main/models.py:7
+#: main/models.py:11
 msgid "color"
 msgstr "couleur"
 
-#: main/models.py:8
+#: main/models.py:12
 msgid "Is goodies?"
 msgstr "Goodies ?"
 
-#: main/models.py:14 templates/index.html:50 templates/index.html:69
+#: main/models.py:18 templates/index.html:62 templates/main_content.html:13
 msgid "Category"
 msgstr "Catégorie"
 
-#: main/models.py:15
+#: main/models.py:19
 msgid "Categories"
 msgstr "Catégories"
 
-#: main/models.py:19 main/models.py:36
+#: main/models.py:23 main/models.py:38 main/models.py:44
 msgid "month"
 msgstr "mois"
 
-#: main/models.py:20
+#: main/models.py:24
 msgid "year"
 msgstr "année"
 
-#: main/models.py:26
+#: main/models.py:25
+msgid "salary"
+msgstr "Salaire"
+
+#: main/models.py:32
 msgid "Month"
 msgstr "Mois"
 
-#: main/models.py:27
+#: main/models.py:33
 msgid "Months"
 msgstr "Mois"
 
-#: main/models.py:31
+#: main/models.py:42
 msgid "transaction date"
 msgstr "date de la transaction"
 
-#: main/models.py:32
+#: main/models.py:43
 msgid "bank added date"
 msgstr "date relevé bancaire"
 
-#: main/models.py:33
+#: main/models.py:50
+msgid "Transaction group"
+msgstr "Groupe de transactions"
+
+#: main/models.py:51
+msgid "Transaction groups"
+msgstr "Groupes de transactions"
+
+#: main/models.py:55
 msgid "subject"
 msgstr "sujet"
 
-#: main/models.py:34
+#: main/models.py:56
 msgid "amount"
 msgstr "montant"
 
-#: main/models.py:35
+#: main/models.py:57
 msgid "category"
 msgstr "catégorie"
 
-#: main/models.py:42
+#: main/models.py:58
+msgid "group"
+msgstr "Groupe"
+
+#: main/models.py:65
 msgid "Transaction"
 msgstr "Transaction"
 
-#: main/models.py:43
+#: main/models.py:66
 msgid "Transactions"
 msgstr "Transactions"
 
-#: templates/index.html:19
+#: main/views.py:138
+msgid "Selected month does not exists. Please contact the support."
+msgstr "Le mois sélectionné n'existe pas. Veuillez contacter le support."
+
+#: main/views.py:142
+msgid ""
+"Internal server error. An unexpected error occurred. Unable to change month. "
+"Please contact the support."
+msgstr ""
+"Erreur serveur. Une erreur inconnue s'est produite. Impossible de changer le "
+"mois. Veuillez contacter le support."
+
+#: templates/index.html:31
 msgid "Add a new transaction"
 msgstr "Ajouter une transaction"
 
-#: templates/index.html:22 templates/index.html:78
+#: templates/index.html:34 templates/main_content.html:22
 msgid "Date"
 msgstr "Date"
 
-#: templates/index.html:30
+#: templates/index.html:42
 msgid "Bank added date"
 msgstr "Date relevé bancaire"
 
-#: templates/index.html:38 templates/index.html:72
+#: templates/index.html:50 templates/main_content.html:16
 msgid "Amount"
 msgstr "Montant"
 
-#: templates/index.html:44 templates/index.html:75
+#: templates/index.html:56 templates/main_content.html:19
 msgid "Subject"
 msgstr "Sujet"
 
-#: templates/index.html:60
+#: templates/index.html:72
 msgid "Add"
 msgstr "Ajouter"
 
-#: templates/index.html:81
+#: templates/index.html:73
+msgid "Cancel"
+msgstr "Annuler"
+
+#: templates/main_content.html:7
+msgid "Salary"
+msgstr "Salaire"
+
+#: templates/main_content.html:25
 msgid "Bank date"
 msgstr "Banque"
+
+#: templates/main_content.html:63
+msgid "Total:"
+msgstr "Total :"
 
 #~ msgid "Logout"
 #~ msgstr "Se déconnecter"

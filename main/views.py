@@ -70,6 +70,8 @@ class TransactionView(View):
         try:
             date_t = request.POST["date_t"] if "date_t" in request.POST else None
             date_bank = request.POST["date_bank"] if "date_bank" in request.POST else None
+            if date_bank == "":
+                date_bank = None
             amount = float(request.POST["amount"].replace(",", "."))
             subject = request.POST["subject"]
             try:
@@ -81,12 +83,14 @@ class TransactionView(View):
             except Month.DoesNotExist:
                 return JsonResponse({"success": False, "message": "Month %s does not exists" % request.POST["month"]})
             tr_id = request.POST["tr_id"] if "tr_id" in request.POST else None
+            if tr_id == "":
+                tr_id = None
         except (KeyError, ValueError):
             traceback.print_exc()
             return JsonResponse({"success": False, "message":
                                  "Bad query. Please contact the support to report the bug"})
 
-        if "tr_id" is None and (date_t is None or month is None):
+        if date_t is None or month is None:
             return JsonResponse({"success": False,
                                  "message": "Bad request (2). please contact the support to report the bug"})
 
@@ -96,9 +100,9 @@ class TransactionView(View):
                 if not re.match(date_regex, date_t):
                     raise ValueError("Invalid date: %s" % date_t)
                 date_t = self.format_date(date_t)
-            elif tr_id is None:
+            else:
                 raise ValueError("Date is required")
-            if date_bank is not None:
+            if date_bank is not None and date_bank != "":
                 if not re.match(date_regex, date_bank):
                     raise ValueError("Invalid date: %s" % date_bank)
                 date_bank = self.format_date(date_bank)
@@ -113,6 +117,22 @@ class TransactionView(View):
                     transaction_group.save()
                     transaction = Transaction(amount=amount, subject=subject, category=category, group=transaction_group)
                     transaction.save()
+            else:
+                # Edit existing transaction
+                try:
+                    with db_transaction.atomic():
+                        transaction = Transaction.objects.get(pk=tr_id)
+                        transaction_group = transaction.group
+                        transaction_group.date_t = date_t
+                        transaction_group.date_bank = date_bank
+                        transaction_group.month = month
+                        transaction_group.save()
+                        transaction.amount = amount
+                        transaction.subject = subject
+                        transaction.category = category
+                        transaction.save()
+                except Transaction.DoesNotExist:
+                    return JsonResponse({"success": False, "message": "Transaction %s does not exists" % tr_id})
         except:
             traceback.print_exc()
             return JsonResponse({"success": False,

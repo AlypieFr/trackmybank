@@ -2,6 +2,7 @@ trackmybank = {};
 
 trackmybank.csrftocken = null;
 trackmybank.current_month = null;
+trackmybank.in_edition = null;
 
 trackmybank.init = function (csrftoken) {
     trackmybank.csrftocken = csrftoken;
@@ -12,6 +13,7 @@ trackmybank.init = function (csrftoken) {
         placeholder: django.gettext("Select an option")
     });
     $("input.submit-form").on("click", trackmybank.init_submit_form);
+    $("input.cancel-edit").on("click", trackmybank.reset_edit);
     $("select#months").on("change", trackmybank.change_month);
 };
 
@@ -43,25 +45,58 @@ trackmybank.init_special_fields = function() {
 
 trackmybank.init_table_click_events = function() {
     $(document).on("click", "table#list-tr tbody tr", function(e) {
-        let doSelect = true;
-        if ($(this).hasClass("selected")) {
-            $(this).removeClass("selected");
-            doSelect = false;
+        if (trackmybank.in_edition == null) {
+            let doSelect = true;
+            if ($(this).hasClass("selected")) {
+                $(this).removeClass("selected");
+                doSelect = false;
+            }
+            if (!e.ctrlKey) {
+                $("table#list-tr tbody tr").removeClass("selected");
+            }
+            if (doSelect) {
+                $(this).addClass("selected");
+            }
         }
-        if (!e.ctrlKey) {
-            $("table#list-tr tbody tr").removeClass("selected");
-        }
-        if (doSelect) {
-            $(this).addClass("selected");
-        }
+    });
+
+    $(document).on("dblclick", "table#list-tr tbody tr", function(e) {
+        $("table#list-tr tbody tr").removeClass("selected");
+        $("table#list-tr tbody tr").removeClass("edited");
+        document.getSelection().removeAllRanges();
+        trackmybank.edit($(this));
+
     });
 
     // Remove selection on escape pressed:
     $(document).on("keyup", function(e) {
         if (e.keyCode == 27) {
             $("table#list-tr tbody tr").removeClass("selected");
+            if (trackmybank.in_edition != null) {
+                trackmybank.reset_edit();
+            }
         }
     });
+};
+
+trackmybank.edit = function(jq_tr) {
+    jq_tr.addClass("edited");
+    trackmybank.in_edition = parseInt(jq_tr.attr("id").split("_")[1]);
+    $("input#date_t").val(jq_tr.find("td.date_t").length === 1 ? jq_tr.find("td.date_t").html() : jq_tr.find("total").attr("value").split(" ")[0]);
+    $("input#date_b").val(jq_tr.find("td.date_b").length === 1 ? jq_tr.find("td.date_b").html() : jq_tr.find("total").attr("value").split(" ")[1]);
+    $("input#amount").val(jq_tr.find("td.amount").attr("value"));
+    $("textarea#subject").val(jq_tr.find("td.subject").attr("value"));
+    $("select#category").val(jq_tr.find("td.category").attr("value")).trigger("change.select2");
+    $("input.submit-form").val(django.gettext("Edit"));
+    $("input.cancel-edit").show();
+};
+
+trackmybank.reset_edit = function() {
+    trackmybank.in_edition = null;
+    $("table#list-tr tbody tr").removeClass("edited");
+    $("input.submit-form").val(django.gettext("Add"));
+    $("input.cancel-edit").hide();
+    trackmybank.reset_form();
 };
 
 trackmybank.init_submit_form = function () {
@@ -102,12 +137,17 @@ trackmybank.submit_form = function(date, date_bank, amount, subject, category, m
                 subject: subject,
                 category: category,
                 month: month,
+                tr_id: trackmybank.in_edition == null ? null : trackmybank.in_edition,
                 csrfmiddlewaretoken: trackmybank.csrftocken
             },
             success = function (data, success) {
                 if (success && data["success"]) {
                     $(".main-content").html(data["html"]);
-                    trackmybank.reset_form();
+                    if (trackmybank.in_edition == null) {
+                        trackmybank.reset_form();
+                    } else {
+                        trackmybank.reset_edit();
+                    }
                 }
                 else {
                     trackmybank.notify("message" in data ? data["message"] :

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-16 14:51+0200\n"
-"PO-Revision-Date: 2018-09-16 14:52+0200\n"
+"POT-Creation-Date: 2018-09-17 21:09+0200\n"
+"PO-Revision-Date: 2018-09-17 21:11+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -18,10 +18,22 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.0.6\n"
 
-#: main/static/js/trackmybank.js:7
+#: main/static/js/trackmybank.js:13
 msgid "Select an option"
 msgstr "Sélectionner une option"
 
+#: main/static/js/trackmybank.js:88
+msgid "Edit"
+msgstr "Modifier"
+
 #: main/static/js/trackmybank.js:95
+msgid "Add"
+msgstr "Ajouter"
+
+#: main/static/js/trackmybank.js:114
 msgid "Some required fields are empty"
 msgstr "Certains champs requis sont vides"
+
+#: main/static/js/trackmybank.js:147 main/static/js/trackmybank.js:194
+msgid "An error has occurred. Please contact the support"
+msgstr "Une erreur s'est produite. Veuillez contacter le support"

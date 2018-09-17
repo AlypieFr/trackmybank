@@ -151,11 +151,15 @@ select option {
     display: block;
 }
 
-input.submit-form {
+input.submit-form, input.cancel-edit {
     margin-top: 20px;
     width: 100px;
     border-radius: 10px;
     margin-left: 55px;
+}
+
+input.cancel-edit {
+    margin-top: 10px;
 }
 
 div.loading {
@@ -211,7 +215,7 @@ div.loading {
 /* Table: */
 
 th.category {
-    width: 100px;
+    width: 130px;
 }
 
 th.amount {
@@ -239,7 +243,7 @@ table.thead-dark thead tr {
     color: #fff;
 }
 
-tbody tr.selected td {
+tbody tr.selected td, tbody tr.edited td {
     background-color: #2aabd2 !important;
 }
 
