@@ -75,11 +75,48 @@ trackmybank.init_submit_form = function () {
     let month = $("select#months").val();
 
     if (trackmybank.valid_form(date, date_bank, amount, subject, category)) {
-        console.log("pass");
+        trackmybank.submit_form(date, date_bank, amount, subject, category, month);
     }
     else {
         trackmybank.notify(django.gettext("Some required fields are empty"), "danger");
     }
+};
+
+trackmybank.reset_form = function() {
+    $("input#date_t").val("");
+    $("input#date_b").val("");
+    $("input#amount").val("");
+    $("textarea#subject").val("");
+    $("select#category").val("").trigger("change.select2");
+};
+
+trackmybank.submit_form = function(date, date_bank, amount, subject, category, month) {
+    trackmybank.show_loading();
+    window.setTimeout(() => {
+        trackmybank.post(
+            url = "/transaction/",
+            data = {
+                date_t: date,
+                date_bank: date_bank,
+                amount: amount,
+                subject: subject,
+                category: category,
+                month: month,
+                csrfmiddlewaretoken: trackmybank.csrftocken
+            },
+            success = function (data, success) {
+                if (success && data["success"]) {
+                    $(".main-content").html(data["html"]);
+                    trackmybank.reset_form();
+                }
+                else {
+                    trackmybank.notify("message" in data ? data["message"] :
+                        django.gettext("An error has occurred. Please contact the support"), "danger")
+                }
+                trackmybank.hide_loading();
+            }
+        )
+    }, 0);
 };
 
 trackmybank.valid_form = function(date, date_bank, amount, subject, category) {
@@ -88,7 +125,7 @@ trackmybank.valid_form = function(date, date_bank, amount, subject, category) {
         valid = false;
         $("label[for=date_t]").addClass("error");
     }
-    if (amount === "") {
+    if (amount === "" || amount === "0,00" || amount === "0.00") {
         valid = false;
         $("label[for=amount]").addClass("error");
     }
