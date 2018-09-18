@@ -121,6 +121,25 @@ input, textarea, select {
     width: 220px;
 }
 
+input[type=checkbox] {
+    width: auto;
+}
+
+.toggle, .toggle.btn {
+    height: 30px !important;
+    min-height: 30px !important;
+    width: 30px !important;
+    margin-right: 15px;
+}
+
+label.toggle-off {
+    color: black !important;
+}
+
+div.link-to-selected {
+    margin-top: 25px;
+}
+
 select {
     height: 30px;
 }
@@ -288,5 +307,65 @@ span.total-label {
 }
 
 td.total {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+div.top-info {
+    height: 35px;
+    line-height: 35px;
+    display: inline-block;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+
+div.top-info .info-label {
+    display: inline-block;
+    height: 35px;
+    line-height: 35px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: black;
+    color: white;
+}
+
+div.top-info .info-value {
+    display: inline-block;
+    height: 35px;
+    line-height: 35px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: white;
+}
+
+div.top-info.economy .info-label {
+    background-color: #0c5413;
+}
+
+div.top-info.economy .info-value {
+    background-color: #bdffbc;
+}
+
+div.top-info.goodies-part .info-label {
+    background-color: #540805;
+}
+
+div.top-info.goodies-part .info-value {
+    background-color: #ffddd7;
+}
+
+div.top-info.bank .info-label {
+    background-color: #03094b;
+}
+
+div.top-info.bank .info-value {
+    background-color: #dce8ff;
+}
+
+.amount-debit {
+    color: red;
+}
+
+.banked {
     font-weight: bold;
 }

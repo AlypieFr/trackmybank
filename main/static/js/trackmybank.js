@@ -15,6 +15,16 @@ trackmybank.init = function (csrftoken) {
     $("input.submit-form").on("click", trackmybank.init_submit_form);
     $("input.cancel-edit").on("click", trackmybank.reset_edit);
     $("select#months").on("change", trackmybank.change_month);
+    $(document).on("change", "input#link-to-selected", function() {
+        if ($(this).prop("checked")) {
+            $("input#date_t").prop("disabled", true);
+            $("input#date_b").prop("disabled", true);
+        }
+        else {
+            $("input#date_t").prop("disabled", false);
+            $("input#date_b").prop("disabled", false);
+        }
+    })
 };
 
 trackmybank.init_special_fields = function() {
@@ -43,6 +53,20 @@ trackmybank.init_special_fields = function() {
     })
 };
 
+trackmybank.show_link_option = function() {
+    $("div.link-to-selected").show();
+}
+
+trackmybank.hide_link_option = function() {
+    $("div.link-to-selected").hide();
+    $("input#link-to-selected").bootstrapToggle('off');
+};
+
+trackmybank.clear_selection = function() {
+    $("table#list-tr tbody tr").removeClass("selected");
+    trackmybank.hide_link_option();
+};
+
 trackmybank.init_table_click_events = function() {
     $(document).on("click", "table#list-tr tbody tr", function(e) {
         if (trackmybank.in_edition == null) {
@@ -57,11 +81,18 @@ trackmybank.init_table_click_events = function() {
             if (doSelect) {
                 $(this).addClass("selected");
             }
+
+            if ($("tr.selected").length === 1) {
+                trackmybank.show_link_option();
+            }
+            else {
+                trackmybank.hide_link_option();
+            }
         }
     });
 
     $(document).on("dblclick", "table#list-tr tbody tr", function(e) {
-        $("table#list-tr tbody tr").removeClass("selected");
+        trackmybank.clear_selection();
         $("table#list-tr tbody tr").removeClass("edited");
         document.getSelection().removeAllRanges();
         trackmybank.edit($(this));
@@ -70,8 +101,8 @@ trackmybank.init_table_click_events = function() {
 
     // Remove selection on escape pressed:
     $(document).on("keyup", function(e) {
-        if (e.keyCode == 27) {
-            $("table#list-tr tbody tr").removeClass("selected");
+        if (e.keyCode === 27) {
+            trackmybank.clear_selection();
             if (trackmybank.in_edition != null) {
                 trackmybank.reset_edit();
             }
@@ -82,8 +113,8 @@ trackmybank.init_table_click_events = function() {
 trackmybank.edit = function(jq_tr) {
     jq_tr.addClass("edited");
     trackmybank.in_edition = parseInt(jq_tr.attr("id").split("_")[1]);
-    $("input#date_t").val(jq_tr.find("td.date_t").length === 1 ? jq_tr.find("td.date_t").html() : jq_tr.find("total").attr("value").split(" ")[0]);
-    $("input#date_b").val(jq_tr.find("td.date_b").length === 1 ? jq_tr.find("td.date_b").html() : jq_tr.find("total").attr("value").split(" ")[1]);
+    $("input#date_t").val(jq_tr.find("td.date_t").length === 1 ? jq_tr.find("td.date_t").attr("value") : jq_tr.find("td.total").attr("value").split(",")[0]);
+    $("input#date_b").val(jq_tr.find("td.date_b").length === 1 ? jq_tr.find("td.date_b").attr("value") : jq_tr.find("td.total").attr("value").split(",")[1]);
     $("input#amount").val(jq_tr.find("td.amount").attr("value"));
     $("textarea#subject").val(jq_tr.find("td.subject").attr("value"));
     $("select#category").val(jq_tr.find("td.category").attr("value")).trigger("change.select2");
@@ -108,9 +139,22 @@ trackmybank.init_submit_form = function () {
     let subject = $("textarea#subject").val();
     let category = $("select#category").val();
     let month = $("select#months").val();
+    let id_group = null;
+    if ($("input#link-to-selected").prop("checked")) {
+        let selection = $("table#list-tr tr.selected");
+        if (selection.length === 0) {
+            trackmybank.notify(django.gettext("Error: empty selection"), "danger");
+            return false;
+        }
+        else if (selection.length > 1) {
+            trackmybank.notify(django.gettext("Error: more than one transaction selected"), "danger");
+            return false;
+        }
+        id_group = parseInt(selection.attr("group"));
+    }
 
     if (trackmybank.valid_form(date, date_bank, amount, subject, category)) {
-        trackmybank.submit_form(date, date_bank, amount, subject, category, month);
+        trackmybank.submit_form(date, date_bank, amount, subject, category, month, id_group);
     }
     else {
         trackmybank.notify(django.gettext("Some required fields are empty"), "danger");
@@ -125,18 +169,20 @@ trackmybank.reset_form = function() {
     $("select#category").val("").trigger("change.select2");
 };
 
-trackmybank.submit_form = function(date, date_bank, amount, subject, category, month) {
+trackmybank.submit_form = function(date, date_bank, amount, subject, category, month, id_group) {
     trackmybank.show_loading();
+    let checkbox = $("input#link-to-selected");
     window.setTimeout(() => {
         trackmybank.post(
             url = "/transaction/",
             data = {
-                date_t: date,
-                date_bank: date_bank,
+                date_t: checkbox.prop("checked") ? null : date,
+                date_bank: checkbox.prop("checked") ? null :  date_bank,
                 amount: amount,
                 subject: subject,
                 category: category,
-                month: month,
+                month: checkbox.prop("checked") ? null :  month,
+                group_id: id_group,
                 tr_id: trackmybank.in_edition == null ? null : trackmybank.in_edition,
                 csrfmiddlewaretoken: trackmybank.csrftocken
             },
@@ -148,6 +194,7 @@ trackmybank.submit_form = function(date, date_bank, amount, subject, category, m
                     } else {
                         trackmybank.reset_edit();
                     }
+                    trackmybank.clear_selection();
                 }
                 else {
                     trackmybank.notify("message" in data ? data["message"] :
@@ -161,7 +208,7 @@ trackmybank.submit_form = function(date, date_bank, amount, subject, category, m
 
 trackmybank.valid_form = function(date, date_bank, amount, subject, category) {
     let valid = true;
-    if (date === "") {
+    if (date === "" && !$("input#link-to-selected").prop("checked")) {
         valid = false;
         $("label[for=date_t]").addClass("error");
     }

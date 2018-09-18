@@ -22,7 +22,7 @@ class Category(models.Model):
 class Month(models.Model):
     month = models.IntegerField(verbose_name=_("month"))
     year = models.IntegerField(verbose_name=_("year"))
-    salary = models.FloatField(verbose_name=_("salary"))
+    salary = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("salary"))
 
     def __str__(self):
         with calendar.different_locale(settings.LOCALE) as encoding:

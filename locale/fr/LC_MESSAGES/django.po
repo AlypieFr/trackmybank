@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-17 21:12+0200\n"
-"PO-Revision-Date: 2018-09-17 21:12+0200\n"
+"POT-Creation-Date: 2018-09-18 21:24+0200\n"
+"PO-Revision-Date: 2018-09-18 21:25+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -30,7 +30,7 @@ msgstr "couleur"
 msgid "Is goodies?"
 msgstr "Goodies ?"
 
-#: main/models.py:18 templates/index.html:62 templates/main_content.html:13
+#: main/models.py:18 templates/index.html:62 templates/main_content.html:26
 msgid "Category"
 msgstr "Catégorie"
 
@@ -98,11 +98,11 @@ msgstr "Transaction"
 msgid "Transactions"
 msgstr "Transactions"
 
-#: main/views.py:138
+#: main/views.py:169
 msgid "Selected month does not exists. Please contact the support."
 msgstr "Le mois sélectionné n'existe pas. Veuillez contacter le support."
 
-#: main/views.py:142
+#: main/views.py:173
 msgid ""
 "Internal server error. An unexpected error occurred. Unable to change month. "
 "Please contact the support."
@@ -114,7 +114,7 @@ msgstr ""
 msgid "Add a new transaction"
 msgstr "Ajouter une transaction"
 
-#: templates/index.html:34 templates/main_content.html:22
+#: templates/index.html:34 templates/main_content.html:35
 msgid "Date"
 msgstr "Date"
 
@@ -122,31 +122,55 @@ msgstr "Date"
 msgid "Bank added date"
 msgstr "Date relevé bancaire"
 
-#: templates/index.html:50 templates/main_content.html:16
+#: templates/index.html:50 templates/main_content.html:29
 msgid "Amount"
 msgstr "Montant"
 
-#: templates/index.html:56 templates/main_content.html:19
+#: templates/index.html:56 templates/main_content.html:32
 msgid "Subject"
 msgstr "Sujet"
 
-#: templates/index.html:72
+#: templates/index.html:73
+msgid "Yes"
+msgstr "Oui"
+
+#: templates/index.html:73
+msgid "No"
+msgstr "Non"
+
+#: templates/index.html:73
+msgid "Link to selection"
+msgstr "Lier à la sélection"
+
+#: templates/index.html:75
 msgid "Add"
 msgstr "Ajouter"
 
-#: templates/index.html:73
+#: templates/index.html:76
 msgid "Cancel"
 msgstr "Annuler"
 
-#: templates/main_content.html:7
+#: templates/main_content.html:9
 msgid "Salary"
 msgstr "Salaire"
 
-#: templates/main_content.html:25
+#: templates/main_content.html:12
+msgid "Bank"
+msgstr "Banque"
+
+#: templates/main_content.html:15
+msgid "Free money"
+msgstr "Argent libre"
+
+#: templates/main_content.html:18
+msgid "Goodies"
+msgstr "Goodies"
+
+#: templates/main_content.html:38
 msgid "Bank date"
 msgstr "Banque"
 
-#: templates/main_content.html:63
+#: templates/main_content.html:76
 msgid "Total:"
 msgstr "Total :"
 

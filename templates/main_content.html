@@ -4,7 +4,20 @@
 {% load static %}
 
         <div class="header-main">
-            <p>{% trans "Salary" %}</p>
+            {% localize on %}
+            <div class="top-info salary">
+                <span class="info-label">{% trans "Salary" %}</span><span class="info-value">{{ view.data.current_month.salary }} €</span>
+            </div>
+            <div class="top-info bank">
+                <span class="info-label">{% trans "Bank" %}</span><span class="info-value">{{ view.data.bank_status }} €</span>
+            </div>
+            <div class="top-info economy">
+                <span class="info-label">{% trans "Free money" %}</span><span class="info-value">{{ view.data.free_money }} €</span>
+            </div>
+            <div class="top-info goodies-part">
+                <span class="info-label">{% trans "Goodies" %}</span><span class="info-value">{{ view.data.goodies_part }} €</span>
+            </div>
+            {% endlocalize %}
         </div>
         <table class="table thead-dark" id="list-tr">
             <thead>
@@ -38,34 +51,34 @@
                 {% endif %}
 
                 {% for transaction in group.transaction_set.all %}
-                    <tr id="t_{{ transaction.pk }}" class="{{ class }}">
+                    <tr id="t_{{ transaction.pk }}" group="{{ group.pk }}" class="{{ class }}">
                         <td style="background-color: {{ transaction.category.color }}" class="category" value="{{ transaction.category.pk }}">
                             {{ transaction.category.name }}
                         </td>
                         {% localize on %}
-                        <td class="amount" value="{{ transaction.amount }}">
+                        <td class="amount {% if transaction.amount < 0 %}amount-debit{% endif %} {% if group.date_bank %}banked{% endif %}" value="{{ transaction.amount }}">
                             {{ transaction.amount }} €
                         </td>
                         {% endlocalize %}
-                        <td class="subject" value="{{ transaction.subject }}">
+                        <td class="subject {% if group.date_bank %}banked{% endif %}" value="{{ transaction.subject }}">
                             {{ transaction.subject }}
                         </td>
                         {% if forloop.first %}
-                            <td class="date_t" value="{{ group.date_t }}">
+                            <td class="date_t {% if group.date_bank %}banked{% endif %}" value="{{ group.date_t }}">
                                 {{ group.date_t }}
                             </td>
-                            <td class="date_b" value="{{ group.date_bank|default_if_none:"" }}">
+                            <td class="date_b {% if group.date_bank %}banked{% endif %}" value="{{ group.date_bank|default_if_none:"" }}">
                                 {{ group.date_bank|default_if_none:"" }}
                             </td>
                         {% elif forloop.last %}
-                            <td class="total" colspan="2" value="{{ group.date_t }} {{ group.date_bank }}">
+                            <td class="total {% if group.date_bank %}banked{% endif %}" colspan="2" value="{{ group.date_t }},{{ group.date_bank }}">
                                 {% localize on %}
                                     <span class="total-label">{% trans "Total:" %}</span> {{ group.total }} €
                                 {% endlocalize %}
                             </td>
                         {% else %}
-                            <td class="date_t" value="{{ group.date_t }}"></td>
-                            <td class="date_b" value="{{ group.date_bank }}"></td>
+                            <td class="date_t {% if group.date_bank %}banked{% endif %}" value="{{ group.date_t }}"></td>
+                            <td class="date_b {% if group.date_bank %}banked{% endif %}" value="{{ group.date_bank }}"></td>
                         {% endif %}
                     </tr>
                 {% endfor %}

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-17 21:09+0200\n"
-"PO-Revision-Date: 2018-09-17 21:11+0200\n"
+"POT-Creation-Date: 2018-09-18 21:38+0200\n"
+"PO-Revision-Date: 2018-09-18 21:39+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -22,18 +22,26 @@ msgstr ""
 msgid "Select an option"
 msgstr "Sélectionner une option"
 
-#: main/static/js/trackmybank.js:88
+#: main/static/js/trackmybank.js:111
 msgid "Edit"
 msgstr "Modifier"
 
-#: main/static/js/trackmybank.js:95
+#: main/static/js/trackmybank.js:118
 msgid "Add"
 msgstr "Ajouter"
 
-#: main/static/js/trackmybank.js:114
+#: main/static/js/trackmybank.js:136
+msgid "Error: empty selection"
+msgstr "Erreur : sélection vide"
+
+#: main/static/js/trackmybank.js:140
+msgid "Error: more than one transaction selected"
+msgstr "Erreur : plus d'une transaction sélectionnée"
+
+#: main/static/js/trackmybank.js:151
 msgid "Some required fields are empty"
 msgstr "Certains champs requis sont vides"
 
-#: main/static/js/trackmybank.js:147 main/static/js/trackmybank.js:194
+#: main/static/js/trackmybank.js:189 main/static/js/trackmybank.js:236
 msgid "An error has occurred. Please contact the support"
 msgstr "Une erreur s'est produite. Veuillez contacter le support"
