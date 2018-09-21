@@ -24,7 +24,9 @@ trackmybank.init = function (csrftoken) {
             $("input#date_t").prop("disabled", false);
             $("input#date_b").prop("disabled", false);
         }
-    })
+    });
+    $("#add-month").on("click", trackmybank.show_hide_new_month_form);
+    $("#add-month-valid").on("click", trackmybank.add_new_month);
 };
 
 trackmybank.init_special_fields = function() {
@@ -53,9 +55,55 @@ trackmybank.init_special_fields = function() {
     })
 };
 
+trackmybank.is_add_month_form_visible = function() {
+    return $("#add-month-form").is(":visible");
+}
+
+trackmybank.show_new_month_form = function() {
+    $("#add-month-form").show();
+};
+
+trackmybank.hide_new_month_form = function() {
+    $("#add-month-form").hide();
+};
+
+trackmybank.show_hide_new_month_form = function() {
+    if (trackmybank.is_add_month_form_visible()) {
+        trackmybank.hide_new_month_form();
+    }
+    else {
+        trackmybank.show_new_month_form();
+    }
+};
+
+trackmybank.add_new_month = function() {
+    trackmybank.show_loading();
+    window.setTimeout(() => {
+        trackmybank.post(
+            url = "/month/",
+            data = {
+                month: $("#select-added-month").val(),
+                year: $("#added-month-year").val(),
+                salary: $("#added-month-salary").val(),
+                csrfmiddlewaretoken: trackmybank.csrftocken
+            },
+            success = function (data, success) {
+                if (success && data["success"]) {
+                    window.location.href = "/";
+                }
+                else {
+                    trackmybank.notify("message" in data ? data["message"] :
+                        django.gettext("An error has occurred. Please contact the support"), "danger")
+                }
+                trackmybank.hide_loading();
+            }
+        );
+    }, 0);
+};
+
 trackmybank.show_link_option = function() {
     $("div.link-to-selected").show();
-}
+};
 
 trackmybank.hide_link_option = function() {
     $("div.link-to-selected").hide();
@@ -102,9 +150,14 @@ trackmybank.init_table_click_events = function() {
     // Remove selection on escape pressed:
     $(document).on("keyup", function(e) {
         if (e.keyCode === 27) {
-            trackmybank.clear_selection();
-            if (trackmybank.in_edition != null) {
-                trackmybank.reset_edit();
+            if (trackmybank.is_add_month_form_visible()) {
+                trackmybank.hide_new_month_form();
+            }
+            else {
+                trackmybank.clear_selection();
+                if (trackmybank.in_edition != null) {
+                    trackmybank.reset_edit();
+                }
             }
         }
     });

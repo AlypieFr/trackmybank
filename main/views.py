@@ -1,3 +1,5 @@
+import calendar
+import os
 import re
 from datetime import datetime
 
@@ -5,14 +7,15 @@ from django.views.generic import TemplateView, View
 from django.template.loader import render_to_string
 from django.contrib.auth import logout
 from django.shortcuts import redirect
-from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse
 from django.utils.translation import ugettext as _
 from django.middleware import csrf
 from django.db import transaction as db_transaction
+from django.conf import settings
 
 import main.functions as functions
 import traceback
-from main.models import Category, Month, TransactionGroup, Transaction
+from main.models import Category, Month, TransactionGroup, Transaction, RecurringCharges
 
 
 def context_data(user):
@@ -31,10 +34,24 @@ def context_data(user):
         total_depenses += total
         if group.date_bank is not None:
             total_bank += total
+    with calendar.different_locale(settings.LOCALE):
+        all_months = [{"id": m, "name": calendar.month_name[m].capitalize()} for m in range(1, 13)]
+    months = sorted(Month.objects.all(), key=lambda m: (-m.year, -m.month))
+    next_month = None
+    next_year = None
+    next_salary = None
+    if len(months) > 0:
+        next_month = months[0].month + 1 if months[0].month < 12 else 1
+        next_year = months[0].year if months[0].month < 12 else months[0].year + 1
+        next_salary = months[0].salary
     return {
         "categories": Category.objects.all().order_by("name"),
         "transactions": transactions,
-        "months": sorted(Month.objects.all(), key=lambda m: (-m.year, -m.month)),
+        "months": months,
+        "next_month": next_month,
+        "next_year": next_year,
+        "next_salary": next_salary,
+        "all_months": all_months,
         "current_month": current_month,
         "free_money": current_month.salary - total_depenses,
         "goodies_part": goodies_part,
@@ -127,7 +144,7 @@ class TransactionView(View):
             if tr_id is None:
                 # Add a new transaction
                 with db_transaction.atomic():
-                    if group_id is None:
+                    if group_id is None or group_id == "":
                         transaction_group = TransactionGroup(date_t=date_t, date_bank=date_bank, month=month)
                         transaction_group.save()
                     else:
@@ -141,16 +158,20 @@ class TransactionView(View):
                 # Edit existing transaction
                 try:
                     with db_transaction.atomic():
-                        transaction = Transaction.objects.get(pk=tr_id)
-                        transaction_group = transaction.group
-                        transaction_group.date_t = date_t
-                        transaction_group.date_bank = date_bank
-                        transaction_group.month = month
-                        transaction_group.save()
-                        transaction.amount = amount
-                        transaction.subject = subject
-                        transaction.category = category
-                        transaction.save()
+                        try:
+                            transaction = Transaction.objects.get(pk=tr_id)
+                            transaction_group = transaction.group
+                            transaction_group.date_t = date_t
+                            transaction_group.date_bank = date_bank
+                            transaction_group.month = month
+                            transaction_group.save()
+                            transaction.amount = amount
+                            transaction.subject = subject
+                            transaction.category = category
+                            transaction.save()
+                        except:
+                            db_transaction.rollback()
+                            raise Exception()
                 except Transaction.DoesNotExist:
                     return JsonResponse({"success": False, "message": "Transaction %s does not exists" % tr_id})
         except:
@@ -184,3 +205,58 @@ class ChangeMonthView(View):
         return JsonResponse({"success": True,
                              "html": render_to_string("main_content.html",
                                                       {"view": {"data": context_data(request.user)}})})
+
+class MonthView(View):
+
+    def get(self, request):
+        return HttpResponseForbidden()
+
+    def add_recurring_charges(self, r_file, user, month):
+        with open(r_file, "r") as rec_file:
+            for line in rec_file:
+                line = line.rstrip()
+                if line != "":
+                    parts = line.split("\t")
+                    if len(parts) != 3:
+                        raise Exception(_("Recurring charges file is not valid"))
+                    subject = parts[0]
+                    amount = float(parts[1].replace(",", "."))
+                    category = Category.objects.get(name=parts[2].lower().capitalize())
+                    group = TransactionGroup(date_t="%04d-%02d-%02d" % (month.year, month.month, 1), month=month)
+                    group.save()
+                    transaction = Transaction(subject=subject, amount=amount, category=category, group=group)
+                    transaction.save()
+
+    def post(self, request):
+        if not self.request.user.is_authenticated:
+            return HttpResponseForbidden()
+
+        try:
+            try:
+                month = int(request.POST["month"])
+                year = int(request.POST["year"])
+                salary = float(request.POST["salary"].replace(",", "."))
+            except (KeyError, ValueError):
+                traceback.print_exc()
+                return JsonResponse({"success": False, "message": _("Invalid request")})
+
+            with db_transaction.atomic():
+                try:
+                    month_db = Month(month=month, year=year, salary=salary)
+                    month_db.save()
+                    functions.set_current_month(month_db, self.request.user)
+
+                    if RecurringCharges.objects.filter(user=request.user).exists():
+                        r_file = RecurringCharges.objects.get(user=request.user).file
+                        if os.path.exists(r_file):
+                            self.add_recurring_charges(r_file, request.user, month_db)
+                except Exception as e:
+                    traceback.print_exc()
+                    db_transaction.rollback()
+                    return JsonResponse({"success": False, "message": str(e)})
+
+            return JsonResponse({"success": True})
+        except:
+            traceback.print_exc()
+            return JsonResponse({"success": False,
+                                 "message": _("An unexpected error occurred. Please contact the support.")})

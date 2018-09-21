@@ -25,7 +25,7 @@ class Month(models.Model):
     salary = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("salary"))
 
     def __str__(self):
-        with calendar.different_locale(settings.LOCALE) as encoding:
+        with calendar.different_locale(settings.LOCALE):
             return " ".join((calendar.month_name[self.month].capitalize(), str(self.year)))
 
     class Meta:
@@ -64,3 +64,11 @@ class Transaction(models.Model):
     class Meta:
         verbose_name = _("Transaction")
         verbose_name_plural = _("Transactions")
+
+
+class RecurringCharges(models.Model):
+    user = models.OneToOneField(User, primary_key=True)
+    file = models.CharField(max_length=1000, verbose_name=_("File path"))
+
+    def __str__(self):
+        return self.user.username + " - " + self.file

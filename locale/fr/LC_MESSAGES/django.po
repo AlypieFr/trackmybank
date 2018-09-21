@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-18 21:24+0200\n"
-"PO-Revision-Date: 2018-09-18 21:25+0200\n"
+"POT-Creation-Date: 2018-09-21 22:22+0200\n"
+"PO-Revision-Date: 2018-09-21 22:23+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -30,7 +30,7 @@ msgstr "couleur"
 msgid "Is goodies?"
 msgstr "Goodies ?"
 
-#: main/models.py:18 templates/index.html:62 templates/main_content.html:26
+#: main/models.py:18 templates/index.html:86 templates/main_content.html:26
 msgid "Category"
 msgstr "Catégorie"
 
@@ -50,7 +50,7 @@ msgstr "année"
 msgid "salary"
 msgstr "Salaire"
 
-#: main/models.py:32
+#: main/models.py:32 templates/index.html:31
 msgid "Month"
 msgstr "Mois"
 
@@ -98,11 +98,15 @@ msgstr "Transaction"
 msgid "Transactions"
 msgstr "Transactions"
 
-#: main/views.py:169
+#: main/models.py:71
+msgid "File path"
+msgstr "Chemin du fichier"
+
+#: main/views.py:199
 msgid "Selected month does not exists. Please contact the support."
 msgstr "Le mois sélectionné n'existe pas. Veuillez contacter le support."
 
-#: main/views.py:173
+#: main/views.py:203
 msgid ""
 "Internal server error. An unexpected error occurred. Unable to change month. "
 "Please contact the support."
@@ -110,49 +114,67 @@ msgstr ""
 "Erreur serveur. Une erreur inconnue s'est produite. Impossible de changer le "
 "mois. Veuillez contacter le support."
 
-#: templates/index.html:31
+#: main/views.py:221
+msgid "Recurring charges file is not valid"
+msgstr "Fichier de frais récurrents invalide"
+
+#: main/views.py:241
+msgid "Invalid request"
+msgstr "Requête invalide"
+
+#: main/views.py:262
+msgid "An unexpected error occurred. Please contact the support."
+msgstr ""
+"Erreur serveur. Une erreur inconnue s'est produite. Veuillez contacter le "
+"support."
+
+#: templates/index.html:39
+msgid "Year"
+msgstr "Année"
+
+#: templates/index.html:43 templates/main_content.html:9
+msgid "Salary"
+msgstr "Salaire"
+
+#: templates/index.html:55
 msgid "Add a new transaction"
 msgstr "Ajouter une transaction"
 
-#: templates/index.html:34 templates/main_content.html:35
+#: templates/index.html:58 templates/main_content.html:35
 msgid "Date"
 msgstr "Date"
 
-#: templates/index.html:42
+#: templates/index.html:66
 msgid "Bank added date"
 msgstr "Date relevé bancaire"
 
-#: templates/index.html:50 templates/main_content.html:29
+#: templates/index.html:74 templates/main_content.html:29
 msgid "Amount"
 msgstr "Montant"
 
-#: templates/index.html:56 templates/main_content.html:32
+#: templates/index.html:80 templates/main_content.html:32
 msgid "Subject"
 msgstr "Sujet"
 
-#: templates/index.html:73
+#: templates/index.html:97
 msgid "Yes"
 msgstr "Oui"
 
-#: templates/index.html:73
+#: templates/index.html:97
 msgid "No"
 msgstr "Non"
 
-#: templates/index.html:73
+#: templates/index.html:97
 msgid "Link to selection"
 msgstr "Lier à la sélection"
 
-#: templates/index.html:75
+#: templates/index.html:99
 msgid "Add"
 msgstr "Ajouter"
 
-#: templates/index.html:76
+#: templates/index.html:100
 msgid "Cancel"
 msgstr "Annuler"
-
-#: templates/main_content.html:9
-msgid "Salary"
-msgstr "Salaire"
 
 #: templates/main_content.html:12
 msgid "Bank"

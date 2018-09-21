@@ -369,3 +369,52 @@ div.top-info.bank .info-value {
 .banked {
     font-weight: bold;
 }
+
+#add-month-form {
+    position: fixed;
+    top: 50px;
+    left: 320px;
+    width: 345px;
+    background-color: white;
+    padding: 10px;
+    /*border-bottom: black solid 1px;*/
+    /*border-left: black solid 1px;*/
+    /*border-right: black solid 1px;*/
+    box-shadow: 2px 2px 10px #000;
+}
+
+#add-month-form label {
+    display: block;
+}
+
+#add-month-form div.form-item {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+#add-month-form select {
+    width: 100px;
+}
+
+#add-month-form .year-input {
+    width: 70px;
+    height: 25px;
+}
+
+.valid-button {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    background: url("/static/images/valid.svg") 0 0;
+    background-size: 25px 25px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.valid-button:hover {
+    background-image: url("/static/images/valid-hover.svg");
+}
+
+.valid-button:active {
+    background-image: url("/static/images/valid-active.svg");
+}
