@@ -61,9 +61,9 @@ def context_data(user):
         "next_salary": next_salary,
         "all_months": all_months,
         "current_month": current_month,
-        "free_money": current_month.salary - total_depenses,
+        "free_money": current_month.salary - total_depenses if current_month is not None else 0,
         "goodies_part": goodies_part,
-        "bank_status": current_month.salary - total_bank,
+        "bank_status": current_month.salary - total_bank if current_month is not None else 0,
         "lang": settings.LANGUAGE_CODE
     }
 
