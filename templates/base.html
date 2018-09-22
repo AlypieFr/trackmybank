@@ -27,7 +27,7 @@
     <script type="application/javascript" src="{% static 'js/select2.full.min.js' %}"></script>
     <script type="application/javascript" src="{% static 'js/trackmybank.js' %}"></script>
 </head>
-<body onload='trackmybank.init("{{ csrf_token }}");'>
+<body onload='trackmybank.init("{{ csrf_token }}", "{{ view.data.lang }}");'>
 {% block body %}
 {% endblock %}
 </body>

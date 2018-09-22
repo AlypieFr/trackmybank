@@ -3,9 +3,12 @@ trackmybank = {};
 trackmybank.csrftocken = null;
 trackmybank.current_month = null;
 trackmybank.in_edition = null;
+trackmybank.lang = null;
+trackmybank.last_selected = null;
 
-trackmybank.init = function (csrftoken) {
+trackmybank.init = function (csrftoken, lang) {
     trackmybank.csrftocken = csrftoken;
+    trackmybank.lang = lang;
     trackmybank.current_month = $("select#months").val();
     trackmybank.init_special_fields();
     trackmybank.init_table_click_events();
@@ -30,20 +33,7 @@ trackmybank.init = function (csrftoken) {
 };
 
 trackmybank.init_special_fields = function() {
-    let lang = "fr-fr";
-    // Datetime picker:
-    $(".datepicker").datetimepicker({
-        format: "DD/MM/YYYY",
-        locale: lang
-    });
-    let placeholder = 'dd/mm/yyyy';
-    if (lang.split("-")[0] === "fr")
-        placeholder = 'jj/mm/aaaa';
-    $('.datemask').inputmask("datetime", {
-        mask: "1/2/y",
-        placeholder: placeholder,
-        alias: "dd/mm/yyyy"
-    });
+    trackmybank.set_datemask();
 
     //Decimal:
     $('.decimal').inputmask("decimal", {
@@ -54,6 +44,23 @@ trackmybank.init_special_fields = function() {
         allowMinus: true
     })
 };
+
+trackmybank.set_datemask = function(element) {
+    // Datetime picker:
+    $(element ? element : '.datepicker').datetimepicker({
+        format: "DD/MM/YYYY",
+        locale: trackmybank.lang
+    });
+
+    let placeholder = 'dd/mm/yyyy';
+    if (trackmybank.lang.split("-")[0] === "fr")
+        placeholder = 'jj/mm/aaaa';
+    $(element ? element : '.datemask').inputmask("datetime", {
+        mask: "1/2/y",
+        placeholder: placeholder,
+        alias: "dd/mm/yyyy"
+    });
+}
 
 trackmybank.is_add_month_form_visible = function() {
     return $("#add-month-form").is(":visible");
@@ -113,6 +120,7 @@ trackmybank.hide_link_option = function() {
 trackmybank.clear_selection = function() {
     $("table#list-tr tbody tr").removeClass("selected");
     trackmybank.hide_link_option();
+    trackmybank.last_selected = null;
 };
 
 trackmybank.init_table_click_events = function() {
@@ -123,8 +131,24 @@ trackmybank.init_table_click_events = function() {
                 $(this).removeClass("selected");
                 doSelect = false;
             }
-            if (!e.ctrlKey) {
+            if (!e.ctrlKey && !e.shiftKey) {
                 $("table#list-tr tbody tr").removeClass("selected");
+            }
+            if (e.shiftKey) {
+                if (trackmybank.last_selected != null) {
+                    if($(`tr[nb=${trackmybank.last_selected}]`).hasClass("selected")) {
+                        let current_nb = parseInt($(this).attr("nb"));
+                        let from_nb = Math.min(current_nb, trackmybank.last_selected);
+                        let to_nb = Math.max(current_nb, trackmybank.last_selected);
+                        let current = $(`tr[nb=${from_nb}]`).next();
+                        current_nb = parseInt(current.attr("nb"))
+                        while (current_nb !== to_nb) {
+                            current.addClass("selected");
+                            current = $(`tr[nb=${current_nb}]`).next();
+                            current_nb = parseInt(current.attr("nb"))
+                        }
+                    }
+                }
             }
             if (doSelect) {
                 $(this).addClass("selected");
@@ -132,9 +156,15 @@ trackmybank.init_table_click_events = function() {
 
             if ($("tr.selected").length === 1) {
                 trackmybank.show_link_option();
+                trackmybank.last_selected = parseInt($(this).attr("nb"));
+            }
+            else if ($("tr.selected").length > 0) {
+                trackmybank.hide_link_option();
+                trackmybank.last_selected = parseInt($(this).attr("nb"));
             }
             else {
                 trackmybank.hide_link_option();
+                trackmybank.last_selected = null;
             }
         }
     });

@@ -7,13 +7,13 @@ html, body {
     margin: 0;
     padding: 0;
     background: #d4d4d4;
-    height: 100%;
 }
 
 #header-menu-div {
     position: fixed;
     width: 100%;
     top: 0;
+    z-index: 1000;
 }
 
 #header-menu {
@@ -102,6 +102,34 @@ div#add-transaction-div span.euro {
 div.main-content {
     margin-top: 60px;
     margin-left: 250px;
+}
+
+div.main-left, div.main-right {
+    display: inline-block;
+    vertical-align: top;
+}
+
+div.main-left {
+    width: 50%;
+}
+
+div.main-right {
+    width: 49.9%;
+}
+
+@media screen and (max-width: 1700px) {
+    div.main-left {
+        width: 60%;
+    }
+    div.main-right {
+        width: 39%;
+    }
+}
+
+@media screen and (max-width: 1500px) {
+    div.main-left, div.main-right {
+        width: 100%;
+    }
 }
 
 form#add-transaction {
@@ -262,8 +290,12 @@ table.thead-dark thead tr {
     color: #fff;
 }
 
-tbody tr.selected td, tbody tr.edited td {
+tbody tr.selected td {
     background-color: #2aabd2 !important;
+}
+
+tbody tr.edited td {
+    background-color: #68d228 !important;
 }
 
 label.error {

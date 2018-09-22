@@ -55,8 +55,13 @@ def context_data(user):
         "current_month": current_month,
         "free_money": current_month.salary - total_depenses,
         "goodies_part": goodies_part,
-        "bank_status": current_month.salary - total_bank
+        "bank_status": current_month.salary - total_bank,
+        "lang": settings.LANGUAGE_CODE
     }
+
+
+def format_date(date):
+    return datetime.strptime(date, "%d/%m/%Y").strftime("%Y-%m-%d")
 
 
 class IndexView(TemplateView):
@@ -84,10 +89,6 @@ class LogoutView(View):
 
 
 class TransactionView(View):
-
-    @staticmethod
-    def format_date(date):
-        return datetime.strptime(date, "%d/%m/%Y").strftime("%Y-%m-%d")
 
     def get(self, request):
         return HttpResponseForbidden()
@@ -130,13 +131,13 @@ class TransactionView(View):
                 if date_t is not None:
                     if not re.match(date_regex, date_t):
                         raise ValueError("Invalid date: %s" % date_t)
-                    date_t = self.format_date(date_t)
+                    date_t = format_date(date_t)
                 else:
                     raise ValueError("Date is required")
                 if date_bank is not None and date_bank != "":
                     if not re.match(date_regex, date_bank):
                         raise ValueError("Invalid date: %s" % date_bank)
-                    date_bank = self.format_date(date_bank)
+                    date_bank = format_date(date_bank)
             except ValueError as e:
                 return JsonResponse({"success": False, "message": str(e)})
 
