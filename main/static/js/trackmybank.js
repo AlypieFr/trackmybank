@@ -30,6 +30,7 @@ trackmybank.init = function (csrftoken, lang) {
     });
     $("#add-month").on("click", trackmybank.show_hide_new_month_form);
     $("#add-month-valid").on("click", trackmybank.add_new_month);
+    $(document).on("click", "#submit-change-bank_date", trackmybank.set_bank_date);
 };
 
 trackmybank.init_special_fields = function() {
@@ -83,6 +84,50 @@ trackmybank.show_hide_new_month_form = function() {
     }
 };
 
+trackmybank.set_bank_date = function() {
+    let bank_date = $("#date_b_change").val();
+    let selection = [];
+    $.each($("tr.selected"), function (id, tr) {
+        selection.push(parseInt($(tr).attr("id").split("_")[1]));
+    });
+    if (selection.length > 0) {
+        trackmybank.show_loading();
+        window.setTimeout(() => {
+            trackmybank.post(
+                url = "/bank-date/",
+                data = {
+                    date_b: bank_date,
+                    transactions: selection.join("|"),
+                    csrfmiddlewaretoken: trackmybank.csrftocken
+                },
+                success = function (data, success) {
+                    if (success && data["success"]) {
+                        $(".main-content").html(data["html"]);
+                        $.each(selection, function (i, item) {
+                            console.log(item);
+                            $("tr#t_" + item.toString()).addClass("selected");
+                        });
+                        if (selection.length === 1) {
+                            trackmybank.show_link_option();
+                        }
+                        $(".on-select").show();
+                        trackmybank.set_datemask("#date_b_change");
+                        $("#date_b_change").val(bank_date);
+                    }
+                    else {
+                        trackmybank.notify("message" in data ? data["message"] :
+                            django.gettext("An error has occurred. Please contact the support"), "danger")
+                    }
+                    trackmybank.hide_loading();
+                }
+            );
+        }, 0);
+    }
+    else {
+        trackmybank.notify(django.gettext("Empty selection"), "danger");
+    }
+};
+
 trackmybank.add_new_month = function() {
     trackmybank.show_loading();
     window.setTimeout(() => {
@@ -120,6 +165,7 @@ trackmybank.hide_link_option = function() {
 trackmybank.clear_selection = function() {
     $("table#list-tr tbody tr").removeClass("selected");
     trackmybank.hide_link_option();
+    $(".on-select").hide();
     trackmybank.last_selected = null;
 };
 
@@ -156,14 +202,17 @@ trackmybank.init_table_click_events = function() {
 
             if ($("tr.selected").length === 1) {
                 trackmybank.show_link_option();
+                $(".on-select").show();
                 trackmybank.last_selected = parseInt($(this).attr("nb"));
             }
             else if ($("tr.selected").length > 0) {
                 trackmybank.hide_link_option();
+                $(".on-select").show();
                 trackmybank.last_selected = parseInt($(this).attr("nb"));
             }
             else {
                 trackmybank.hide_link_option();
+                $(".on-select").hide();
                 trackmybank.last_selected = null;
             }
         }

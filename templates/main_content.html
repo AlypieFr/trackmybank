@@ -19,6 +19,17 @@
                     <span class="info-label">{% trans "Goodies" %}</span><span class="info-value">{{ view.data.goodies_part }} €</span>
                 </div>
                 {% endlocalize %}
+                <div class="top-form on-select" style="display: none;">
+                    <div class="sub-item bank-date">
+                        <label for="date_b_change">{% trans "Set bank date:" %}</label>
+                        <div class="input-value input-group input-with-icon-group">
+                            <div class="input-group-addon calendar">
+                            </div>
+                            <input id="date_b_change" class="datemask datepicker" required autocomplete="off"/></div>
+                    </div>
+                </div>
+                <div class="top-form submit on-select" id="submit-change-bank_date" style="display: none;">
+
                 </div>
             </div>
             <table class="table thead-dark" id="list-tr">

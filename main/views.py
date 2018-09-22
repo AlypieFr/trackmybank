@@ -261,3 +261,41 @@ class MonthView(View):
             traceback.print_exc()
             return JsonResponse({"success": False,
                                  "message": _("An unexpected error occurred. Please contact the support.")})
+
+
+class BankDateView(View):
+
+    def get(self, request):
+        return HttpResponseForbidden()
+
+    def post(self, request):
+        if not self.request.user.is_authenticated:
+            return HttpResponseForbidden()
+        try:
+            date_b = request.POST["date_b"]
+            transactions = list(map(int, request.POST["transactions"].split("|")))
+            date_regex = r"^\d\d/\d\d/\d\d\d\d$"
+            if not re.match(date_regex, date_b):
+                raise ValueError("Invalid date: %s" % date_b)
+            date_b = format_date(date_b)
+        except (KeyError, ValueError):
+            traceback.print_exc()
+            return JsonResponse({"success": False, "message": _("Invalid request")})
+
+        with db_transaction.atomic():
+            try:
+                for transaction in transactions:
+                    transaction = Transaction.objects.get(pk=transaction)
+                    group = transaction.group
+                    group.date_bank = date_b
+                    group.save()
+            except Transaction.DoesNotExist:
+                db_transaction.rollback()
+                return JsonResponse({"success": False, "message": _("Transaction does not exists")})
+            except Exception as e:
+                traceback.print_exc()
+                db_transaction.rollback()
+                return JsonResponse({"success": False, "message": str(e)})
+        return JsonResponse({"success": True,
+                             "html": render_to_string("main_content.html",
+                                                      {"view": {"data": context_data(request.user)}})})

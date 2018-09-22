@@ -450,3 +450,59 @@ div.top-info.bank .info-value {
 .valid-button:active {
     background-image: url("/static/images/valid-active.svg");
 }
+
+.top-form {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.top-form.submit {
+    width: 30px;
+    height: 30px;
+}
+
+.top-form label {
+    font-size: 10pt;
+    display: block;
+    margin-bottom: 0;
+}
+
+.top-form input {
+    width: 90px;
+}
+
+.top-form .sub-item {
+    margin-top: -7px !important;
+}
+
+.top-form .sub-item.bank {
+    display: inline-block;
+    width: 90px;
+}
+
+.top-form .input-value.input-group.input-with-icon-group {
+    width: 115px !important;
+}
+
+.top-form.submit {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    vertical-align: bottom;
+    margin-left: 5px;
+    background: url("/static/images/valid.svg") no-repeat 0 0;
+    background-size: 25px 25px;
+}
+
+.top-form.submit:hover {
+    background-image: url("/static/images/valid-hover.svg");
+}
+
+.top-form.submit:active {
+    background-image: url("/static/images/valid-active.svg");
+}
+
+tr {
+    user-select: none;
+}
