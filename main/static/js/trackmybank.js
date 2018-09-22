@@ -105,8 +105,7 @@ trackmybank.set_bank_date = function() {
                 url = "/bank-date/",
                 data = {
                     date_b: bank_date,
-                    transactions: selection.join("|"),
-                    csrfmiddlewaretoken: trackmybank.csrftocken
+                    transactions: selection.join("|")
                 },
                 success = function (data, success) {
                     if (success && data["success"]) {
@@ -145,8 +144,7 @@ trackmybank.add_new_month = function() {
             data = {
                 month: $("#select-added-month").val(),
                 year: $("#added-month-year").val(),
-                salary: $("#added-month-salary").val(),
-                csrfmiddlewaretoken: trackmybank.csrftocken
+                salary: $("#added-month-salary").val()
             },
             success = function (data, success) {
                 if (success && data["success"]) {
@@ -324,8 +322,7 @@ trackmybank.submit_form = function(date, date_bank, amount, subject, category, m
                 category: category,
                 month: checkbox.prop("checked") ? null :  month,
                 group_id: id_group,
-                tr_id: trackmybank.in_edition == null ? null : trackmybank.in_edition,
-                csrfmiddlewaretoken: trackmybank.csrftocken
+                tr_id: trackmybank.in_edition == null ? null : trackmybank.in_edition
             },
             success = function (data, success) {
                 if (success && data["success"]) {
@@ -376,8 +373,7 @@ trackmybank.change_month = function(e) {
         trackmybank.post(
             url = "/select-month/",
             data = {
-                "month": value,
-                csrfmiddlewaretoken: trackmybank.csrftocken
+                "month": value
             },
             success = function (data, success) {
                 if (success && data["success"]) {
@@ -418,7 +414,7 @@ trackmybank.hide_loading = function() {
     $(".lds-facebook").hide();
 }
 
-trackmybank.ajax = function(url, data, success, error, method="POST") {
+trackmybank.ajax = function(url, data, success, error, method="POST", async=true) {
     $.ajax(url,
         {
             method: method,
@@ -426,19 +422,23 @@ trackmybank.ajax = function(url, data, success, error, method="POST") {
             success: success,
             error: error || function () {
                 trackmybank.hide_loading();
-                trackmybank.notify("An error occurred! Please contact us to report the bug", "danger");
+                trackmybank.notify(django.gettext("An error occurred! Please contact the support to report the bug"), "danger");
             },
+            async: async,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("X-CSRFToken", trackmybank.csrftocken);
+            }
         }
     );
 };
 
 trackmybank.post = function(url, data, success, error, async=true) {
-    trackmybank.ajax({
-        url: url,
-        data: data,
-        success: success,
-        error: error,
-        type: "POST",
-        async: async
-    });
+    trackmybank.ajax(
+        url=url,
+        data=data,
+        success=success,
+        error=error,
+        method="POST",
+        async=async
+    );
 };
