@@ -9,31 +9,54 @@ trackmybank.last_selected = null;
 trackmybank.init = function (csrftoken, lang) {
     trackmybank.csrftocken = csrftoken;
     trackmybank.lang = lang;
-    trackmybank.resize_table();
     trackmybank.current_month = $("select#months").val();
-    trackmybank.init_special_fields();
-    trackmybank.init_table_click_events();
-    $("select.select2").select2({
-        placeholder: django.gettext("Select an option")
-    });
-    $("input.submit-form").on("click", trackmybank.init_submit_form);
-    $("input.cancel-edit").on("click", trackmybank.reset_edit);
-    $("select#months").on("change", trackmybank.change_month);
-    $(document).on("change", "input#link-to-selected", function() {
-        if ($(this).prop("checked")) {
-            $("input#date_t").prop("disabled", true);
-            $("input#date_b").prop("disabled", true);
-        }
-        else {
-            $("input#date_t").prop("disabled", false);
-            $("input#date_b").prop("disabled", false);
-        }
-    });
-    $("#add-month").on("click", trackmybank.show_hide_new_month_form);
-    $("#add-month-valid").on("click", trackmybank.add_new_month);
-    $(document).on("click", "#submit-change-bank_date", trackmybank.set_bank_date);
-    $(document).on("click", "#delete-transactions", trackmybank.delete_transactions);
-    $(window).on("resize", trackmybank.resize_table);
+    trackmybank.load_content();
+};
+
+trackmybank.load_content = function() {
+    $("input,select,textarea,#add").prop("disabled", true);
+    trackmybank.show_loading();
+    window.setTimeout(() => {
+        trackmybank.get(
+            url = "/transaction/",
+            data = {},
+            success = function (data, success) {
+                if (success && data["success"]) {
+                    $(".main-content").html(data["html"]);
+                    trackmybank.resize_table();
+                    trackmybank.init_special_fields();
+                    trackmybank.init_table_click_events();
+                    $("select.select2").select2({
+                        placeholder: django.gettext("Select an option")
+                    });
+                    $("input.submit-form").on("click", trackmybank.init_submit_form);
+                    $("input.cancel-edit").on("click", trackmybank.reset_edit);
+                    $("select#months").on("change", trackmybank.change_month);
+                    $(document).on("change", "input#link-to-selected", function() {
+                        if ($(this).prop("checked")) {
+                            $("input#date_t").prop("disabled", true);
+                            $("input#date_b").prop("disabled", true);
+                        }
+                        else {
+                            $("input#date_t").prop("disabled", false);
+                            $("input#date_b").prop("disabled", false);
+                        }
+                    });
+                    $("#add-month").on("click", trackmybank.show_hide_new_month_form);
+                    $("#add-month-valid").on("click", trackmybank.add_new_month);
+                    $(document).on("click", "#submit-change-bank_date", trackmybank.set_bank_date);
+                    $(document).on("click", "#delete-transactions", trackmybank.delete_transactions);
+                    $(window).on("resize", trackmybank.resize_table);
+                }
+                else {
+                    trackmybank.notify("message" in data ? data["message"] :
+                        django.gettext("An error has occurred. Please contact the support"), "danger")
+                }
+                $("input,select,textarea,#add").prop("disabled", false);
+                trackmybank.hide_loading();
+            }
+        );
+    }, 0);
 };
 
 trackmybank.resize_table = function() {
@@ -481,6 +504,17 @@ trackmybank.post = function(url, data, success, error, async=true) {
         success=success,
         error=error,
         method="POST",
+        async=async
+    );
+};
+
+trackmybank.get = function (url, data, success, error, async = true) {
+    trackmybank.ajax(
+        url=url,
+        data=data,
+        success=success,
+        error=error,
+        method="GET",
         async=async
     );
 };

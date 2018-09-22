@@ -100,7 +100,11 @@ class LogoutView(View):
 class TransactionView(View):
 
     def get(self, request):
-        return HttpResponseForbidden()
+        if not self.request.user.is_authenticated:
+            return HttpResponseForbidden()
+        return JsonResponse({"success": True,
+                             "html": render_to_string("main_content.html",
+                                                      {"view": {"data": context_data(request.user)}})})
 
     def post(self, request):
         if not self.request.user.is_authenticated:
