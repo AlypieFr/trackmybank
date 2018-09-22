@@ -448,6 +448,7 @@ div.top-info.bank .info-value {
     /*border-left: black solid 1px;*/
     /*border-right: black solid 1px;*/
     box-shadow: 2px 2px 10px #000;
+    z-index: 11;
 }
 
 #add-month-form label {
