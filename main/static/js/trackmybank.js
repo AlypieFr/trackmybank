@@ -32,6 +32,7 @@ trackmybank.init = function (csrftoken, lang) {
     $("#add-month").on("click", trackmybank.show_hide_new_month_form);
     $("#add-month-valid").on("click", trackmybank.add_new_month);
     $(document).on("click", "#submit-change-bank_date", trackmybank.set_bank_date);
+    $(document).on("click", "#delete-transactions", trackmybank.delete_transactions);
     $(window).on("resize", trackmybank.resize_table);
 };
 
@@ -133,6 +134,43 @@ trackmybank.set_bank_date = function() {
     }
     else {
         trackmybank.notify(django.gettext("Empty selection"), "danger");
+    }
+};
+
+trackmybank.delete_transactions = function() {
+    if (confirm(django.gettext("Delete selected transactions?"))) {
+        trackmybank.show_loading();
+        let selection = [];
+        $.each($("tr.selected"), function (id, tr) {
+            selection.push(parseInt($(tr).attr("id").split("_")[1]));
+        });
+        if (selection.length > 0) {
+            trackmybank.show_loading();
+            window.setTimeout(() => {
+                trackmybank.post(
+                    url = "/delete-transaction/",
+                    data = {
+                        transactions: selection.join("|")
+                    },
+                    success = function (data, success) {
+                        if (success && data["success"]) {
+                            trackmybank.clear_selection();
+                            $(".main-content").html(data["html"]);
+                            trackmybank.resize_table();
+                            trackmybank.set_datemask("#date_b_change");
+                        }
+                    else {
+                        trackmybank.notify("message" in data ? data["message"] :
+                            django.gettext("An error has occurred. Please contact the support"), "danger")
+                    }
+                    trackmybank.hide_loading();
+                    }
+                );
+            }, 0);
+        }
+        else {
+            trackmybank.notify(django.gettext("Empty selection"), "danger");
+        }
     }
 };
 

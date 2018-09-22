@@ -319,3 +319,33 @@ class BankDateView(View):
         return JsonResponse({"success": True,
                              "html": render_to_string("main_content.html",
                                                       {"view": {"data": context_data(request.user)}})})
+
+
+class DeleteTransaction(View):
+
+    def get(self, request):
+        return HttpResponseForbidden()
+
+    def post(self, request):
+        if not self.request.user.is_authenticated:
+            return HttpResponseForbidden()
+        try:
+            transactions = list(map(int, request.POST["transactions"].split("|")))
+        except (KeyError, ValueError):
+            traceback.print_exc()
+            return JsonResponse({"success": False, "message": _("Invalid request")})
+
+        for transaction in transactions:
+            try:
+                tr_db = Transaction.objects.get(pk=transaction)
+                group = tr_db.group
+                tr_db.delete()
+                if len(Transaction.objects.filter(group=group)) == 0:
+                    group.delete()
+            except Transaction.DoesNotExist:
+                pass
+
+        return JsonResponse({"success": True,
+                             "html": render_to_string("main_content.html",
+                                                      {"view": {"data": context_data(request.user)}})})
+

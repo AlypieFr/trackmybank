@@ -537,4 +537,21 @@ div.top-info.bank .info-value {
 .top-form.submit:active {
     background-image: url("/static/images/valid-active.svg");
 }
+.top-form.delete {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    vertical-align: bottom;
+    margin-left: 15px;
+    background: url("/static/images/trash.svg") no-repeat 0 0;
+    background-size: 25px 25px;
+}
 
+.top-form.delete:hover {
+    background-image: url("/static/images/trash-hover.svg");
+}
+
+.top-form.delete:active {
+    background-image: url("/static/images/trash-active.svg");
+}
