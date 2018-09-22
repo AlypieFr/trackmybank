@@ -152,17 +152,23 @@ class TransactionView(View):
         try:
             if tr_id is None:
                 # Add a new transaction
-                with db_transaction.atomic():
-                    if group_id is None or group_id == "":
-                        transaction_group = TransactionGroup(date_t=date_t, date_bank=date_bank, month=month)
-                        transaction_group.save()
-                    else:
-                        try:
-                            transaction_group = TransactionGroup.objects.get(pk=int(group_id))
-                        except TransactionGroup.DoesNotExist:
-                            return JsonResponse({"success": False, "message": "Transaction group does not exists"})
-                    transaction = Transaction(amount=amount, subject=subject, category=category, group=transaction_group)
-                    transaction.save()
+                try:
+                    with db_transaction.atomic():
+                        if group_id is None or group_id == "":
+                            transaction_group = TransactionGroup(date_t=date_t, date_bank=date_bank, month=month)
+                            transaction_group.save()
+                        else:
+                            try:
+                                transaction_group = TransactionGroup.objects.get(pk=int(group_id))
+                            except TransactionGroup.DoesNotExist:
+                                return JsonResponse({"success": False, "message": "Transaction group does not exists"})
+                        transaction = Transaction(amount=amount, subject=subject, category=category, group=transaction_group)
+                        transaction.save()
+                except:
+                    db_transaction.rollback()
+                    traceback.print_exc()
+                    return JsonResponse({"success": False,
+                                         "message": "An unexpected error occurred. Please contact the support"})
             else:
                 # Edit existing transaction
                 try:
@@ -182,7 +188,13 @@ class TransactionView(View):
                             db_transaction.rollback()
                             raise Exception()
                 except Transaction.DoesNotExist:
+                    db_transaction.rollback()
                     return JsonResponse({"success": False, "message": "Transaction %s does not exists" % tr_id})
+                except:
+                    db_transaction.rollback()
+                    traceback.print_exc()
+                    return JsonResponse({"success": False,
+                                         "message": "An unexpected error occurred. Please contact the support"})
         except:
             traceback.print_exc()
             return JsonResponse({"success": False,
@@ -249,8 +261,8 @@ class MonthView(View):
                 traceback.print_exc()
                 return JsonResponse({"success": False, "message": _("Invalid request")})
 
-            with db_transaction.atomic():
-                try:
+            try:
+                with db_transaction.atomic():
                     month_db = Month(month=month, year=year, salary=salary)
                     month_db.save()
                     functions.set_current_month(month_db, self.request.user)
@@ -259,10 +271,10 @@ class MonthView(View):
                         r_file = RecurringCharges.objects.get(user=request.user).file
                         if os.path.exists(r_file):
                             self.add_recurring_charges(r_file, request.user, month_db)
-                except Exception as e:
-                    traceback.print_exc()
-                    db_transaction.rollback()
-                    return JsonResponse({"success": False, "message": str(e)})
+            except Exception as e:
+                traceback.print_exc()
+                db_transaction.rollback()
+                return JsonResponse({"success": False, "message": str(e)})
 
             return JsonResponse({"success": True})
         except:
@@ -290,20 +302,20 @@ class BankDateView(View):
             traceback.print_exc()
             return JsonResponse({"success": False, "message": _("Invalid request")})
 
-        with db_transaction.atomic():
-            try:
+        try:
+            with db_transaction.atomic():
                 for transaction in transactions:
                     transaction = Transaction.objects.get(pk=transaction)
                     group = transaction.group
                     group.date_bank = date_b
                     group.save()
-            except Transaction.DoesNotExist:
-                db_transaction.rollback()
-                return JsonResponse({"success": False, "message": _("Transaction does not exists")})
-            except Exception as e:
-                traceback.print_exc()
-                db_transaction.rollback()
-                return JsonResponse({"success": False, "message": str(e)})
+        except Transaction.DoesNotExist:
+            db_transaction.rollback()
+            return JsonResponse({"success": False, "message": _("Transaction does not exists")})
+        except Exception as e:
+            traceback.print_exc()
+            db_transaction.rollback()
+            return JsonResponse({"success": False, "message": str(e)})
         return JsonResponse({"success": True,
                              "html": render_to_string("main_content.html",
                                                       {"view": {"data": context_data(request.user)}})})

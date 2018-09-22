@@ -246,7 +246,7 @@ div.loading {
 }
 .lds-facebook div:nth-child(3) {
   left: 45px;
-  animation-delay: 0;
+  animation-delay: 0s;
 }
 @keyframes lds-facebook {
   0% {
@@ -261,20 +261,20 @@ div.loading {
 
 /* Table: */
 
-th.category {
+td.category, div.column.category {
     width: 130px;
 }
 
-th.amount {
+td.amount, div.column.amount {
     width: 100px;
 }
 
-th.date {
-    width: 100px;
+td.date_t, div.column.date_t {
+    width: 100px !important;
 }
 
-th.bank_date {
-    width: 100px;
+td.date_b, div.column.date_b, td.date_b {
+    width: 100px !important;
 }
 
 tr.odd {
@@ -297,6 +297,56 @@ tbody tr.selected td {
 tbody tr.edited td {
     background-color: #68d228 !important;
 }
+
+td {
+    border-top: none !important;
+}
+
+span.total-label {
+    margin-right: 5px;
+}
+
+td.total {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+tr {
+    user-select: none;
+    -moz-user-select: none;
+}
+
+thead {
+    display: none;
+}
+
+div.table-header {
+    display: flex;
+    height: 35px;
+    line-height: 20px;
+    background: #000;
+    color: white;
+    font-weight: bold;
+    padding-right: 13px;
+}
+
+div.table-header div.column {
+    line-height: 20px;
+    display: table-cell;
+    padding: 8px;
+}
+
+div.column.subject {
+    flex-grow: 100;
+}
+
+.table-wrapper-scroll-y {
+  display: block;
+  overflow-y: scroll;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+/* Other */
 
 label.error {
     color: #ff524f !important;
@@ -328,19 +378,6 @@ div#add-month:active {
 
 input[type=button] {
     outline: none;
-}
-
-td {
-    border-top: none !important;
-}
-
-span.total-label {
-    margin-right: 5px;
-}
-
-td.total {
-    font-weight: bold;
-    text-decoration: underline;
 }
 
 div.top-info {
@@ -471,7 +508,7 @@ div.top-info.bank .info-value {
     width: 90px;
 }
 
-.top-form .sub-item {
+.top-form {
     margin-top: -7px !important;
 }
 
@@ -503,6 +540,3 @@ div.top-info.bank .info-value {
     background-image: url("/static/images/valid-active.svg");
 }
 
-tr {
-    user-select: none;
-}

@@ -9,6 +9,7 @@ trackmybank.last_selected = null;
 trackmybank.init = function (csrftoken, lang) {
     trackmybank.csrftocken = csrftoken;
     trackmybank.lang = lang;
+    trackmybank.resize_table();
     trackmybank.current_month = $("select#months").val();
     trackmybank.init_special_fields();
     trackmybank.init_table_click_events();
@@ -31,6 +32,13 @@ trackmybank.init = function (csrftoken, lang) {
     $("#add-month").on("click", trackmybank.show_hide_new_month_form);
     $("#add-month-valid").on("click", trackmybank.add_new_month);
     $(document).on("click", "#submit-change-bank_date", trackmybank.set_bank_date);
+    $(window).on("resize", trackmybank.resize_table);
+};
+
+trackmybank.resize_table = function() {
+    let window_height = $(window).height();
+    let table_position = $(".table-wrapper-scroll-y").position().top;
+    $(".table-wrapper-scroll-y").css("height", window_height - table_position - 1 + "px");
 };
 
 trackmybank.init_special_fields = function() {
@@ -103,6 +111,7 @@ trackmybank.set_bank_date = function() {
                 success = function (data, success) {
                     if (success && data["success"]) {
                         $(".main-content").html(data["html"]);
+                        trackmybank.resize_table();
                         $.each(selection, function (i, item) {
                             console.log(item);
                             $("tr#t_" + item.toString()).addClass("selected");
@@ -321,6 +330,7 @@ trackmybank.submit_form = function(date, date_bank, amount, subject, category, m
             success = function (data, success) {
                 if (success && data["success"]) {
                     $(".main-content").html(data["html"]);
+                    trackmybank.resize_table();
                     if (trackmybank.in_edition == null) {
                         trackmybank.reset_form();
                     } else {
@@ -372,6 +382,7 @@ trackmybank.change_month = function(e) {
             success = function (data, success) {
                 if (success && data["success"]) {
                     $(".main-content").html(data["html"]);
+                    trackmybank.resize_table();
                     trackmybank.current_month = value;
                 }
                 else {
