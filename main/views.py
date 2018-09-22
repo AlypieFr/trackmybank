@@ -233,7 +233,7 @@ class MonthView(View):
         return HttpResponseForbidden()
 
     def add_recurring_charges(self, r_file, user, month):
-        with open(r_file, "r") as rec_file:
+        with open(r_file, "r", encoding="utf-8") as rec_file:
             for line in rec_file:
                 line = line.rstrip()
                 if line != "":
