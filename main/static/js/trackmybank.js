@@ -317,7 +317,8 @@ trackmybank.init_submit_form = function () {
     let category = $("select#category").val();
     let month = $("select#months").val();
     if (month == null) {
-        trackmybank.notify(django.gettext("You must create a month before"), "danger")
+        trackmybank.notify(django.gettext("You must create a month before"), "danger");
+        return false;
     }
     let id_group = null;
     if ($("input#link-to-selected").prop("checked")) {
