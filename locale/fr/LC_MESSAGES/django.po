@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-21 22:22+0200\n"
-"PO-Revision-Date: 2018-09-21 22:23+0200\n"
+"POT-Creation-Date: 2018-09-22 19:21+0200\n"
+"PO-Revision-Date: 2018-09-22 19:22+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -18,95 +18,95 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.0.6\n"
 
-#: main/models.py:10
+#: main/models.py:18
 msgid "name"
 msgstr "nom"
 
-#: main/models.py:11
+#: main/models.py:19
 msgid "color"
 msgstr "couleur"
 
-#: main/models.py:12
+#: main/models.py:20
 msgid "Is goodies?"
 msgstr "Goodies ?"
 
-#: main/models.py:18 templates/index.html:86 templates/main_content.html:26
+#: main/models.py:26 templates/index.html:86 templates/main_content.html:40
 msgid "Category"
 msgstr "Catégorie"
 
-#: main/models.py:19
+#: main/models.py:27
 msgid "Categories"
 msgstr "Catégories"
 
-#: main/models.py:23 main/models.py:38 main/models.py:44
+#: main/models.py:31 main/models.py:46 main/models.py:52
 msgid "month"
 msgstr "mois"
 
-#: main/models.py:24
+#: main/models.py:32
 msgid "year"
 msgstr "année"
 
-#: main/models.py:25
+#: main/models.py:33
 msgid "salary"
 msgstr "Salaire"
 
-#: main/models.py:32 templates/index.html:31
+#: main/models.py:40 templates/index.html:31
 msgid "Month"
 msgstr "Mois"
 
-#: main/models.py:33
+#: main/models.py:41
 msgid "Months"
 msgstr "Mois"
 
-#: main/models.py:42
+#: main/models.py:50
 msgid "transaction date"
 msgstr "date de la transaction"
 
-#: main/models.py:43
+#: main/models.py:51
 msgid "bank added date"
 msgstr "date relevé bancaire"
 
-#: main/models.py:50
+#: main/models.py:58
 msgid "Transaction group"
 msgstr "Groupe de transactions"
 
-#: main/models.py:51
+#: main/models.py:59
 msgid "Transaction groups"
 msgstr "Groupes de transactions"
 
-#: main/models.py:55
+#: main/models.py:63
 msgid "subject"
 msgstr "sujet"
 
-#: main/models.py:56
+#: main/models.py:64
 msgid "amount"
 msgstr "montant"
 
-#: main/models.py:57
+#: main/models.py:65
 msgid "category"
 msgstr "catégorie"
 
-#: main/models.py:58
+#: main/models.py:66
 msgid "group"
 msgstr "Groupe"
 
-#: main/models.py:65
+#: main/models.py:73
 msgid "Transaction"
 msgstr "Transaction"
 
-#: main/models.py:66
+#: main/models.py:74
 msgid "Transactions"
 msgstr "Transactions"
 
-#: main/models.py:71
+#: main/models.py:79
 msgid "File path"
 msgstr "Chemin du fichier"
 
-#: main/views.py:199
+#: main/views.py:220
 msgid "Selected month does not exists. Please contact the support."
 msgstr "Le mois sélectionné n'existe pas. Veuillez contacter le support."
 
-#: main/views.py:203
+#: main/views.py:224
 msgid ""
 "Internal server error. An unexpected error occurred. Unable to change month. "
 "Please contact the support."
@@ -114,25 +114,29 @@ msgstr ""
 "Erreur serveur. Une erreur inconnue s'est produite. Impossible de changer le "
 "mois. Veuillez contacter le support."
 
-#: main/views.py:221
+#: main/views.py:242
 msgid "Recurring charges file is not valid"
 msgstr "Fichier de frais récurrents invalide"
 
-#: main/views.py:241
+#: main/views.py:262 main/views.py:303 main/views.py:336
 msgid "Invalid request"
 msgstr "Requête invalide"
 
-#: main/views.py:262
+#: main/views.py:283
 msgid "An unexpected error occurred. Please contact the support."
 msgstr ""
 "Erreur serveur. Une erreur inconnue s'est produite. Veuillez contacter le "
 "support."
 
+#: main/views.py:314
+msgid "Transaction does not exists"
+msgstr "La transaction n'existe pas"
+
 #: templates/index.html:39
 msgid "Year"
 msgstr "Année"
 
-#: templates/index.html:43 templates/main_content.html:9
+#: templates/index.html:43 templates/main_content.html:10
 msgid "Salary"
 msgstr "Salaire"
 
@@ -140,7 +144,7 @@ msgstr "Salaire"
 msgid "Add a new transaction"
 msgstr "Ajouter une transaction"
 
-#: templates/index.html:58 templates/main_content.html:35
+#: templates/index.html:58 templates/main_content.html:49
 msgid "Date"
 msgstr "Date"
 
@@ -148,11 +152,11 @@ msgstr "Date"
 msgid "Bank added date"
 msgstr "Date relevé bancaire"
 
-#: templates/index.html:74 templates/main_content.html:29
+#: templates/index.html:74 templates/main_content.html:43
 msgid "Amount"
 msgstr "Montant"
 
-#: templates/index.html:80 templates/main_content.html:32
+#: templates/index.html:80 templates/main_content.html:46
 msgid "Subject"
 msgstr "Sujet"
 
@@ -176,23 +180,31 @@ msgstr "Ajouter"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: templates/main_content.html:12
+#: templates/main_content.html:13
 msgid "Bank"
 msgstr "Banque"
 
-#: templates/main_content.html:15
+#: templates/main_content.html:16
 msgid "Free money"
 msgstr "Argent libre"
 
-#: templates/main_content.html:18
+#: templates/main_content.html:19
 msgid "Goodies"
 msgstr "Goodies"
 
-#: templates/main_content.html:38
+#: templates/main_content.html:24
+msgid "Set bank date:"
+msgstr "Date (banque) :"
+
+#: templates/main_content.html:34
+msgid "Delete selected transactions"
+msgstr "Supprimer les transactions sélectionnées"
+
+#: templates/main_content.html:52
 msgid "Bank date"
 msgstr "Banque"
 
-#: templates/main_content.html:76
+#: templates/main_content.html:91
 msgid "Total:"
 msgstr "Total :"
 

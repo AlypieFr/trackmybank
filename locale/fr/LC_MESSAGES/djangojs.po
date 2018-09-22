@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-18 21:38+0200\n"
-"PO-Revision-Date: 2018-09-18 21:39+0200\n"
+"POT-Creation-Date: 2018-09-22 19:21+0200\n"
+"PO-Revision-Date: 2018-09-22 19:23+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -18,30 +18,44 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.0.6\n"
 
-#: main/static/js/trackmybank.js:13
+#: main/static/js/trackmybank.js:17
 msgid "Select an option"
 msgstr "Sélectionner une option"
 
-#: main/static/js/trackmybank.js:111
+#: main/static/js/trackmybank.js:128 main/static/js/trackmybank.js:164
+#: main/static/js/trackmybank.js:193 main/static/js/trackmybank.js:378
+#: main/static/js/trackmybank.js:425
+msgid "An error has occurred. Please contact the support"
+msgstr "Une erreur s'est produite. Veuillez contacter le support"
+
+#: main/static/js/trackmybank.js:136 main/static/js/trackmybank.js:172
+msgid "Empty selection"
+msgstr "Erreur : sélection vide"
+
+#: main/static/js/trackmybank.js:141
+msgid "Delete selected transactions?"
+msgstr "Supprimer les transactions sélectionnées ?"
+
+#: main/static/js/trackmybank.js:298
 msgid "Edit"
 msgstr "Modifier"
 
-#: main/static/js/trackmybank.js:118
+#: main/static/js/trackmybank.js:305
 msgid "Add"
 msgstr "Ajouter"
 
-#: main/static/js/trackmybank.js:136
+#: main/static/js/trackmybank.js:323
 msgid "Error: empty selection"
 msgstr "Erreur : sélection vide"
 
-#: main/static/js/trackmybank.js:140
+#: main/static/js/trackmybank.js:327
 msgid "Error: more than one transaction selected"
 msgstr "Erreur : plus d'une transaction sélectionnée"
 
-#: main/static/js/trackmybank.js:151
+#: main/static/js/trackmybank.js:337
 msgid "Some required fields are empty"
 msgstr "Certains champs requis sont vides"
 
-#: main/static/js/trackmybank.js:189 main/static/js/trackmybank.js:236
-msgid "An error has occurred. Please contact the support"
+#: main/static/js/trackmybank.js:463
+msgid "An error occurred! Please contact the support to report the bug"
 msgstr "Une erreur s'est produite. Veuillez contacter le support"
