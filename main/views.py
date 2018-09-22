@@ -28,7 +28,8 @@ from main.models import Category, Month, TransactionGroup, Transaction, Recurrin
 
 def context_data(user):
     current_month = functions.get_current_month(user)
-    transactions = TransactionGroup.objects.filter(month=current_month).order_by("date_t")
+    transactions = TransactionGroup.objects.filter(month=current_month).order_by("date_t", "date_bank",
+                                                                                 "transaction__subject")
     total_depenses = 0
     goodies_part = 0
     total_bank = 0
