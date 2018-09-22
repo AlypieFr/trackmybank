@@ -51,25 +51,6 @@
             </div>
             <div class="table-wrapper-scroll-y">
                 <table class="table thead-dark" id="list-tr">
-                    <thead>
-                        <tr>
-                            <th class="category">
-                                {% trans "Category" %}
-                            </th>
-                            <th class="amount">
-                                {% trans "Amount" %}
-                            </th>
-                            <th class="subject">
-                                {% trans "Subject" %}
-                            </th>
-                            <th class="date_t">
-                                {% trans "Date" %}
-                            </th>
-                            <th class="bank_b">
-                                {% trans "Bank date" %}
-                            </th>
-                        </tr>
-                    </thead>
                     <tbody>
                     {% set odd = True %}
                     {% for group in view.data.transactions %}

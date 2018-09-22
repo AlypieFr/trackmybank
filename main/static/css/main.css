@@ -316,10 +316,6 @@ tr {
     -moz-user-select: none;
 }
 
-thead {
-    display: none;
-}
-
 div.table-header {
     display: flex;
     height: 35px;
@@ -331,9 +327,11 @@ div.table-header {
 }
 
 div.table-header div.column {
+    z-index: 10;
     line-height: 20px;
     display: table-cell;
     padding: 8px;
+    background: #000;
 }
 
 div.column.subject {
