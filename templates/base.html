@@ -13,19 +13,19 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/animate.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/select2.min.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
-    <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
-    <script type="application/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-    <script type="application/javascript" src="{% static 'js/moment-with-locales.min.js' %}"></script>
-    <script type="application/javascript" src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
-    <script type="application/javascript" src="{% static 'js/bootstrap-notify.min.js' %}"></script>
-    <script type="application/javascript" src="{% static 'js/bootstrap-toggle.min.js' %}"></script>
-    <script type="application/javascript" src="{% static 'js/inputmask.min.js' %}"></script>
-    <script type="application/javascript" src="{% static 'js/jquery.inputmask.min.js' %}"></script>
-    <script type="application/javascript" src="{% static 'js/inputmask.extensions.min.js' %}"></script>
-    <script type="application/javascript" src="{% static 'js/inputmask.date.extensions.min.js' %}"></script>
-    <script type="application/javascript" src="{% static 'js/inputmask.numeric.extensions.min.js' %}"></script>
-    <script type="application/javascript" src="{% static 'js/select2.full.min.js' %}"></script>
-    <script type="application/javascript" src="{% static 'js/trackmybank.js' %}"></script>
+    <script type="text/javascript" src="{% url 'javascript-catalog' %}" defer></script>
+    <script type="application/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}" defer></script>
+    <script type="application/javascript" src="{% static 'js/moment-with-locales.min.js' %}" defer></script>
+    <script type="application/javascript" src="{% static 'js/bootstrap-datetimepicker.min.js' %}" defer></script>
+    <script type="application/javascript" src="{% static 'js/bootstrap-notify.min.js' %}" defer></script>
+    <script type="application/javascript" src="{% static 'js/bootstrap-toggle.min.js' %}" defer></script>
+    <script type="application/javascript" src="{% static 'js/inputmask.min.js' %}" defer></script>
+    <script type="application/javascript" src="{% static 'js/jquery.inputmask.min.js' %}" defer></script>
+    <script type="application/javascript" src="{% static 'js/inputmask.extensions.min.js' %}" defer></script>
+    <script type="application/javascript" src="{% static 'js/inputmask.date.extensions.min.js' %}" defer></script>
+    <script type="application/javascript" src="{% static 'js/inputmask.numeric.extensions.min.js' %}" defer></script>
+    <script type="application/javascript" src="{% static 'js/select2.full.min.js' %}" defer></script>
+    <script type="application/javascript" src="{% static 'js/trackmybank.js' %}" defer></script>
 </head>
 <body onload='trackmybank.init("{{ csrf_token }}", "{{ view.data.lang }}");'>
 {% block body %}
