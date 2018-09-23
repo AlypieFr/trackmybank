@@ -9,7 +9,7 @@
 import calendar
 import os
 import re
-from datetime import datetime
+import datetime
 
 from django.views.generic import TemplateView, View
 from django.template.loader import render_to_string
@@ -28,8 +28,10 @@ from main.models import Category, Month, TransactionGroup, Transaction, Recurrin
 
 def content_data(user):
     current_month = functions.get_current_month(user)
-    transactions = TransactionGroup.objects.filter(month=current_month).order_by("date_t", "date_bank",
-                                                                                 "transaction__subject")
+    transactions = sorted(TransactionGroup.objects.filter(month=current_month),
+                          key=lambda t: (t.date_t,
+                                         t.date_bank if t.date_bank is not None else datetime.date(1900, 1, 1),
+                                         t.transaction_set.first().subject.lower()))
     total_depenses = 0
     goodies_part = 0
     total_bank = 0
@@ -77,7 +79,7 @@ def basic_context_data(user):
 
 
 def format_date(date):
-    return datetime.strptime(date, "%d/%m/%Y").strftime("%Y-%m-%d")
+    return datetime.datetime.strptime(date, "%d/%m/%Y").strftime("%Y-%m-%d")
 
 
 class IndexView(TemplateView):
