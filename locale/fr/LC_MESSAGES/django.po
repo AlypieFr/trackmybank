@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-22 19:21+0200\n"
-"PO-Revision-Date: 2018-09-22 19:22+0200\n"
+"POT-Creation-Date: 2018-09-23 23:09+0200\n"
+"PO-Revision-Date: 2018-09-23 23:11+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -102,11 +102,11 @@ msgstr "Transactions"
 msgid "File path"
 msgstr "Chemin du fichier"
 
-#: main/views.py:220
+#: main/views.py:256
 msgid "Selected month does not exists. Please contact the support."
 msgstr "Le mois sélectionné n'existe pas. Veuillez contacter le support."
 
-#: main/views.py:224
+#: main/views.py:260
 msgid ""
 "Internal server error. An unexpected error occurred. Unable to change month. "
 "Please contact the support."
@@ -114,21 +114,21 @@ msgstr ""
 "Erreur serveur. Une erreur inconnue s'est produite. Impossible de changer le "
 "mois. Veuillez contacter le support."
 
-#: main/views.py:242
+#: main/views.py:278
 msgid "Recurring charges file is not valid"
 msgstr "Fichier de frais récurrents invalide"
 
-#: main/views.py:262 main/views.py:303 main/views.py:336
+#: main/views.py:298 main/views.py:339 main/views.py:372
 msgid "Invalid request"
 msgstr "Requête invalide"
 
-#: main/views.py:283
+#: main/views.py:319
 msgid "An unexpected error occurred. Please contact the support."
 msgstr ""
 "Erreur serveur. Une erreur inconnue s'est produite. Veuillez contacter le "
 "support."
 
-#: main/views.py:314
+#: main/views.py:350
 msgid "Transaction does not exists"
 msgstr "La transaction n'existe pas"
 
@@ -207,6 +207,14 @@ msgstr "Banque"
 #: templates/main_content.html:91
 msgid "Total:"
 msgstr "Total :"
+
+#: templates/main_content.html:106
+msgid "Transactions by category"
+msgstr "Dépenses par catégorie"
+
+#: templates/main_content.html:108
+msgid "Transactions by ranges of amount"
+msgstr "Dépenses par groupe de montant"
 
 #~ msgid "Logout"
 #~ msgstr "Se déconnecter"

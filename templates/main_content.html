@@ -102,6 +102,9 @@
                 </table>
             </div>
         </div>
-{#        <div class="main-right">#}
-{##}
-{#        </div>#}
+        <div class="main-right">
+            <h1 class="title-chart">{% trans "Transactions by category" %}</h1>
+            {{ view.data.fig_pie_categories | safe }}
+            <h1 class="title-chart">{% trans "Transactions by ranges of amount" %}</h1>
+            {{ view.data.fig_pie_tranches | safe }}
+        </div>

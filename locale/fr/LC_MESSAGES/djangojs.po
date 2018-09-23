@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-22 21:58+0200\n"
+"POT-Creation-Date: 2018-09-23 23:09+0200\n"
 "PO-Revision-Date: 2018-09-22 21:58+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,48 +18,124 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.0.6\n"
 
-#: main/static/js/trackmybank.js:17
+#: main/static/js/plotly-latest.min.js:7
+msgid "Max vertices per segment is "
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "Geometry exceeds allowed extent, reduce your vector tile buffer size"
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "\""
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "index2"
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "index4"
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "bgcolor"
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "bordercolor"
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "borderwidth"
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "orientation"
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "traceorder"
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "tracegroupgap"
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "x"
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "xanchor"
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "y"
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "yanchor"
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "visible"
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "thickness"
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "autorange"
+msgstr ""
+
+#: main/static/js/plotly-latest.min.js:7
+msgid "range"
+msgstr ""
+
+#: main/static/js/trackmybank.js:30
 msgid "Select an option"
 msgstr "Sélectionner une option"
 
-#: main/static/js/trackmybank.js:128 main/static/js/trackmybank.js:164
-#: main/static/js/trackmybank.js:193 main/static/js/trackmybank.js:381
-#: main/static/js/trackmybank.js:428
+#: main/static/js/trackmybank.js:53 main/static/js/trackmybank.js:153
+#: main/static/js/trackmybank.js:189 main/static/js/trackmybank.js:218
+#: main/static/js/trackmybank.js:407 main/static/js/trackmybank.js:454
 msgid "An error has occurred. Please contact the support"
 msgstr "Une erreur s'est produite. Veuillez contacter le support"
 
-#: main/static/js/trackmybank.js:136 main/static/js/trackmybank.js:172
+#: main/static/js/trackmybank.js:161 main/static/js/trackmybank.js:197
 msgid "Empty selection"
 msgstr "Erreur : sélection vide"
 
-#: main/static/js/trackmybank.js:141
+#: main/static/js/trackmybank.js:166
 msgid "Delete selected transactions?"
 msgstr "Supprimer les transactions sélectionnées ?"
 
-#: main/static/js/trackmybank.js:298
+#: main/static/js/trackmybank.js:323
 msgid "Edit"
 msgstr "Modifier"
 
-#: main/static/js/trackmybank.js:305
+#: main/static/js/trackmybank.js:330
 msgid "Add"
 msgstr "Ajouter"
 
-#: main/static/js/trackmybank.js:320
+#: main/static/js/trackmybank.js:345
 msgid "You must create a month before"
 msgstr "Vous devez créer un mois avant"
 
-#: main/static/js/trackmybank.js:326
+#: main/static/js/trackmybank.js:352
 msgid "Error: empty selection"
 msgstr "Erreur : sélection vide"
 
-#: main/static/js/trackmybank.js:330
+#: main/static/js/trackmybank.js:356
 msgid "Error: more than one transaction selected"
 msgstr "Erreur : plus d'une transaction sélectionnée"
 
-#: main/static/js/trackmybank.js:340
+#: main/static/js/trackmybank.js:366
 msgid "Some required fields are empty"
 msgstr "Certains champs requis sont vides"
 
-#: main/static/js/trackmybank.js:466
+#: main/static/js/trackmybank.js:492
 msgid "An error occurred! Please contact the support to report the bug"
 msgstr "Une erreur s'est produite. Veuillez contacter le support"

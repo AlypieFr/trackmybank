@@ -102,6 +102,7 @@ div#add-transaction-div span.euro {
 div.main-content {
     margin-top: 60px;
     margin-left: 250px;
+    height: 100%;
 }
 
 div.main-left, div.main-right {
@@ -114,7 +115,16 @@ div.main-left {
 }
 
 div.main-right {
-    width: 49.9%;
+    width: 49%;
+    //background: #dadac1;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+h1.title-chart {
+    font-size: 20pt;
+    margin-left: 15px;
 }
 
 @media screen and (max-width: 1700px) {
@@ -555,4 +565,8 @@ div.top-info.bank .info-value {
 
 .top-form.delete:active {
     background-image: url("/static/images/trash-active.svg");
+}
+
+div.modebar {
+    display: none;
 }

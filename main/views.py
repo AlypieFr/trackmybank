@@ -35,12 +35,33 @@ def content_data(user):
     total_depenses = 0
     goodies_part = 0
     total_bank = 0
+    count_by_cat = {}
+    count_by_tranches = {
+        (0, 2): 0,
+        (2, 5): 0,
+        (5, 10): 0,
+        (10, 20): 0,
+        (20, 50): 0,
+        (50, 100): 0,
+        (100, 200): 0,
+        (200, 500): 0,
+        (500, -1): 0
+    }
     for group in transactions:
         total = 0
         for transaction in group.transaction_set.all():
             total += transaction.amount
             if transaction.category.is_goodies:
                 goodies_part += transaction.amount
+            if transaction.category.name not in count_by_cat:
+                count_by_cat[transaction.category.name] = 0
+            count_by_cat[transaction.category.name] += transaction.amount
+            for tranche in count_by_tranches:
+                min_t = tranche[0]
+                max_t = tranche[1] if tranche[1] > 0 else 1000000000000000000
+                if min_t <= transaction.amount < max_t:
+                    count_by_tranches[tranche] += 1
+                    break
         group.total = total
         total_depenses += total
         if group.date_bank is not None:
@@ -50,7 +71,9 @@ def content_data(user):
         "free_money": current_month.salary - total_depenses if current_month is not None else 0,
         "goodies_part": goodies_part,
         "bank_status": current_month.salary - total_bank if current_month is not None else 0,
-        "current_month": current_month
+        "current_month": current_month,
+        "fig_pie_categories": functions.build_category_pie_chart(count_by_cat),
+        "fig_pie_tranches": functions.build_tranches_pie_chart(count_by_tranches)
     }
 
 

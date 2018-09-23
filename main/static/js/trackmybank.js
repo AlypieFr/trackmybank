@@ -63,6 +63,8 @@ trackmybank.resize_table = function() {
     let window_height = $(window).height();
     let table_position = $(".table-wrapper-scroll-y").position().top;
     $(".table-wrapper-scroll-y").css("height", window_height - table_position - 1 + "px");
+    let right_position = $(".main-right").position().top;
+    $(".main-right").height(window_height - right_position - 1 + "px");
 };
 
 trackmybank.init_special_fields = function() {
