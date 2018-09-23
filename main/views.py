@@ -26,7 +26,7 @@ import traceback
 from main.models import Category, Month, TransactionGroup, Transaction, RecurringCharges
 
 
-def context_data(user):
+def content_data(user):
     current_month = functions.get_current_month(user)
     transactions = TransactionGroup.objects.filter(month=current_month).order_by("date_t", "date_bank",
                                                                                  "transaction__subject")
@@ -43,6 +43,16 @@ def context_data(user):
         total_depenses += total
         if group.date_bank is not None:
             total_bank += total
+    return {
+        "transactions": transactions,
+        "free_money": current_month.salary - total_depenses if current_month is not None else 0,
+        "goodies_part": goodies_part,
+        "bank_status": current_month.salary - total_bank if current_month is not None else 0,
+    }
+
+
+def basic_context_data(user):
+    current_month = functions.get_current_month(user)
     with calendar.different_locale(settings.LOCALE):
         all_months = [{"id": m, "name": calendar.month_name[m].capitalize()} for m in range(1, 13)]
     months = sorted(Month.objects.all(), key=lambda m: (-m.year, -m.month))
@@ -55,16 +65,12 @@ def context_data(user):
         next_salary = months[0].salary
     return {
         "categories": Category.objects.all().order_by("name"),
-        "transactions": transactions,
         "months": months,
         "next_month": next_month,
         "next_year": next_year,
         "next_salary": next_salary,
         "all_months": all_months,
         "current_month": current_month,
-        "free_money": current_month.salary - total_depenses if current_month is not None else 0,
-        "goodies_part": goodies_part,
-        "bank_status": current_month.salary - total_bank if current_month is not None else 0,
         "lang": settings.LANGUAGE_CODE
     }
 
@@ -77,16 +83,14 @@ class IndexView(TemplateView):
     template_name = "index.html"
 
     user = None
+    data = None
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
-        c = super(TemplateView, self).get_context_data(**kwargs)
+        c = super().get_context_data(**kwargs)
         self.user = self.request.user
+        self.data = basic_context_data(self.user)
         return c
-
-    def data(self):
-        current_month = functions.get_current_month(self.user)
-        return context_data(self.user)
 
 
 class LogoutView(View):
@@ -104,7 +108,7 @@ class TransactionView(View):
             return HttpResponseForbidden()
         return JsonResponse({"success": True,
                              "html": render_to_string("main_content.html",
-                                                      {"view": {"data": context_data(request.user)}})})
+                                                      {"view": {"data": content_data(request.user)}})})
 
     def post(self, request):
         if not self.request.user.is_authenticated:
@@ -119,7 +123,8 @@ class TransactionView(View):
             try:
                 category = Category.objects.get(pk=request.POST["category"])
             except Category.DoesNotExist:
-                return JsonResponse({"success": False, "message": "Category %s does not exists" % request.POST["category"]})
+                return JsonResponse({"success": False,
+                                     "message": "Category %s does not exists" % request.POST["category"]})
             try:
                 month = Month.objects.get(pk=request.POST["month"]) \
                     if ("month" in request.POST and request.POST["month"] != "") else None
@@ -207,7 +212,7 @@ class TransactionView(View):
 
         return JsonResponse({"success": True,
                              "html": render_to_string("main_content.html",
-                                                      {"view": {"data": context_data(request.user)}})})
+                                                      {"view": {"data": content_data(request.user)}})})
 
 
 class ChangeMonthView(View):
@@ -230,7 +235,7 @@ class ChangeMonthView(View):
                                                                 "Unable to change month. Please contact the support.")})
         return JsonResponse({"success": True,
                              "html": render_to_string("main_content.html",
-                                                      {"view": {"data": context_data(request.user)}})})
+                                                      {"view": {"data": content_data(request.user)}})})
 
 class MonthView(View):
 
@@ -323,7 +328,7 @@ class BankDateView(View):
             return JsonResponse({"success": False, "message": str(e)})
         return JsonResponse({"success": True,
                              "html": render_to_string("main_content.html",
-                                                      {"view": {"data": context_data(request.user)}})})
+                                                      {"view": {"data": content_data(request.user)}})})
 
 
 class DeleteTransaction(View):
@@ -352,5 +357,5 @@ class DeleteTransaction(View):
 
         return JsonResponse({"success": True,
                              "html": render_to_string("main_content.html",
-                                                      {"view": {"data": context_data(request.user)}})})
+                                                      {"view": {"data": content_data(request.user)}})})
 
