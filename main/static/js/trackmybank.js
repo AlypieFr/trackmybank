@@ -470,6 +470,7 @@ trackmybank.change_month = function(e) {
                     $(".main-content").html(data["html"]);
                     trackmybank.resize_table();
                     trackmybank.current_month = value;
+                    trackmybank.clear_selection();
                 }
                 else {
                     $("select#months").val(trackmybank.current_month).trigger("change.select2");
