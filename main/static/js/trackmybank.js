@@ -47,6 +47,7 @@ trackmybank.load_content = function() {
                     $(document).on("click", "#submit-change-bank_date", trackmybank.set_bank_date);
                     $(document).on("click", "#delete-transactions", trackmybank.delete_transactions);
                     $(window).on("resize", trackmybank.resize_table);
+                    $(".main-tab").on("click", trackmybank.toggle_tab);
                 }
                 else {
                     trackmybank.notify("message" in data ? data["message"] :
@@ -59,7 +60,29 @@ trackmybank.load_content = function() {
     }, 0);
 };
 
+trackmybank.toggle_tab = function() {
+    if (!$(this).hasClass("selected")) {
+        $($(".main-tab.selected").removeClass("selected").attr("show")).hide();
+        $($(this).attr("show")).show();
+        $(this).addClass("selected");
+        trackmybank.resize_table();
+    }
+};
+
 trackmybank.resize_table = function() {
+    if ($(".main-tab").is(":visible") && !$(".main-tab[show='.main-right']").hasClass("selected")) {
+        $(".main-right").hide();
+    }
+    else {
+        if (!$(".main-tab").is(":visible")) {
+            $(".main-left").show();
+        }
+        $(".main-right").show();
+    }
+    if ($(".main-left").is(":visible")) {
+        $(".main-tab").removeClass("selected");
+        $(".main-tab[show='.main-left']").addClass("selected");
+    }
     let window_height = $(window).height();
     let table_position = $(".table-wrapper-scroll-y").position().top;
     $(".table-wrapper-scroll-y").css("height", window_height - table_position - 1 + "px");

@@ -127,21 +127,6 @@ h1.title-chart {
     margin-left: 15px;
 }
 
-@media screen and (max-width: 1700px) {
-    div.main-left {
-        width: 60%;
-    }
-    div.main-right {
-        width: 39%;
-    }
-}
-
-@media screen and (max-width: 1500px) {
-    div.main-left, div.main-right {
-        width: 100%;
-    }
-}
-
 form#add-transaction {
     margin-left: 5px;
 }
@@ -371,7 +356,7 @@ div#add-month {
     height: 28px;
     display: inline-block;
     margin-left: 5px;
-    margin-bottom: 12px;
+    margin-bottom: 11px;
     vertical-align: bottom;
     cursor: pointer;
 }
@@ -382,6 +367,35 @@ div#add-month:hover {
 
 div#add-month:active {
     background-image: url("/static/images/add_click.svg");
+}
+
+div.main-tab {
+    background-size: 100% 100%;
+    display: none;
+    margin-left: 15px;
+    margin-bottom: 11px;
+    vertical-align: bottom;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+}
+
+div#show-transactions {
+    background-image: url("/static/images/table.svg");
+}
+
+div#show-transactions.selected {
+    background-image: url("/static/images/table_selected.svg");
+    cursor: default;
+}
+
+div#show-stats {
+    background-image: url("/static/images/graph.svg");
+}
+
+div#show-stats.selected {
+    background-image: url("/static/images/graph_selected.svg");
+    cursor: default;
 }
 
 input[type=button] {
@@ -569,4 +583,25 @@ div.top-info.bank .info-value {
 
 div.modebar {
     display: none;
+}
+
+@media screen and (max-width: 1700px) {
+    div.main-left {
+        width: 60%;
+    }
+    div.main-right {
+        width: 39%;
+    }
+}
+
+@media screen and (max-width: 1500px) {
+    div.main-left, div.main-right {
+        width: 100%;
+    }
+    div.main-right {
+        //display: none;
+    }
+    div.main-tab {
+        display: inline-block;
+    }
 }
