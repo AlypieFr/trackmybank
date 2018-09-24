@@ -306,7 +306,7 @@ td.total {
     text-decoration: underline;
 }
 
-tr {
+tr, div.main-right {
     user-select: none;
     -moz-user-select: none;
 }
