@@ -45,7 +45,7 @@ def set_current_month(month, user):
 
 def _get_plotly_figure(plot_item):
     layout = go.Layout(
-        margin=go.Margin(
+        margin=go.layout.Margin(
             l=15,
             r=10,
             b=30,
