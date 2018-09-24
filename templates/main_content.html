@@ -67,7 +67,7 @@
 
                         {% for transaction in group.transaction_set.all %}
                             <tr nb="{{ forloop.parentloop.counter }}{{ forloop.counter }}" id="t_{{ transaction.pk }}" group="{{ group.pk }}" class="{{ class }}">
-                                <td style="background-color: {{ transaction.category.color }}" class="category" value="{{ transaction.category.pk }}">
+                                <td style="background-color: {{ transaction.category.color }}" class="category" value="{{ transaction.category.pk }}" name="{{ transaction.category.name }}">
                                     {{ transaction.category.name }}
                                 </td>
                                 {% localize on %}
@@ -103,8 +103,9 @@
             </div>
         </div>
         <div class="main-right">
+            <div id="filters"></div>
             <h1 class="title-chart">{% trans "Transactions by category" %}</h1>
-            {{ view.data.fig_pie_categories | safe }}
+            <div id="pie-chart-category">{{ view.data.fig_pie_categories | safe }}</div>
             <h1 class="title-chart">{% trans "Transactions by ranges of amount" %}</h1>
-            {{ view.data.fig_pie_tranches | safe }}
+            <div id="pie-chart-range">{{ view.data.fig_pie_tranches | safe }}</div>
         </div>

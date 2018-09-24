@@ -585,6 +585,36 @@ div.modebar {
     display: none;
 }
 
+.selected-filter {
+    font-weight: bolder !important;
+    text-decoration: underline !important;
+    fill: white !important;
+}
+
+div#filters div.filter {
+    padding: 5px;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+div#filters div.filter.range {
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+}
+
+div.delete-filter {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    background: url("/static/images/delete.svg") no-repeat 0 0;
+    background-size: 15px 15px;
+    margin-top: -2px;
+    margin-left: 5px;
+}
+
 @media screen and (max-width: 1700px) {
     div.main-left {
         width: 60%;

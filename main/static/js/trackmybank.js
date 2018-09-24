@@ -5,6 +5,10 @@ trackmybank.current_month = null;
 trackmybank.in_edition = null;
 trackmybank.lang = null;
 trackmybank.last_selected = null;
+trackmybank.filters = {
+    "category": {},
+    "range": {}
+};
 
 trackmybank.init = function (csrftoken, lang) {
     trackmybank.csrftocken = csrftoken;
@@ -48,6 +52,22 @@ trackmybank.load_content = function() {
                     $(document).on("click", "#delete-transactions", trackmybank.delete_transactions);
                     $(window).on("resize", trackmybank.resize_table);
                     $(".main-tab").on("click", trackmybank.toggle_tab);
+                    $("#pie-chart-category").on("plotly_click", function(event, data) {
+                        let color = $(data.event.path[0]).css("fill");
+                        let label = data.points[0].label;
+                        trackmybank.toggle_filter(label, "category", color, data.event.path[1]);
+                    });
+                    $("#pie-chart-range").on("plotly_click", function(event, data) {
+                        let color = $(data.event.path[0]).css("fill");
+                        let label = data.points[0].label;
+                        trackmybank.toggle_filter(label, "range", color, data.event.path[1]);
+                    });
+                    $(document).on("click", ".delete-filter", function() {
+                        let parent = $(this).parent();
+                        let label = parent.attr("value");
+                        let type = parent.attr("type-f");
+                        trackmybank.remove_filter(label, type);
+                    });
                 }
                 else {
                     trackmybank.notify("message" in data ? data["message"] :
@@ -58,6 +78,88 @@ trackmybank.load_content = function() {
             }
         );
     }, 0);
+};
+
+trackmybank.toggle_filter = function(label, type, color, data) {
+    if (label in trackmybank.filters[type]) {
+        trackmybank.remove_filter(label, type);
+    }
+    else {
+        trackmybank.add_filter(label, type, color, data);
+    }
+};
+
+trackmybank.remove_filter = function(label, type) {
+    if (label in trackmybank.filters[type]) {
+        let data = trackmybank.filters[type][label];
+        $("#filters").find(`.filter[type-f='${type}'][value='${label}']`).remove();
+        $(data).find("text").removeClass("selected-filter");
+        delete trackmybank.filters[type][label];
+    }
+    else {
+        console.warn(`Filter ${label} (${type}) does not exists`);
+    }
+    trackmybank.apply_filters();
+};
+
+trackmybank.add_filter = function(label, type, color, data) {
+    $("#filters").append(
+        $("<div>").addClass("filter")
+            .addClass(type)
+            .attr("type-f", type)
+            .attr("value", label)
+            .css("background-color", color)
+            .html(label)
+            .append(
+                $("<div>").addClass("delete-filter")
+            )
+    );
+    $(data).find("text").addClass("selected-filter");
+    trackmybank.filters[type][label] = data;
+    trackmybank.apply_filters();
+};
+
+trackmybank.keep_for_range = function(tr) {
+    let keep = true;
+    if (Object.keys(trackmybank.filters.range).length > 0) {
+        keep = false;
+        let amount = parseFloat($(tr).find("td.amount").attr("value").replace(",", "."));
+        $.each(trackmybank.filters.range, function(range_str, data) {
+            let range = range_str.split("-").map(x => parseFloat(x));
+            if (range[0] <= amount && amount < range[1]) {
+                keep = true;
+                return keep;
+            }
+        });
+    }
+    return keep;
+};
+
+trackmybank.apply_filters = function() {
+    trackmybank.clear_filters_in_table();
+    let keep = true;
+    if (Object.keys(trackmybank.filters.category).length > 0) {
+        $("div.main-left tr").each(function (i, tr) {
+            if (!($(tr).find("td.category").attr("name") in trackmybank.filters.category)) {
+                $(tr).hide();
+            }
+            else if (!trackmybank.keep_for_range(tr)) {
+                $(tr).hide();
+            }
+        });
+    }
+    else if (Object.keys(trackmybank.filters.range).length > 0) {
+        $("div.main-left tr").each(function (i, tr) {
+            if (!trackmybank.keep_for_range(tr)) {
+                $(tr).hide();
+            }
+        });
+    }
+
+};
+
+trackmybank.clear_filters_in_table = function() {
+    $(".main-left tbody tr").show();
 };
 
 trackmybank.toggle_tab = function() {
