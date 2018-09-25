@@ -68,6 +68,7 @@ trackmybank.load_content = function() {
                         let type = parent.attr("type-f");
                         trackmybank.remove_filter(label, type);
                     });
+                    $(document).on("click", "#clear-filters", trackmybank.clear_filters)
                 }
                 else {
                     trackmybank.notify("message" in data ? data["message"] :
@@ -78,6 +79,24 @@ trackmybank.load_content = function() {
             }
         );
     }, 0);
+};
+
+trackmybank.toggle_clear_filter_button = function() {
+    if ($("div.filter").length > 0) {
+        $("#clear-filters").show();
+    }
+    else {
+        $("#clear-filters").hide();
+        trackmybank.clear_filters_in_table();
+    }
+};
+
+trackmybank.clear_filters = function() {
+    $(".selected-filter").removeClass("selected-filter");
+    $("div.filter").remove();
+    trackmybank.filters.category = [];
+    trackmybank.filters.range = [];
+    trackmybank.toggle_clear_filter_button();
 };
 
 trackmybank.toggle_filter = function(label, type, color, data) {
@@ -125,8 +144,14 @@ trackmybank.keep_for_range = function(tr) {
         keep = false;
         let amount = parseFloat($(tr).find("td.amount").attr("value").replace(",", "."));
         $.each(trackmybank.filters.range, function(range_str, data) {
-            let range = range_str.split("-").map(x => parseFloat(x));
-            if (range[0] <= amount && amount < range[1]) {
+            let range;
+            if (range_str.startsWith("> ")) {
+                range = [parseFloat(range_str.substr(2)), -1]
+            }
+            else {
+                range = range_str.split("-").map(x => parseFloat(x));
+            }
+            if ((range[1] < 0 && amount >= range[0]) || (range[0] <= amount && amount < range[1])) {
                 keep = true;
                 return keep;
             }
@@ -136,8 +161,6 @@ trackmybank.keep_for_range = function(tr) {
 };
 
 trackmybank.apply_filters = function() {
-    trackmybank.clear_filters_in_table();
-    let keep = true;
     if (Object.keys(trackmybank.filters.category).length > 0) {
         $("div.main-left tr").each(function (i, tr) {
             if (!($(tr).find("td.category").attr("name") in trackmybank.filters.category)) {
@@ -146,6 +169,9 @@ trackmybank.apply_filters = function() {
             else if (!trackmybank.keep_for_range(tr)) {
                 $(tr).hide();
             }
+            else {
+                $(tr).show();
+            }
         });
     }
     else if (Object.keys(trackmybank.filters.range).length > 0) {
@@ -153,9 +179,12 @@ trackmybank.apply_filters = function() {
             if (!trackmybank.keep_for_range(tr)) {
                 $(tr).hide();
             }
+            else {
+                $(tr).show();
+            }
         });
     }
-
+    trackmybank.toggle_clear_filter_button();
 };
 
 trackmybank.clear_filters_in_table = function() {

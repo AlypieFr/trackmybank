@@ -369,7 +369,7 @@ div#add-month:active {
     background-image: url("/static/images/add_click.svg");
 }
 
-div.main-tab {
+div.main-tab, div#clear-filters {
     background-size: 100% 100%;
     display: none;
     margin-left: 15px;
@@ -387,6 +387,19 @@ div#show-transactions {
 div#show-transactions.selected {
     background-image: url("/static/images/table_selected.svg");
     cursor: default;
+}
+
+div#clear-filters {
+    display: inline-block;
+    background-image: url("/static/images/no_filter.svg");
+}
+
+div#clear-filters:hover {
+    background-image: url("/static/images/no_filter_hover.svg");
+}
+
+div#clear-filters:active {
+    background-image: url("/static/images/no_filter.svg");
 }
 
 div#show-stats {
