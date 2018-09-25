@@ -94,8 +94,8 @@ trackmybank.toggle_clear_filter_button = function() {
 trackmybank.clear_filters = function() {
     $(".selected-filter").removeClass("selected-filter");
     $("div.filter").remove();
-    trackmybank.filters.category = [];
-    trackmybank.filters.range = [];
+    trackmybank.filters.category = {};
+    trackmybank.filters.range = {};
     trackmybank.toggle_clear_filter_button();
 };
 
