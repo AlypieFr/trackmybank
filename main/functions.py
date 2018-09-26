@@ -9,6 +9,7 @@
 from main.models import Month, CurrentMonth, Category
 import plotly as py
 import plotly.graph_objs as go
+from django.utils.translation import ugettext as _
 
 
 def get_current_month(user):
@@ -54,13 +55,14 @@ def _get_plotly_figure(plot_item):
         ),
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
-        height=400
+        height=400,
+        hiddenlabels=[_("Free money")]
     )
     fig = go.Figure(data=[plot_item], layout=layout)
     return py.offline.plot(fig, output_type="div", include_plotlyjs=False, config={"showLink": False})
 
 
-def build_category_pie_chart(count_by_cat):
+def build_category_pie_chart(count_by_cat, count_free_money):
     """
     Build category pie chart
 
@@ -75,6 +77,9 @@ def build_category_pie_chart(count_by_cat):
         values.append(amount)
         labels.append(category)
         colors.append(Category.objects.get(name=category).color)
+    labels.append(_("Free money"))
+    values.append(count_free_money)
+    colors.append("#006600")
     pie = go.Pie(values=values,
                  labels=labels,
                  hoverinfo="label+percent+value",

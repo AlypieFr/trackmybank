@@ -66,13 +66,14 @@ def content_data(user):
         total_depenses += total
         if group.date_bank is not None:
             total_bank += total
+    free_money = current_month.salary - total_depenses if current_month is not None else 0
     return {
         "transactions": transactions,
-        "free_money": current_month.salary - total_depenses if current_month is not None else 0,
+        "free_money": free_money,
         "goodies_part": goodies_part,
         "bank_status": current_month.salary - total_bank if current_month is not None else 0,
         "current_month": current_month,
-        "fig_pie_categories": functions.build_category_pie_chart(count_by_cat),
+        "fig_pie_categories": functions.build_category_pie_chart(count_by_cat, free_money),
         "fig_pie_tranches": functions.build_tranches_pie_chart(count_by_tranches)
     }
 
