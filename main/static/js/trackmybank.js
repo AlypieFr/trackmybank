@@ -52,12 +52,12 @@ trackmybank.load_content = function() {
                     $(document).on("click", "#delete-transactions", trackmybank.delete_transactions);
                     $(window).on("resize", trackmybank.resize_table);
                     $(".main-tab").on("click", trackmybank.toggle_tab);
-                    $("#pie-chart-category").on("plotly_click", function(event, data) {
+                    $(document).on("plotly_click", "#pie-chart-category", function(event, data) {
                         let color = $(data.event.path[0]).css("fill");
                         let label = data.points[0].label;
                         trackmybank.toggle_filter(label, "category", color, data.event.path[1]);
                     });
-                    $("#pie-chart-range").on("plotly_click", function(event, data) {
+                    $(document).on("plotly_click", "#pie-chart-range", function(event, data) {
                         let color = $(data.event.path[0]).css("fill");
                         let label = data.points[0].label;
                         trackmybank.toggle_filter(label, "range", color, data.event.path[1]);
