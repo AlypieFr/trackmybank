@@ -198,8 +198,10 @@ class TransactionView(View):
                                 transaction_group = TransactionGroup.objects.get(pk=int(group_id))
                             except TransactionGroup.DoesNotExist:
                                 return JsonResponse({"success": False, "message": "Transaction group does not exists"})
-                        transaction = Transaction(amount=amount, subject=subject, category=category, group=transaction_group)
+                        transaction = Transaction(amount=amount, subject=subject, category=category,
+                                                  group=transaction_group)
                         transaction.save()
+                        tr_id = transaction.pk
                 except:
                     db_transaction.rollback()
                     traceback.print_exc()
@@ -238,7 +240,8 @@ class TransactionView(View):
 
         return JsonResponse({"success": True,
                              "html": render_to_string("main_content.html",
-                                                      {"view": {"data": content_data(request.user)}})})
+                                                      {"view": {"data": content_data(request.user)}}),
+                             "tr_id": tr_id})
 
 
 class ChangeMonthView(View):

@@ -81,6 +81,12 @@ trackmybank.load_content = function() {
     }, 0);
 };
 
+trackmybank.scroll_to_row = function(id_row) {
+    $(".table-wrapper-scroll-y").animate({
+        scrollTop: $("#t_" + id_row).offset().top - $(".table-wrapper-scroll-y").offset().top
+    }, 500);
+};
+
 trackmybank.toggle_clear_filter_button = function() {
     if ($("div.filter").length > 0) {
         $("#clear-filters").show();
@@ -301,6 +307,7 @@ trackmybank.set_bank_date = function() {
                         $(".on-select").show();
                         trackmybank.set_datemask("#date_b_change");
                         $("#date_b_change").val(bank_date);
+                        trackmybank.scroll_to_row($("tr.selected").first().attr("id").split("_")[1]);
                     }
                     else {
                         trackmybank.notify("message" in data ? data["message"] :
@@ -555,6 +562,7 @@ trackmybank.submit_form = function(date, date_bank, amount, subject, category, m
                         trackmybank.reset_edit();
                     }
                     trackmybank.clear_selection();
+                    trackmybank.scroll_to_row(data["tr_id"]);
                 }
                 else {
                     trackmybank.notify("message" in data ? data["message"] :
