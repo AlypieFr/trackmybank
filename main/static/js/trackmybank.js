@@ -55,7 +55,7 @@ trackmybank.load_content = function() {
                     $(document).on("plotly_click", "#pie-chart-category", function(event, data) {
                         let color = $(data.event.path[0]).css("fill");
                         let label = data.points[0].label;
-                        if (data.event.path[1] !== django.gettext("Free money")) {
+                        if (label !== django.gettext("Free money")) {
                             trackmybank.toggle_filter(label, "category", color, data.event.path[1]);
                         }
                     });
