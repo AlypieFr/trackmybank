@@ -77,9 +77,10 @@ def build_category_pie_chart(count_by_cat, count_free_money):
         values.append(amount)
         labels.append(category)
         colors.append(Category.objects.get(name=category).color)
-    labels.append(_("Free money"))
-    values.append(count_free_money)
-    colors.append("#006600")
+    if count_free_money > 0:
+        labels.append(_("Free money"))
+        values.append(count_free_money)
+        colors.append("#006600")
     pie = go.Pie(values=values,
                  labels=labels,
                  hoverinfo="label+percent+value",
