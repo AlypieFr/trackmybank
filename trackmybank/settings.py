@@ -117,6 +117,10 @@ USE_TZ = True
 
 DATE_FORMAT = "d/m/Y"
 
+NEW_MONTH_DAY = 27
+
+NEW_MONTH_INTERVAL = -1
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

@@ -283,7 +283,9 @@ class MonthView(View):
                     subject = parts[0]
                     amount = float(parts[1].replace(",", "."))
                     category = Category.objects.get(name=parts[2].lower().capitalize())
-                    group = TransactionGroup(date_t="%04d-%02d-%02d" % (month.year, month.month, 1), month=month)
+                    group = TransactionGroup(date_t="%04d-%02d-%02d" %
+                                                    (month.year, month.month + settings.NEW_MONTH_INTERVAL,
+                                                     settings.NEW_MONTH_DAY), month=month)
                     group.save()
                     transaction = Transaction(subject=subject, amount=amount, category=category, group=group)
                     transaction.save()
