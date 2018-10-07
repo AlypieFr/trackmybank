@@ -280,6 +280,11 @@ trackmybank.show_hide_new_month_form = function() {
     }
 };
 
+trackmybank.update_content = function(html) {
+    $(".main-content").html(html);
+    trackmybank.set_datemask("#date_b_change");
+};
+
 trackmybank.set_bank_date = function() {
     let bank_date = $("#date_b_change").val();
     let selection = [];
@@ -297,7 +302,7 @@ trackmybank.set_bank_date = function() {
                 },
                 success = function (data, success) {
                     if (success && data["success"]) {
-                        $(".main-content").html(data["html"]);
+                        trackmybank.update_content(data.html)
                         trackmybank.resize_table();
                         $.each(selection, function (i, item) {
                             console.log(item);
@@ -307,7 +312,6 @@ trackmybank.set_bank_date = function() {
                             trackmybank.show_link_option();
                         }
                         $(".on-select").show();
-                        trackmybank.set_datemask("#date_b_change");
                         $("#date_b_change").val(bank_date);
                         trackmybank.scroll_to_row($("tr.selected").first().attr("id").split("_")[1]);
                     }
@@ -343,7 +347,7 @@ trackmybank.delete_transactions = function() {
                     success = function (data, success) {
                         if (success && data["success"]) {
                             trackmybank.clear_selection();
-                            $(".main-content").html(data["html"]);
+                            trackmybank.update_content(data["html"]);
                             trackmybank.resize_table();
                             trackmybank.set_datemask("#date_b_change");
                         }
@@ -556,7 +560,7 @@ trackmybank.submit_form = function(date, date_bank, amount, subject, category, m
             },
             success = function (data, success) {
                 if (success && data["success"]) {
-                    $(".main-content").html(data["html"]);
+                    trackmybank.update_content(data["html"]);
                     trackmybank.resize_table();
                     if (trackmybank.in_edition == null) {
                         trackmybank.reset_form();
@@ -608,7 +612,7 @@ trackmybank.change_month = function(e) {
             },
             success = function (data, success) {
                 if (success && data["success"]) {
-                    $(".main-content").html(data["html"]);
+                    trackmybank.update_content(data["html"]);
                     trackmybank.resize_table();
                     trackmybank.current_month = value;
                     trackmybank.clear_selection();
