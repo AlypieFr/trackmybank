@@ -50,9 +50,11 @@ class TransactionGroup(models.Model):
     date_t = models.DateField(verbose_name=_("transaction date"))
     date_bank = models.DateField(verbose_name=_("bank added date"), blank=True, null=True)
     month = models.ForeignKey(Month, verbose_name=_("month"))
+    ignore_week_filters = models.BooleanField(default=False, verbose_name=_("ignore weekly spending filters"))
 
     def __str__(self):
-        return str(self.id) + "-" + calendar.month_name[self.month.month] + "_" + str(self.month.year)
+        return str(self.id) + "-" + calendar.month_name[self.month.month] + "_" + str(self.month.year) + \
+               " (" + str(self.date_t) + ")"
 
     class Meta:
         verbose_name = _("Transaction group")

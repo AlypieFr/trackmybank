@@ -67,6 +67,10 @@ def content_data(user):
         if group.date_bank is not None:
             total_bank += total
     free_money = current_month.salary - total_depenses if current_month is not None else 0
+    starting_day = datetime.datetime(current_month.year, current_month.month + settings.NEW_MONTH_INTERVAL,
+                                     settings.NEW_MONTH_DAY)
+    ending_day = datetime.datetime(current_month.year, current_month.month + settings.NEW_MONTH_INTERVAL + 1,
+                                   settings.NEW_MONTH_DAY)
     return {
         "transactions": transactions,
         "free_money": free_money,
@@ -74,7 +78,8 @@ def content_data(user):
         "bank_status": current_month.salary - total_bank if current_month is not None else 0,
         "current_month": current_month,
         "fig_pie_categories": functions.build_category_pie_chart(count_by_cat, free_money),
-        "fig_pie_tranches": functions.build_tranches_pie_chart(count_by_tranches)
+        "fig_pie_tranches": functions.build_tranches_pie_chart(count_by_tranches),
+        "fig_hist_week_spending": functions.build_weekly_spending(starting_day, ending_day, list(count_by_cat.keys()))
     }
 
 
@@ -285,7 +290,7 @@ class MonthView(View):
                     category = Category.objects.get(name=parts[2].lower().capitalize())
                     group = TransactionGroup(date_t="%04d-%02d-%02d" %
                                                     (month.year, month.month + settings.NEW_MONTH_INTERVAL,
-                                                     settings.NEW_MONTH_DAY), month=month)
+                                                     settings.NEW_MONTH_DAY), month=month, ignore_week_filters=True)
                     group.save()
                     transaction = Transaction(subject=subject, amount=amount, category=category, group=group)
                     transaction.save()

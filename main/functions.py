@@ -6,10 +6,14 @@
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; version 3.0
 
-from main.models import Month, CurrentMonth, Category
+from collections import OrderedDict
+import datetime
+from django.utils.translation import ugettext as _
+
+from main.models import Month, CurrentMonth, Category, Transaction
+
 import plotly as py
 import plotly.graph_objs as go
-from django.utils.translation import ugettext as _
 
 
 def get_current_month(user):
@@ -17,7 +21,9 @@ def get_current_month(user):
     Return the current month
 
     :param: user: user for which we search current month
+    :type user: User
     :return: current month object
+    :rtype: Month
     """
     month = CurrentMonth.objects.filter(user=user).first()
     if month is None:
@@ -44,21 +50,22 @@ def set_current_month(month, user):
     c_month.save()
 
 
-def _get_plotly_figure(plot_item):
+def _get_plotly_figure(plot_item, left_margin=15):
     layout = go.Layout(
         margin=go.layout.Margin(
-            l=15,
+            l=left_margin,
             r=10,
             b=30,
             t=30,
             pad=4
         ),
         paper_bgcolor='rgba(0,0,0,0)',
+        barmode='stack',
         plot_bgcolor='rgba(0,0,0,0)',
         height=400,
         hiddenlabels=[_("Free money")]
     )
-    fig = go.Figure(data=[plot_item], layout=layout)
+    fig = go.Figure(data=[plot_item] if not isinstance(plot_item, list) else plot_item, layout=layout)
     return py.offline.plot(fig, output_type="div", include_plotlyjs=False, config={"showLink": False})
 
 
@@ -111,3 +118,52 @@ def build_tranches_pie_chart(counts_by_tranches):
                  hoverinfo="label+percent+value")
 
     return _get_plotly_figure(pie)
+
+
+def build_weekly_spending(start, end, categories):
+    """
+    Build total amount of spending per week graph
+
+    :param start: starting date
+    :type start: datetime.datetime
+    :param end: ending date
+    :type end: datetime.datetime
+    :return:
+    """
+    start = start - datetime.timedelta(days=start.weekday())
+    end = end + datetime.timedelta(days=-end.weekday() - 1, weeks=1)
+    start_week = start
+    end_week = start_week + datetime.timedelta(weeks=1)
+    tr_per_week = OrderedDict()
+    n = 0
+    new_cats = set()
+    all_cats = set(categories)
+    while end_week != end + datetime.timedelta(days=1) and n < 100:
+        tr_per_week_key = "%02d/%02d -> %02d/%02d" % (start_week.day, start_week.month, end_week.day, end_week.month)
+        total_by_cat = {k: 0 for k in categories}
+        for transaction in Transaction.objects.filter(group__date_t__gte=start_week, group__date_t__lt=end_week):
+            cat = transaction.category.name
+            if cat not in total_by_cat:
+                new_cats.add(cat)
+                total_by_cat[cat] = 0
+            total_by_cat[cat] += transaction.amount
+        tr_per_week[tr_per_week_key] = total_by_cat
+        start_week = end_week
+        end_week = start_week + datetime.timedelta(weeks=1)
+        n += 1
+    if len(new_cats) > 0:
+        for week, tr_week in tr_per_week.items():
+            for cat in new_cats:
+                if cat not in tr_week:
+                    tr_week[cat] = 0
+    all_cats = all_cats.union(new_cats)
+    traces = []
+    for category in sorted(all_cats):
+        traces.append(go.Bar(
+                             x=list(tr_per_week.keys()),
+                             y=[k[category] for k in tr_per_week.values()],
+                             name=category,
+                             marker=dict(
+                                color=Category.objects.get(name=category).color)
+        ))
+    return _get_plotly_figure(traces, 50)

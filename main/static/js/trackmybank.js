@@ -7,7 +7,8 @@ trackmybank.lang = null;
 trackmybank.last_selected = null;
 trackmybank.filters = {
     "category": {},
-    "range": {}
+    "range": {},
+    "week": {}
 };
 
 trackmybank.init = function (csrftoken, lang) {
@@ -64,6 +65,9 @@ trackmybank.load_content = function() {
                         let label = data.points[0].label;
                         trackmybank.toggle_filter(label, "range", color, data.event.path[1]);
                     });
+                    $(document).on("plotly_click", "#hist-spending-week", function (event, data) {
+                        trackmybank.toggle_filter(data.points[0].x, "week", "#000", null);
+                    });
                     $(document).on("click", ".delete-filter", function() {
                         let parent = $(this).parent();
                         let label = parent.attr("value");
@@ -105,6 +109,7 @@ trackmybank.clear_filters = function() {
     trackmybank.filters.category = {};
     trackmybank.filters.range = {};
     trackmybank.toggle_clear_filter_button();
+    trackmybank.resize_right_panel();
 };
 
 trackmybank.toggle_filter = function(label, type, color, data) {
@@ -114,13 +119,16 @@ trackmybank.toggle_filter = function(label, type, color, data) {
     else {
         trackmybank.add_filter(label, type, color, data);
     }
+    trackmybank.resize_right_panel();
 };
 
 trackmybank.remove_filter = function(label, type) {
     if (label in trackmybank.filters[type]) {
         let data = trackmybank.filters[type][label];
         $("#filters").find(`.filter[type-f='${type}'][value='${label}']`).remove();
-        $(data).find("text").removeClass("selected-filter");
+        if (data != null) {
+            $(data).find("text").removeClass("selected-filter");
+        }
         delete trackmybank.filters[type][label];
     }
     else {
@@ -141,7 +149,9 @@ trackmybank.add_filter = function(label, type, color, data) {
                 $("<div>").addClass("delete-filter")
             )
     );
-    $(data).find("text").addClass("selected-filter");
+    if (data != null) {
+        $(data).find("text").addClass("selected-filter");
+    }
     trackmybank.filters[type][label] = data;
     trackmybank.apply_filters();
 };
@@ -169,6 +179,7 @@ trackmybank.keep_for_range = function(tr) {
 };
 
 trackmybank.apply_filters = function() {
+    let first_filters = true;
     if (Object.keys(trackmybank.filters.category).length > 0) {
         $("div.main-left tr").each(function (i, tr) {
             if (!($(tr).find("td.category").attr("name") in trackmybank.filters.category)) {
@@ -191,6 +202,60 @@ trackmybank.apply_filters = function() {
                 $(tr).show();
             }
         });
+    }
+    else {
+        first_filters = false;
+    }
+    if (Object.keys(trackmybank.filters.week).length > 0) {
+        let ranges = [];
+        let regex = /(\d\d)\/(\d\d) -> (\d\d)\/(\d\d)/;
+        $.each(trackmybank.filters.week, function(filter, null_data) {
+            let match = regex.exec(filter);
+            let from_day = parseInt(match[1]);
+            let from_month = parseInt(match[2]);
+            let to_day = parseInt(match[3]);
+            let to_month = parseInt(match[4]);
+            let year = parseInt($("select#months").find('option:selected').attr("data-year"));
+            let month = parseInt($("select#months").find('option:selected').attr("data-month"));
+            let from_year = year;
+            let to_year = year;
+            if (month === 1 && from_month === 12) {
+                from_year = year - 1;
+                if (to_month === 12) {
+                    to_year = year - 1;
+                }
+            }
+            ranges.push({from: new Date(`${from_year}-${from_month}-${from_day}`),
+                         to: new Date(`${to_year}-${to_month}-${to_day}`)})
+        });
+        regex = /(\d\d)\/(\d\d)\/(\d\d\d\d)/;
+        $(first_filters ? "div.main-left tr:visible" : "div.main-left tr").each(function(i, tr) {
+            if ($(tr).attr("data-weekly-filters") === "1") {
+                let date = $(tr).find("td.date_t").attr("value");
+                if (date === undefined)
+                    date = $(tr).find("td.total").attr("value").split(",")[0];
+                let match = regex.exec(date);
+                let day = parseInt(match[1]);
+                let month = parseInt(match[2]);
+                let year = parseInt(match[3]);
+                let tr_date = new Date(`${year}-${month}-${day}`);
+                let pass = false;
+                $.each(ranges, function (i, range) {
+                    if (range.from <= tr_date && tr_date < range.to) {
+                        pass = true;
+                        return true;
+                    }
+                });
+                if (!pass) {
+                    $(tr).hide();
+                }
+                else if (!first_filters) {
+                    $(tr).show();
+                }
+            } else {
+                $(tr).hide();
+            }
+        })
     }
     trackmybank.toggle_clear_filter_button();
 };
@@ -222,11 +287,22 @@ trackmybank.resize_table = function() {
         $(".main-tab").removeClass("selected");
         $(".main-tab[show='.main-left']").addClass("selected");
     }
+    trackmybank.resize_left_panel();
+    trackmybank.resize_right_panel();
+};
+
+trackmybank.resize_left_panel = function() {
     let window_height = $(window).height();
-    let table_position = $(".table-wrapper-scroll-y").position().top;
-    $(".table-wrapper-scroll-y").css("height", window_height - table_position - 1 + "px");
-    let right_position = $(".main-right").position().top;
-    $(".main-right").height(window_height - right_position - 1 + "px");
+    let table = $(".table-wrapper-scroll-y");
+    let table_position = table.position().top;
+    table.css("height", window_height - table_position - 1 + "px");
+};
+
+trackmybank.resize_right_panel = function() {
+    let window_height = $(window).height();
+    let graphs_panel = $(".main-right .graphs");
+    let top_position = graphs_panel.position().top;
+    graphs_panel.height(window_height - top_position - 1 + "px");
 };
 
 trackmybank.init_special_fields = function() {

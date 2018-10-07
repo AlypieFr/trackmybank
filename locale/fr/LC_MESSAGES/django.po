@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-23 23:09+0200\n"
-"PO-Revision-Date: 2018-09-23 23:11+0200\n"
+"POT-Creation-Date: 2018-10-07 21:08+0200\n"
+"PO-Revision-Date: 2018-10-07 21:09+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -17,6 +17,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.0.6\n"
+
+#: main/functions.py:66 main/functions.py:88 templates/main_content.html:16
+msgid "Free money"
+msgstr "Argent libre"
 
 #: main/models.py:18
 msgid "name"
@@ -30,7 +34,7 @@ msgstr "couleur"
 msgid "Is goodies?"
 msgstr "Goodies ?"
 
-#: main/models.py:26 templates/index.html:86 templates/main_content.html:40
+#: main/models.py:26 templates/index.html:89 templates/main_content.html:40
 msgid "Category"
 msgstr "Catégorie"
 
@@ -50,7 +54,7 @@ msgstr "année"
 msgid "salary"
 msgstr "Salaire"
 
-#: main/models.py:40 templates/index.html:31
+#: main/models.py:40 templates/index.html:34
 msgid "Month"
 msgstr "Mois"
 
@@ -66,47 +70,51 @@ msgstr "date de la transaction"
 msgid "bank added date"
 msgstr "date relevé bancaire"
 
-#: main/models.py:58
+#: main/models.py:53
+msgid "ignore weekly spending filters"
+msgstr "ignorer les filtres de dépense par semaine"
+
+#: main/models.py:60
 msgid "Transaction group"
 msgstr "Groupe de transactions"
 
-#: main/models.py:59
+#: main/models.py:61
 msgid "Transaction groups"
 msgstr "Groupes de transactions"
 
-#: main/models.py:63
+#: main/models.py:65
 msgid "subject"
 msgstr "sujet"
 
-#: main/models.py:64
+#: main/models.py:66
 msgid "amount"
 msgstr "montant"
 
-#: main/models.py:65
+#: main/models.py:67
 msgid "category"
 msgstr "catégorie"
 
-#: main/models.py:66
+#: main/models.py:68
 msgid "group"
 msgstr "Groupe"
 
-#: main/models.py:73
+#: main/models.py:75
 msgid "Transaction"
 msgstr "Transaction"
 
-#: main/models.py:74
+#: main/models.py:76
 msgid "Transactions"
 msgstr "Transactions"
 
-#: main/models.py:79
+#: main/models.py:81
 msgid "File path"
 msgstr "Chemin du fichier"
 
-#: main/views.py:256
+#: main/views.py:265
 msgid "Selected month does not exists. Please contact the support."
 msgstr "Le mois sélectionné n'existe pas. Veuillez contacter le support."
 
-#: main/views.py:260
+#: main/views.py:269
 msgid ""
 "Internal server error. An unexpected error occurred. Unable to change month. "
 "Please contact the support."
@@ -114,79 +122,75 @@ msgstr ""
 "Erreur serveur. Une erreur inconnue s'est produite. Impossible de changer le "
 "mois. Veuillez contacter le support."
 
-#: main/views.py:278
+#: main/views.py:287
 msgid "Recurring charges file is not valid"
 msgstr "Fichier de frais récurrents invalide"
 
-#: main/views.py:298 main/views.py:339 main/views.py:372
+#: main/views.py:309 main/views.py:350 main/views.py:383
 msgid "Invalid request"
 msgstr "Requête invalide"
 
-#: main/views.py:319
+#: main/views.py:330
 msgid "An unexpected error occurred. Please contact the support."
 msgstr ""
 "Erreur serveur. Une erreur inconnue s'est produite. Veuillez contacter le "
 "support."
 
-#: main/views.py:350
+#: main/views.py:361
 msgid "Transaction does not exists"
 msgstr "La transaction n'existe pas"
 
-#: templates/index.html:39
+#: templates/index.html:42
 msgid "Year"
 msgstr "Année"
 
-#: templates/index.html:43 templates/main_content.html:10
+#: templates/index.html:46 templates/main_content.html:10
 msgid "Salary"
 msgstr "Salaire"
 
-#: templates/index.html:55
+#: templates/index.html:58
 msgid "Add a new transaction"
 msgstr "Ajouter une transaction"
 
-#: templates/index.html:58 templates/main_content.html:49
+#: templates/index.html:61 templates/main_content.html:49
 msgid "Date"
 msgstr "Date"
 
-#: templates/index.html:66
+#: templates/index.html:69
 msgid "Bank added date"
 msgstr "Date relevé bancaire"
 
-#: templates/index.html:74 templates/main_content.html:43
+#: templates/index.html:77 templates/main_content.html:43
 msgid "Amount"
 msgstr "Montant"
 
-#: templates/index.html:80 templates/main_content.html:46
+#: templates/index.html:83 templates/main_content.html:46
 msgid "Subject"
 msgstr "Sujet"
 
-#: templates/index.html:97
+#: templates/index.html:100
 msgid "Yes"
 msgstr "Oui"
 
-#: templates/index.html:97
+#: templates/index.html:100
 msgid "No"
 msgstr "Non"
 
-#: templates/index.html:97
+#: templates/index.html:100
 msgid "Link to selection"
 msgstr "Lier à la sélection"
 
-#: templates/index.html:99
+#: templates/index.html:102
 msgid "Add"
 msgstr "Ajouter"
 
-#: templates/index.html:100
+#: templates/index.html:103
 msgid "Cancel"
 msgstr "Annuler"
 
 #: templates/main_content.html:13
 msgid "Bank"
 msgstr "Banque"
-
-#: templates/main_content.html:16
-msgid "Free money"
-msgstr "Argent libre"
 
 #: templates/main_content.html:19
 msgid "Goodies"
@@ -208,13 +212,17 @@ msgstr "Banque"
 msgid "Total:"
 msgstr "Total :"
 
-#: templates/main_content.html:106
+#: templates/main_content.html:108
 msgid "Transactions by category"
 msgstr "Dépenses par catégorie"
 
-#: templates/main_content.html:108
+#: templates/main_content.html:110
 msgid "Transactions by ranges of amount"
 msgstr "Dépenses par groupe de montant"
+
+#: templates/main_content.html:112
+msgid "Spending per week"
+msgstr "Dépenses par semaine"
 
 #~ msgid "Logout"
 #~ msgstr "Se déconnecter"

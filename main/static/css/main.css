@@ -118,6 +118,9 @@ div.main-right {
     width: 49%;
     //background: #dadac1;
     height: 100%;
+}
+
+div.main-right .graphs {
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -608,12 +611,20 @@ div#filters div.filter {
     padding: 5px;
     display: inline-block;
     margin-left: 5px;
+    margin-bottom: 5px;
 }
 
 div#filters div.filter.range {
     -webkit-border-radius: 50px;
     -moz-border-radius: 50px;
     border-radius: 50px;
+}
+
+div#filters div.filter.week {
+    color: white;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
 }
 
 div.delete-filter {
@@ -640,9 +651,6 @@ div.delete-filter {
 @media screen and (max-width: 1500px) {
     div.main-left, div.main-right {
         width: 100%;
-    }
-    div.main-right {
-        //display: none;
     }
     div.main-tab {
         display: inline-block;

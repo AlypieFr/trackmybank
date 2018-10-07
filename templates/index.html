@@ -11,7 +11,7 @@
         <div class="center">
             <select id="months" class="select2">
                 {% for month in view.data.months %}
-                    <option value="{{ month.pk }}" {% if view.data.current_month.pk == month.pk %}selected{% endif %}>{{ month }}</option>
+                    <option value="{{ month.pk }}" data-year="{{ month.year }}" data-month="{{ month.month }}" {% if view.data.current_month.pk == month.pk %}selected{% endif %}>{{ month }}</option>
                 {% endfor %}
             </select>
             <div id="add-month"></div>
