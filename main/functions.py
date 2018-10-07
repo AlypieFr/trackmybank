@@ -142,11 +142,13 @@ def build_weekly_spending(start, end):
         total_by_cat = {}
         for transaction in Transaction.objects.filter(group__date_t__gte=start_week, group__date_t__lte=end_week,
                                                       group__ignore_week_filters=False):
-            cat = transaction.category.name
-            if cat not in total_by_cat:
-                all_cats.add(cat)
-                total_by_cat[cat] = 0
-            total_by_cat[cat] += transaction.amount
+            cat = transaction.category
+            if not cat.ignore_week_filters:
+                cat_name = cat.name
+                if cat_name not in total_by_cat:
+                    all_cats.add(cat_name)
+                    total_by_cat[cat_name] = 0
+                total_by_cat[cat] += transaction.amount
         tr_per_week[tr_per_week_key] = total_by_cat
         start_week = end_week + datetime.timedelta(days=1)
         end_week = start_week + datetime.timedelta(days=6)

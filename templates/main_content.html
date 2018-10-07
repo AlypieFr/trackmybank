@@ -66,7 +66,7 @@
                         {% endif %}
 
                         {% for transaction in group.transaction_set.all %}
-                            <tr data-weekly-filters="{% if group.ignore_week_filters %}0{% else %}1{% endif %}" nb="{{ forloop.parentloop.counter }}{{ forloop.counter }}" id="t_{{ transaction.pk }}" group="{{ group.pk }}" class="{{ class }}">
+                            <tr data-weekly-filters="{% if group.ignore_week_filters or transaction.category.ignore_week_filters %}0{% else %}1{% endif %}" nb="{{ forloop.parentloop.counter }}{{ forloop.counter }}" id="t_{{ transaction.pk }}" group="{{ group.pk }}" class="{{ class }}">
                                 <td style="background-color: {{ transaction.category.color }}" class="category" value="{{ transaction.category.pk }}" name="{{ transaction.category.name }}">
                                     {{ transaction.category.name }}
                                 </td>
