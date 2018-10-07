@@ -148,7 +148,7 @@ def build_weekly_spending(start, end):
                 if cat_name not in total_by_cat:
                     all_cats.add(cat_name)
                     total_by_cat[cat_name] = 0
-                total_by_cat[cat] += transaction.amount
+                total_by_cat[cat_name] += transaction.amount
         tr_per_week[tr_per_week_key] = total_by_cat
         start_week = end_week + datetime.timedelta(days=1)
         end_week = start_week + datetime.timedelta(days=6)
