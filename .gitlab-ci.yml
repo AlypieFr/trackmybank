@@ -3,7 +3,7 @@ image: python:3.5
 all_tests:
   script:
    - virtualenv -p python3 tmb-test
-   - source test/bin/activate
+   - source tmb-test/bin/activate
    - pip install --upgrade pip
    - pip install -r requirements.txt
    - mv trackmybank/local_settings.py.test trackmybank/local_settings.py
