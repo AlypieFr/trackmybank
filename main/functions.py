@@ -120,7 +120,7 @@ def build_tranches_pie_chart(counts_by_tranches):
     return _get_plotly_figure(pie)
 
 
-def build_weekly_spending(start, end, categories):
+def build_weekly_spending(start, end):
     """
     Build total amount of spending per week graph
 
@@ -136,27 +136,26 @@ def build_weekly_spending(start, end, categories):
     end_week = start_week + datetime.timedelta(weeks=1)
     tr_per_week = OrderedDict()
     n = 0
-    new_cats = set()
-    all_cats = set(categories)
+    all_cats = set()
     while end_week != end + datetime.timedelta(days=1) and n < 100:
         tr_per_week_key = "%02d/%02d -> %02d/%02d" % (start_week.day, start_week.month, end_week.day, end_week.month)
-        total_by_cat = {k: 0 for k in categories}
-        for transaction in Transaction.objects.filter(group__date_t__gte=start_week, group__date_t__lt=end_week):
+        total_by_cat = {}
+        for transaction in Transaction.objects.filter(group__date_t__gte=start_week, group__date_t__lt=end_week,
+                                                      group__ignore_week_filters=False):
             cat = transaction.category.name
             if cat not in total_by_cat:
-                new_cats.add(cat)
+                all_cats.add(cat)
                 total_by_cat[cat] = 0
             total_by_cat[cat] += transaction.amount
         tr_per_week[tr_per_week_key] = total_by_cat
         start_week = end_week
         end_week = start_week + datetime.timedelta(weeks=1)
         n += 1
-    if len(new_cats) > 0:
+    if len(all_cats) > 0:
         for week, tr_week in tr_per_week.items():
-            for cat in new_cats:
+            for cat in all_cats:
                 if cat not in tr_week:
                     tr_week[cat] = 0
-    all_cats = all_cats.union(new_cats)
     traces = []
     for category in sorted(all_cats):
         traces.append(go.Bar(

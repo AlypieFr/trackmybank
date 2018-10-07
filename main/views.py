@@ -79,7 +79,7 @@ def content_data(user):
         "current_month": current_month,
         "fig_pie_categories": functions.build_category_pie_chart(count_by_cat, free_money),
         "fig_pie_tranches": functions.build_tranches_pie_chart(count_by_tranches),
-        "fig_hist_week_spending": functions.build_weekly_spending(starting_day, ending_day, list(count_by_cat.keys()))
+        "fig_hist_week_spending": functions.build_weekly_spending(starting_day, ending_day)
     }
 
 
