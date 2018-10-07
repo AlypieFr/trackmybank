@@ -241,7 +241,7 @@ trackmybank.apply_filters = function() {
                 let tr_date = new Date(`${year}-${month}-${day}`);
                 let pass = false;
                 $.each(ranges, function (i, range) {
-                    if (range.from <= tr_date && tr_date < range.to) {
+                    if (range.from <= tr_date && tr_date <= range.to) {
                         pass = true;
                         return true;
                     }

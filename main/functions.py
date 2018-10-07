@@ -133,14 +133,14 @@ def build_weekly_spending(start, end):
     start = start - datetime.timedelta(days=start.weekday())
     end = end + datetime.timedelta(days=-end.weekday() - 1, weeks=1)
     start_week = start
-    end_week = start_week + datetime.timedelta(weeks=1)
+    end_week = start_week + datetime.timedelta(days=6)
     tr_per_week = OrderedDict()
     n = 0
     all_cats = set()
-    while end_week != end + datetime.timedelta(days=1) and n < 100:
+    while end_week < end + datetime.timedelta(days=2):
         tr_per_week_key = "%02d/%02d -> %02d/%02d" % (start_week.day, start_week.month, end_week.day, end_week.month)
         total_by_cat = {}
-        for transaction in Transaction.objects.filter(group__date_t__gte=start_week, group__date_t__lt=end_week,
+        for transaction in Transaction.objects.filter(group__date_t__gte=start_week, group__date_t__lte=end_week,
                                                       group__ignore_week_filters=False):
             cat = transaction.category.name
             if cat not in total_by_cat:
@@ -148,8 +148,8 @@ def build_weekly_spending(start, end):
                 total_by_cat[cat] = 0
             total_by_cat[cat] += transaction.amount
         tr_per_week[tr_per_week_key] = total_by_cat
-        start_week = end_week
-        end_week = start_week + datetime.timedelta(weeks=1)
+        start_week = end_week + datetime.timedelta(days=1)
+        end_week = start_week + datetime.timedelta(days=6)
         n += 1
     if len(all_cats) > 0:
         for week, tr_week in tr_per_week.items():
