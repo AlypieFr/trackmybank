@@ -3,6 +3,11 @@
     src: url(/static/fonts/Signatra.otf);
 }
 
+@font-face {
+    font-family: thisay;
+    src: url(/static/fonts/thisay.otf);
+}
+
 html, body {
     margin: 0;
     padding: 0;
@@ -127,6 +132,7 @@ div.main-right .graphs {
 
 h1.title-chart {
     font-size: 20pt;
+    font-family: thisay;
     margin-left: 15px;
 }
 
