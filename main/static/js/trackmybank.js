@@ -10,6 +10,7 @@ trackmybank.filters = {
     "range": {},
     "week": {}
 };
+trackmybank.placeholder = django.gettext('dd/mm/yyyy');
 
 trackmybank.init = function (csrftoken, lang) {
     trackmybank.csrftocken = csrftoken;
@@ -324,13 +325,9 @@ trackmybank.set_datemask = function(element) {
         format: "DD/MM/YYYY",
         locale: trackmybank.lang
     });
-
-    let placeholder = 'dd/mm/yyyy';
-    if (trackmybank.lang.split("-")[0] === "fr")
-        placeholder = 'jj/mm/aaaa';
     $(element ? element : '.datemask').inputmask("datetime", {
         mask: "1/2/y",
-        placeholder: placeholder,
+        placeholder: trackmybank.placeholder,
         alias: "dd/mm/yyyy"
     });
 }
@@ -579,7 +576,15 @@ trackmybank.init_submit_form = function () {
     $("label").removeClass("error");
 
     let date = $("input#date_t").val();
+    if (date === trackmybank.placeholder) {
+        date = "";
+        $("input#date_t").val(date);
+    }
     let date_bank = $("input#date_b").val();
+    if (date_bank === trackmybank.placeholder) {
+        date_bank = "";
+        $("input#date_b").val(date_bank);
+    }
     let amount = $("input#amount").val();
     let subject = $("textarea#subject").val();
     let category = $("select#category").val();
