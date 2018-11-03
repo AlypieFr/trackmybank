@@ -7,25 +7,30 @@
 
     <div id="header-menu-div">
         <div id="header-menu">
-        <p class="title">Track my bank!</p>
-        <div class="center">
-            <select id="months" class="select2">
-                {% for month in view.data.months %}
-                    <option value="{{ month.pk }}" data-year="{{ month.year }}" data-month="{{ month.month }}" {% if view.data.current_month.pk == month.pk %}selected{% endif %}>{{ month }}</option>
-                {% endfor %}
-            </select>
-            <div id="add-month"></div>
-            <div id="show-transactions" show=".main-left" class="selected main-tab"></div>
-            <div id="show-stats" show=".main-right" class="main-tab"></div>
-            <div id="clear-filters" style="display: none"></div>
-            <div class="loading" style="display: none !important;">
-                <div class="lds-facebook"><div></div><div></div><div></div></div>
+            <p class="title">Track my bank!</p>
+            <div class="center">
+                <select id="months" class="select2">
+                    {% for month in view.data.months %}
+                        <option value="{{ month.pk }}" data-year="{{ month.year }}" data-month="{{ month.month }}"
+                                {% if view.data.current_month.pk == month.pk %}selected{% endif %}>{{ month }}</option>
+                    {% endfor %}
+                </select>
+                <div id="add-month"></div>
+                <div id="show-transactions" show=".main-left" class="selected main-tab"></div>
+                <div id="show-stats" show=".main-right" class="main-tab"></div>
+                <div id="clear-filters" style="display: none"></div>
+                <div class="loading" style="display: none !important;">
+                    <div class="lds-facebook">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="left">
-            <a href="/admin/" class="admin"></a>
-            <a href="/logout/" class="logout"></a>
-        </div>
+            <div class="left">
+                <a href="/admin/" class="admin"></a>
+                <a href="/logout/" class="logout"></a>
+            </div>
         </div>
     </div>
 
@@ -34,18 +39,22 @@
             <label for="select-added-month">{% trans "Month" %}</label>
             <select class="select2" id="select-added-month">
                 {% for month in view.data.all_months %}
-                    <option value="{{ month.id }}" {% if month.id == view.data.next_month %}selected{% endif %}>{{ month.name }}</option>
+                    <option value="{{ month.id }}"
+                            {% if month.id == view.data.next_month %}selected{% endif %}>{{ month.name }}</option>
                 {% endfor %}
             </select>
         </div>
         <div class="year form-item">
             <label for="added-month-year">{% trans "Year" %}</label>
-            <input class="year-input" id="added-month-year" {% if view.data.next_year is not None %}value="{{ view.data.next_year }}"{% endif %} type="number" min="2018" />
+            <input class="year-input" id="added-month-year"
+                   {% if view.data.next_year is not None %}value="{{ view.data.next_year }}"{% endif %} type="number"
+                   min="2018"/>
         </div>
         <div class="year form-item">
             <label for="added-month-salary">{% trans "Salary" %}</label>
             {% localize on %}
-            <input class="year-input decimal" id="added-month-salary" {% if view.data.next_salary is not None %}value="{{ view.data.next_salary }}"{% endif %} />
+                <input class="year-input decimal" id="added-month-salary"
+                       {% if view.data.next_salary is not None %}value="{{ view.data.next_salary }}"{% endif %}/>
             {% endlocalize %}
         </div>
         <div class="submit form-item">
@@ -57,54 +66,71 @@
         <div id="add-transaction-div">
             <h2>{% trans "Add a new transaction" %}</h2>
             <form action="/add/" method="post" id="add-transaction">
-            <div class="item">
-                <label for="date_t">{% trans "Date" %}</label>
-                <div class="input-group input-with-icon-group">
-                    <div class="input-group-addon calendar">
+                <div class="item">
+                    <label for="date_t">{% trans "Date" %}</label>
+                    <div class="input-group input-with-icon-group">
+                        <div class="input-group-addon calendar">
+                        </div>
+                        <input id="date_t" class="datemask datepicker" autocomplete="off"/>
                     </div>
-                    <input id="date_t" class="datemask datepicker" autocomplete="off"/>
                 </div>
-            </div>
-            <div class="item">
-                <label for="date_b">{% trans "Bank added date" %}</label>
-                <div class="input-group input-with-icon-group">
-                    <div class="input-group-addon calendar">
+                <div class="item">
+                    <label for="date_b">{% trans "Bank added date" %}</label>
+                    <div class="input-group input-with-icon-group">
+                        <div class="input-group-addon calendar">
+                        </div>
+                        <input id="date_b" class="datemask datepicker" autocomplete="off"/>
                     </div>
-                    <input id="date_b" class="datemask datepicker" autocomplete="off"/>
                 </div>
-            </div>
-            <div class="item">
-                <label for="amount">{% trans "Amount" %}</label>
-                <div>
-                    <input class="money decimal" id="amount" /> <span class="euro">€</span>
+                <div class="item">
+                    <label for="amount">{% trans "Amount" %}</label>
+                    <div>
+                        <input class="money decimal" id="amount"/> <span class="euro">€</span>
+                    </div>
                 </div>
-            </div>
-            <div class="item">
-                <label for="subject">{% trans "Subject" %}</label>
-                <div>
-                    <textarea id="subject" rows="2"></textarea>
+                <div class="item">
+                    <label for="subject">{% trans "Subject" %}</label>
+                    <div>
+                        <textarea id="subject" rows="2"></textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="item">
-                <label for="category">{% trans "Category" %}</label>
-                <div>
-                    <select id="category" class="select2">
-                    <option></option>
-                        {% for category in view.data.categories %}
-                            <option value="{{ category.pk }}">{{ category.name }}</option>
-                        {% endfor %}
-                    </select>
+                <div class="item">
+                    <label for="category">{% trans "Category" %}</label>
+                    <div>
+                        <select id="category" class="select2">
+                            <option></option>
+                            {% for category in view.data.categories %}
+                                <option value="{{ category.pk }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="item link-to-selected" style="display: none">
-                <input id="link-to-selected" type="checkbox" data-toggle="toggle" data-on="{% trans 'Yes' %}" data-off="{% trans 'No' %}"><label for="link-to-selected">{% trans "Link to selection" %}</label>
-            </div>
-            <input type="button" class="submit-form" value="{% trans "Add" %}"/>
-            <input type="button" class="cancel-edit" value="{% trans "Cancel" %}" style="display: none"/>
+                <div class="item link-to-selected" style="display: none">
+                    <input id="link-to-selected" type="checkbox" data-toggle="toggle" data-on="{% trans 'Yes' %}"
+                           data-off="{% trans 'No' %}"><label
+                        for="link-to-selected">{% trans "Link to selection" %}</label>
+                </div>
+                <input type="button" class="submit-form" value="{% trans "Add" %}"/>
+                <input type="button" class="cancel-edit" value="{% trans "Cancel" %}" style="display: none"/>
             </form>
         </div>
     </div>
     <div class="main-content">
+    </div>
+
+    <div class="modal fade" id="confirm-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-ok" onclick="trackmybank.do_delete_transactions();">{% trans "Delete" %}</a>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+                </div>
+            </div>
+        </div>
     </div>
 
 {% endblock %}

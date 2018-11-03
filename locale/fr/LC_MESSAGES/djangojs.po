@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-02 12:57+0100\n"
-"PO-Revision-Date: 2018-11-02 12:58+0100\n"
+"POT-Creation-Date: 2018-11-03 23:10+0100\n"
+"PO-Revision-Date: 2018-11-03 23:10+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -94,56 +94,72 @@ msgstr ""
 msgid "range"
 msgstr ""
 
-#: main/static/js/trackmybank.js:35
-msgid "Select an option"
-msgstr "Sélectionner une option"
-
-#: main/static/js/trackmybank.js:59
-msgid "Free money"
-msgstr "Argent libre"
-
-#: main/static/js/trackmybank.js:81 main/static/js/trackmybank.js:394
-#: main/static/js/trackmybank.js:430 main/static/js/trackmybank.js:459
-#: main/static/js/trackmybank.js:649 main/static/js/trackmybank.js:697
-msgid "An error has occurred. Please contact the support"
-msgstr "Une erreur s'est produite. Veuillez contacter le support"
-
-#: main/static/js/trackmybank.js:328
+#: main/static/js/trackmybank.js:14
 msgid "dd/mm/yyyy"
 msgstr "jj/mm/yyyy"
 
-#: main/static/js/trackmybank.js:402 main/static/js/trackmybank.js:438
+#: main/static/js/trackmybank.js:37
+msgid "Select an option"
+msgstr "Sélectionner une option"
+
+#: main/static/js/trackmybank.js:61
+msgid "Free money"
+msgstr "Argent libre"
+
+#: main/static/js/trackmybank.js:84 main/static/js/trackmybank.js:442
+#: main/static/js/trackmybank.js:492 main/static/js/trackmybank.js:520
+#: main/static/js/trackmybank.js:719 main/static/js/trackmybank.js:767
+msgid "An error has occurred. Please contact the support"
+msgstr "Une erreur s'est produite. Veuillez contacter le support"
+
+#: main/static/js/trackmybank.js:107
+msgid "Edit transaction"
+msgstr "Modifier la transaction"
+
+#: main/static/js/trackmybank.js:121
+msgid "Delete transactions"
+msgstr "Supprimer les transactions"
+
+#: main/static/js/trackmybank.js:123
+msgid "Delete transaction"
+msgstr "Supprimer la transaction"
+
+#: main/static/js/trackmybank.js:450 main/static/js/trackmybank.js:500
 msgid "Empty selection"
 msgstr "Erreur : sélection vide"
 
-#: main/static/js/trackmybank.js:407
-msgid "Delete selected transactions?"
+#: main/static/js/trackmybank.js:463
+msgid "Confirm deletion of selected transactions?"
 msgstr "Supprimer les transactions sélectionnées ?"
 
-#: main/static/js/trackmybank.js:564
+#: main/static/js/trackmybank.js:465
+msgid "Confirm deletion of selected transaction?"
+msgstr "Supprimer la transaction sélectionnée ?"
+
+#: main/static/js/trackmybank.js:626
 msgid "Edit"
 msgstr "Modifier"
 
-#: main/static/js/trackmybank.js:571
+#: main/static/js/trackmybank.js:633
 msgid "Add"
 msgstr "Ajouter"
 
-#: main/static/js/trackmybank.js:586
+#: main/static/js/trackmybank.js:656
 msgid "You must create a month before"
 msgstr "Vous devez créer un mois avant"
 
-#: main/static/js/trackmybank.js:593
+#: main/static/js/trackmybank.js:663
 msgid "Error: empty selection"
 msgstr "Erreur : sélection vide"
 
-#: main/static/js/trackmybank.js:597
+#: main/static/js/trackmybank.js:667
 msgid "Error: more than one transaction selected"
 msgstr "Erreur : plus d'une transaction sélectionnée"
 
-#: main/static/js/trackmybank.js:607
+#: main/static/js/trackmybank.js:677
 msgid "Some required fields are empty"
 msgstr "Certains champs requis sont vides"
 
-#: main/static/js/trackmybank.js:735
+#: main/static/js/trackmybank.js:806
 msgid "An error occurred! Please contact the support to report the bug"
 msgstr "Une erreur s'est produite. Veuillez contacter le support"

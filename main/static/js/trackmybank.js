@@ -5,6 +5,7 @@ trackmybank.current_month = null;
 trackmybank.in_edition = null;
 trackmybank.lang = null;
 trackmybank.last_selected = null;
+trackmybank.selected_by_context_menu = false;
 trackmybank.filters = {
     "category": {},
     "range": {},
@@ -19,7 +20,7 @@ trackmybank.init = function (csrftoken, lang) {
     trackmybank.load_content();
 };
 
-trackmybank.load_content = function() {
+trackmybank.load_content = function () {
     $("input,select,textarea,#add").prop("disabled", true);
     trackmybank.show_loading();
     window.setTimeout(() => {
@@ -38,7 +39,7 @@ trackmybank.load_content = function() {
                     $("input.submit-form").on("click", trackmybank.init_submit_form);
                     $("input.cancel-edit").on("click", trackmybank.reset_edit);
                     $("select#months").on("change", trackmybank.change_month);
-                    $(document).on("change", "input#link-to-selected", function() {
+                    $(document).on("change", "input#link-to-selected", function () {
                         if ($(this).prop("checked")) {
                             $("input#date_t").prop("disabled", true);
                             $("input#date_b").prop("disabled", true);
@@ -54,14 +55,14 @@ trackmybank.load_content = function() {
                     $(document).on("click", "#delete-transactions", trackmybank.delete_transactions);
                     $(window).on("resize", trackmybank.resize_table);
                     $(".main-tab").on("click", trackmybank.toggle_tab);
-                    $(document).on("plotly_click", "#pie-chart-category", function(event, data) {
+                    $(document).on("plotly_click", "#pie-chart-category", function (event, data) {
                         let color = $(data.event.path[0]).css("fill");
                         let label = data.points[0].label;
                         if (label !== django.gettext("Free money")) {
                             trackmybank.toggle_filter(label, "category", color, data.event.path[1]);
                         }
                     });
-                    $(document).on("plotly_click", "#pie-chart-range", function(event, data) {
+                    $(document).on("plotly_click", "#pie-chart-range", function (event, data) {
                         let color = $(data.event.path[0]).css("fill");
                         let label = data.points[0].label;
                         trackmybank.toggle_filter(label, "range", color, data.event.path[1]);
@@ -69,13 +70,14 @@ trackmybank.load_content = function() {
                     $(document).on("plotly_click", "#hist-spending-week", function (event, data) {
                         trackmybank.toggle_filter(data.points[0].x, "week", "#000", null);
                     });
-                    $(document).on("click", ".delete-filter", function() {
+                    $(document).on("click", ".delete-filter", function () {
                         let parent = $(this).parent();
                         let label = parent.attr("value");
                         let type = parent.attr("type-f");
                         trackmybank.remove_filter(label, type);
                     });
-                    $(document).on("click", "#clear-filters", trackmybank.clear_filters)
+                    $(document).on("click", "#clear-filters", trackmybank.clear_filters);
+                    trackmybank.init_context_menu();
                 }
                 else {
                     trackmybank.notify("message" in data ? data["message"] :
@@ -88,13 +90,58 @@ trackmybank.load_content = function() {
     }, 0);
 };
 
-trackmybank.scroll_to_row = function(id_row) {
+trackmybank.init_context_menu = function () {
+    let menu = new BootstrapMenu('table.transactions tr', {
+        fetchElementData: function (rowElem) {
+            let selection = $("tr.selected");
+            if (selection.length === 0 || trackmybank.selected_by_context_menu) {
+                trackmybank.clear_selection();
+                rowElem.addClass("selected");
+                trackmybank.last_selected = parseInt(rowElem.attr("nb"));
+                trackmybank.selected_by_context_menu = true;
+                trackmybank.show_link_option();
+                $(".on-select").show();
+                selection = rowElem;
+            }
+            return selection;
+        },
+        actions: {
+            edit: {
+                name: django.gettext('Edit transaction'),
+                iconClass: "fa-edit",
+                onClick: function (selection) {
+                    let jq_tr = $(selection[0]);
+                    jq_tr.removeClass("selected");
+                    trackmybank.edit(jq_tr);
+                },
+                isShown: function (selection) {
+                    return selection.length === 1;
+                }
+            }
+            , delete: {
+                name: function (selection) {
+                    let selection_len = selection.length;
+                    if (selection_len >= 2) {
+                        return django.gettext("Delete transactions");
+                    }
+                    return django.gettext("Delete transaction");
+                },
+                iconClass: "fa-trash",
+                onClick: function (selection) {
+                    trackmybank.delete_transactions();
+                }
+            }
+        }
+    });
+};
+
+trackmybank.scroll_to_row = function (id_row) {
     $(".table-wrapper-scroll-y").animate({
         scrollTop: $("#t_" + id_row).offset().top - $(".table-wrapper-scroll-y").offset().top
     }, 500);
 };
 
-trackmybank.toggle_clear_filter_button = function() {
+trackmybank.toggle_clear_filter_button = function () {
     if ($("div.filter").length > 0) {
         $("#clear-filters").show();
     }
@@ -104,7 +151,7 @@ trackmybank.toggle_clear_filter_button = function() {
     }
 };
 
-trackmybank.clear_filters = function() {
+trackmybank.clear_filters = function () {
     $(".selected-filter").removeClass("selected-filter");
     $("div.filter").remove();
     trackmybank.filters.category = {};
@@ -113,7 +160,7 @@ trackmybank.clear_filters = function() {
     trackmybank.resize_right_panel();
 };
 
-trackmybank.toggle_filter = function(label, type, color, data) {
+trackmybank.toggle_filter = function (label, type, color, data) {
     if (label in trackmybank.filters[type]) {
         trackmybank.remove_filter(label, type);
     }
@@ -123,7 +170,7 @@ trackmybank.toggle_filter = function(label, type, color, data) {
     trackmybank.resize_right_panel();
 };
 
-trackmybank.remove_filter = function(label, type) {
+trackmybank.remove_filter = function (label, type) {
     if (label in trackmybank.filters[type]) {
         let data = trackmybank.filters[type][label];
         $("#filters").find(`.filter[type-f='${type}'][value='${label}']`).remove();
@@ -138,7 +185,7 @@ trackmybank.remove_filter = function(label, type) {
     trackmybank.apply_filters();
 };
 
-trackmybank.add_filter = function(label, type, color, data) {
+trackmybank.add_filter = function (label, type, color, data) {
     $("#filters").append(
         $("<div>").addClass("filter")
             .addClass(type)
@@ -157,12 +204,12 @@ trackmybank.add_filter = function(label, type, color, data) {
     trackmybank.apply_filters();
 };
 
-trackmybank.keep_for_range = function(tr) {
+trackmybank.keep_for_range = function (tr) {
     let keep = true;
     if (Object.keys(trackmybank.filters.range).length > 0) {
         keep = false;
         let amount = parseFloat($(tr).find("td.amount").attr("value").replace(",", "."));
-        $.each(trackmybank.filters.range, function(range_str, data) {
+        $.each(trackmybank.filters.range, function (range_str, data) {
             let range;
             if (range_str.startsWith("> ")) {
                 range = [parseFloat(range_str.substr(2)), -1]
@@ -179,7 +226,7 @@ trackmybank.keep_for_range = function(tr) {
     return keep;
 };
 
-trackmybank.apply_filters = function() {
+trackmybank.apply_filters = function () {
     let first_filters = true;
     if (Object.keys(trackmybank.filters.category).length > 0) {
         $("div.main-left tr").each(function (i, tr) {
@@ -210,7 +257,7 @@ trackmybank.apply_filters = function() {
     if (Object.keys(trackmybank.filters.week).length > 0) {
         let ranges = [];
         let regex = /(\d\d)\/(\d\d) -> (\d\d)\/(\d\d)/;
-        $.each(trackmybank.filters.week, function(filter, null_data) {
+        $.each(trackmybank.filters.week, function (filter, null_data) {
             let match = regex.exec(filter);
             let from_day = parseInt(match[1]);
             let from_month = parseInt(match[2]);
@@ -226,11 +273,13 @@ trackmybank.apply_filters = function() {
                     to_year = year - 1;
                 }
             }
-            ranges.push({from: new Date(`${from_year}-${from_month}-${from_day}`),
-                         to: new Date(`${to_year}-${to_month}-${to_day}`)})
+            ranges.push({
+                from: new Date(`${from_year}-${from_month}-${from_day}`),
+                to: new Date(`${to_year}-${to_month}-${to_day}`)
+            })
         });
         regex = /(\d\d)\/(\d\d)\/(\d\d\d\d)/;
-        $(first_filters ? "div.main-left tr:visible" : "div.main-left tr").each(function(i, tr) {
+        $(first_filters ? "div.main-left tr:visible" : "div.main-left tr").each(function (i, tr) {
             if ($(tr).attr("data-weekly-filters") === "1") {
                 let date = $(tr).find("td.date_t").attr("value");
                 if (date === undefined)
@@ -261,11 +310,11 @@ trackmybank.apply_filters = function() {
     trackmybank.toggle_clear_filter_button();
 };
 
-trackmybank.clear_filters_in_table = function() {
+trackmybank.clear_filters_in_table = function () {
     $(".main-left tbody tr").show();
 };
 
-trackmybank.toggle_tab = function() {
+trackmybank.toggle_tab = function () {
     if (!$(this).hasClass("selected")) {
         $($(".main-tab.selected").removeClass("selected").attr("show")).hide();
         $($(this).attr("show")).show();
@@ -274,7 +323,7 @@ trackmybank.toggle_tab = function() {
     }
 };
 
-trackmybank.resize_table = function() {
+trackmybank.resize_table = function () {
     if ($(".main-tab").is(":visible") && !$(".main-tab[show='.main-right']").hasClass("selected")) {
         $(".main-right").hide();
     }
@@ -292,21 +341,21 @@ trackmybank.resize_table = function() {
     trackmybank.resize_right_panel();
 };
 
-trackmybank.resize_left_panel = function() {
+trackmybank.resize_left_panel = function () {
     let window_height = $(window).height();
     let table = $(".table-wrapper-scroll-y");
     let table_position = table.position().top;
     table.css("height", window_height - table_position - 1 + "px");
 };
 
-trackmybank.resize_right_panel = function() {
+trackmybank.resize_right_panel = function () {
     let window_height = $(window).height();
     let graphs_panel = $(".main-right .graphs");
     let top_position = graphs_panel.position().top;
     graphs_panel.height(window_height - top_position - 1 + "px");
 };
 
-trackmybank.init_special_fields = function() {
+trackmybank.init_special_fields = function () {
     trackmybank.set_datemask();
 
     //Decimal:
@@ -319,7 +368,7 @@ trackmybank.init_special_fields = function() {
     })
 };
 
-trackmybank.set_datemask = function(element) {
+trackmybank.set_datemask = function (element) {
     // Datetime picker:
     $(element ? element : '.datepicker').datetimepicker({
         format: "DD/MM/YYYY",
@@ -332,19 +381,19 @@ trackmybank.set_datemask = function(element) {
     });
 }
 
-trackmybank.is_add_month_form_visible = function() {
+trackmybank.is_add_month_form_visible = function () {
     return $("#add-month-form").is(":visible");
 }
 
-trackmybank.show_new_month_form = function() {
+trackmybank.show_new_month_form = function () {
     $("#add-month-form").show();
 };
 
-trackmybank.hide_new_month_form = function() {
+trackmybank.hide_new_month_form = function () {
     $("#add-month-form").hide();
 };
 
-trackmybank.show_hide_new_month_form = function() {
+trackmybank.show_hide_new_month_form = function () {
     if (trackmybank.is_add_month_form_visible()) {
         trackmybank.hide_new_month_form();
     }
@@ -353,17 +402,22 @@ trackmybank.show_hide_new_month_form = function() {
     }
 };
 
-trackmybank.update_content = function(html) {
+trackmybank.update_content = function (html) {
     $(".main-content").html(html);
     trackmybank.set_datemask("#date_b_change");
 };
 
-trackmybank.set_bank_date = function() {
-    let bank_date = $("#date_b_change").val();
+trackmybank.get_selected_transactions = function () {
     let selection = [];
     $.each($("tr.selected"), function (id, tr) {
         selection.push(parseInt($(tr).attr("id").split("_")[1]));
     });
+    return selection;
+};
+
+trackmybank.set_bank_date = function () {
+    let bank_date = $("#date_b_change").val();
+    let selection = trackmybank.get_selected_transactions();
     if (selection.length > 0) {
         trackmybank.show_loading();
         window.setTimeout(() => {
@@ -402,44 +456,57 @@ trackmybank.set_bank_date = function() {
     }
 };
 
-trackmybank.delete_transactions = function() {
-    if (confirm(django.gettext("Delete selected transactions?"))) {
+trackmybank.prepare_dialog = function (message, type) {
+    let dialog = $("#confirm-dialog");
+    dialog.find(".modal-body").html(message);
+    dialog.find(".btn-ok").removeClass().addClass("btn").addClass("btn-ok").addClass("btn-" + type);
+    return dialog;
+};
+
+trackmybank.delete_transactions = function () {
+    let selection = trackmybank.get_selected_transactions();
+    let message = django.gettext("Confirm deletion of selected transactions?");
+    if (selection.length < 2) {
+        message = django.gettext("Confirm deletion of selected transaction?");
+    }
+    let dialog = trackmybank.prepare_dialog(message, "danger");
+    dialog.modal();
+};
+
+trackmybank.do_delete_transactions = function () {
+    $("#confirm-dialog").modal("hide");
+    trackmybank.show_loading();
+    let selection = trackmybank.get_selected_transactions();
+    if (selection.length > 0) {
         trackmybank.show_loading();
-        let selection = [];
-        $.each($("tr.selected"), function (id, tr) {
-            selection.push(parseInt($(tr).attr("id").split("_")[1]));
-        });
-        if (selection.length > 0) {
-            trackmybank.show_loading();
-            window.setTimeout(() => {
-                trackmybank.post(
-                    url = "/delete-transaction/",
-                    data = {
-                        transactions: selection.join("|")
-                    },
-                    success = function (data, success) {
-                        if (success && data["success"]) {
-                            trackmybank.clear_selection();
-                            trackmybank.update_content(data["html"]);
-                            trackmybank.resize_table();
-                            trackmybank.set_datemask("#date_b_change");
-                        }
+        window.setTimeout(() => {
+            trackmybank.post(
+                url = "/delete-transaction/",
+                data = {
+                    transactions: selection.join("|")
+                },
+                success = function (data, success) {
+                    if (success && data["success"]) {
+                        trackmybank.clear_selection();
+                        trackmybank.update_content(data["html"]);
+                        trackmybank.resize_table();
+                        trackmybank.set_datemask("#date_b_change");
+                    }
                     else {
                         trackmybank.notify("message" in data ? data["message"] :
                             django.gettext("An error has occurred. Please contact the support"), "danger")
                     }
                     trackmybank.hide_loading();
-                    }
-                );
-            }, 0);
-        }
-        else {
-            trackmybank.notify(django.gettext("Empty selection"), "danger");
-        }
+                }
+            );
+        }, 0);
+    }
+    else {
+        trackmybank.notify(django.gettext("Empty selection"), "danger");
     }
 };
 
-trackmybank.add_new_month = function() {
+trackmybank.add_new_month = function () {
     trackmybank.show_loading();
     window.setTimeout(() => {
         trackmybank.post(
@@ -463,24 +530,24 @@ trackmybank.add_new_month = function() {
     }, 0);
 };
 
-trackmybank.show_link_option = function() {
+trackmybank.show_link_option = function () {
     $("div.link-to-selected").show();
 };
 
-trackmybank.hide_link_option = function() {
+trackmybank.hide_link_option = function () {
     $("div.link-to-selected").hide();
     $("input#link-to-selected").bootstrapToggle('off');
 };
 
-trackmybank.clear_selection = function() {
+trackmybank.clear_selection = function () {
     $("table#list-tr tbody tr").removeClass("selected");
     trackmybank.hide_link_option();
     $(".on-select").hide();
     trackmybank.last_selected = null;
 };
 
-trackmybank.init_table_click_events = function() {
-    $(document).on("click", "table#list-tr tbody tr", function(e) {
+trackmybank.init_table_click_events = function () {
+    $(document).on("click", "table#list-tr tbody tr", function (e) {
         if (trackmybank.in_edition == null) {
             let doSelect = true;
             if ($(this).hasClass("selected")) {
@@ -492,7 +559,7 @@ trackmybank.init_table_click_events = function() {
             }
             if (e.shiftKey) {
                 if (trackmybank.last_selected != null) {
-                    if($(`tr[nb=${trackmybank.last_selected}]`).hasClass("selected")) {
+                    if ($(`tr[nb=${trackmybank.last_selected}]`).hasClass("selected")) {
                         let current_nb = parseInt($(this).attr("nb"));
                         let from_nb = Math.min(current_nb, trackmybank.last_selected);
                         let to_nb = Math.max(current_nb, trackmybank.last_selected);
@@ -507,6 +574,7 @@ trackmybank.init_table_click_events = function() {
                 }
             }
             if (doSelect) {
+                trackmybank.selected_by_context_menu = false;
                 $(this).addClass("selected");
             }
 
@@ -528,7 +596,7 @@ trackmybank.init_table_click_events = function() {
         }
     });
 
-    $(document).on("dblclick", "table#list-tr tbody tr", function(e) {
+    $(document).on("dblclick", "table#list-tr tbody tr", function (e) {
         trackmybank.clear_selection();
         $("table#list-tr tbody tr").removeClass("edited");
         document.getSelection().removeAllRanges();
@@ -537,7 +605,7 @@ trackmybank.init_table_click_events = function() {
     });
 
     // Remove selection on escape pressed:
-    $(document).on("keyup", function(e) {
+    $(document).on("keyup", function (e) {
         if (e.keyCode === 27) {
             if (trackmybank.is_add_month_form_visible()) {
                 trackmybank.hide_new_month_form();
@@ -547,12 +615,14 @@ trackmybank.init_table_click_events = function() {
                 if (trackmybank.in_edition != null) {
                     trackmybank.reset_edit();
                 }
+                // Hide context menu, if visible
+                $(".bootstrapMenu").hide();
             }
         }
     });
 };
 
-trackmybank.edit = function(jq_tr) {
+trackmybank.edit = function (jq_tr) {
     jq_tr.addClass("edited");
     trackmybank.in_edition = parseInt(jq_tr.attr("id").split("_")[1]);
     $("input#date_t").val(jq_tr.find("td.date_t").length === 1 ? jq_tr.find("td.date_t").attr("value") : jq_tr.find("td.total").attr("value").split(",")[0]);
@@ -564,7 +634,7 @@ trackmybank.edit = function(jq_tr) {
     $("input.cancel-edit").show();
 };
 
-trackmybank.reset_edit = function() {
+trackmybank.reset_edit = function () {
     trackmybank.in_edition = null;
     $("table#list-tr tbody tr").removeClass("edited");
     $("input.submit-form").val(django.gettext("Add"));
@@ -615,7 +685,7 @@ trackmybank.init_submit_form = function () {
     }
 };
 
-trackmybank.reset_form = function() {
+trackmybank.reset_form = function () {
     $("input#date_t").val("");
     $("input#date_b").val("");
     $("input#amount").val("");
@@ -623,7 +693,7 @@ trackmybank.reset_form = function() {
     $("select#category").val("").trigger("change.select2");
 };
 
-trackmybank.submit_form = function(date, date_bank, amount, subject, category, month, id_group) {
+trackmybank.submit_form = function (date, date_bank, amount, subject, category, month, id_group) {
     trackmybank.show_loading();
     let checkbox = $("input#link-to-selected");
     window.setTimeout(() => {
@@ -631,11 +701,11 @@ trackmybank.submit_form = function(date, date_bank, amount, subject, category, m
             url = "/transaction/",
             data = {
                 date_t: checkbox.prop("checked") ? null : date,
-                date_bank: checkbox.prop("checked") ? null :  date_bank,
+                date_bank: checkbox.prop("checked") ? null : date_bank,
                 amount: amount,
                 subject: subject,
                 category: category,
-                month: checkbox.prop("checked") ? null :  month,
+                month: checkbox.prop("checked") ? null : month,
                 group_id: id_group,
                 tr_id: trackmybank.in_edition == null ? null : trackmybank.in_edition
             },
@@ -661,7 +731,7 @@ trackmybank.submit_form = function(date, date_bank, amount, subject, category, m
     }, 0);
 };
 
-trackmybank.valid_form = function(date, date_bank, amount, subject, category) {
+trackmybank.valid_form = function (date, date_bank, amount, subject, category) {
     let valid = true;
     if (date === "" && !$("input#link-to-selected").prop("checked")) {
         valid = false;
@@ -682,7 +752,7 @@ trackmybank.valid_form = function(date, date_bank, amount, subject, category) {
     return valid
 };
 
-trackmybank.change_month = function(e) {
+trackmybank.change_month = function (e) {
     trackmybank.show_loading();
     window.setTimeout(() => {
         let value = $(this).val();
@@ -709,29 +779,30 @@ trackmybank.change_month = function(e) {
     }, 0);
 };
 
-trackmybank.notify = function(message, type) {
+trackmybank.notify = function (message, type) {
     $.notify({
-            message: message},{
-            type: type,
-            offset: {x: 5, y: 55},
-            animate: {
-                enter: 'animated fadeInDown',
-                exit: 'animated fadeOutUp'
-            },
-        })
+        message: message
+    }, {
+        type: type,
+        offset: {x: 5, y: 55},
+        animate: {
+            enter: 'animated fadeInDown',
+            exit: 'animated fadeOutUp'
+        },
+    })
 };
 
-trackmybank.show_loading = function() {
+trackmybank.show_loading = function () {
     $(".loading").show();
     $(".lds-facebook").show();
 };
 
-trackmybank.hide_loading = function() {
+trackmybank.hide_loading = function () {
     $(".loading").hide();
     $(".lds-facebook").hide();
 }
 
-trackmybank.ajax = function(url, data, success, error, method="POST", async=true) {
+trackmybank.ajax = function (url, data, success, error, method = "POST", async = true) {
     $.ajax(url,
         {
             method: method,
@@ -742,31 +813,31 @@ trackmybank.ajax = function(url, data, success, error, method="POST", async=true
                 trackmybank.notify(django.gettext("An error occurred! Please contact the support to report the bug"), "danger");
             },
             async: async,
-            beforeSend: function(xhr) {
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("X-CSRFToken", trackmybank.csrftocken);
             }
         }
     );
 };
 
-trackmybank.post = function(url, data, success, error, async=true) {
+trackmybank.post = function (url, data, success, error, async = true) {
     trackmybank.ajax(
-        url=url,
-        data=data,
-        success=success,
-        error=error,
-        method="POST",
-        async=async
+        url = url,
+        data = data,
+        success = success,
+        error = error,
+        method = "POST",
+        async = async
     );
 };
 
 trackmybank.get = function (url, data, success, error, async = true) {
     trackmybank.ajax(
-        url=url,
-        data=data,
-        success=success,
-        error=error,
-        method="GET",
-        async=async
+        url = url,
+        data = data,
+        success = success,
+        error = error,
+        method = "GET",
+        async = async
     );
 };
