@@ -645,6 +645,10 @@ div.delete-filter {
     margin-left: 5px;
 }
 
+.error {
+    color: #ff0000;
+}
+
 @media screen and (max-width: 1700px) {
     div.main-left {
         width: 60%;

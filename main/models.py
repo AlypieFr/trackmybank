@@ -18,6 +18,7 @@ class Category(models.Model):
     name = models.CharField(max_length=50, verbose_name=_("name"))
     color = models.CharField(max_length=50, verbose_name=_("color"))
     is_goodies = models.BooleanField(verbose_name=_("Is goodies?"))
+    is_saving = models.BooleanField(verbose_name=_("Is saving?"), default=False)
     ignore_week_filters = models.BooleanField(default=False, verbose_name=_("ignore weekly spending filters"))
 
     def __str__(self):

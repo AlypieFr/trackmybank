@@ -35,6 +35,7 @@ def content_data(user):
     total_depenses = 0
     goodies_part = 0
     total_bank = 0
+    total_savings = 0
     count_by_cat = {}
     count_by_tranches = {
         (0, 2): 0,
@@ -53,6 +54,8 @@ def content_data(user):
             total += transaction.amount
             if transaction.category.is_goodies:
                 goodies_part += transaction.amount
+            elif transaction.category.is_saving:
+                total_savings += transaction.amount
             if transaction.category.name not in count_by_cat:
                 count_by_cat[transaction.category.name] = 0
             count_by_cat[transaction.category.name] += transaction.amount
@@ -76,10 +79,11 @@ def content_data(user):
         "free_money": free_money,
         "goodies_part": goodies_part,
         "bank_status": current_month.salary - total_bank if current_month is not None else 0,
+        "savings": total_savings,
         "current_month": current_month,
         "fig_pie_categories": functions.build_category_pie_chart(count_by_cat, free_money),
         "fig_pie_tranches": functions.build_tranches_pie_chart(count_by_tranches),
-        "fig_hist_week_spending": functions.build_weekly_spending(starting_day, ending_day)
+        "fig_hist_week_spending": functions.build_weekly_spending(starting_day, ending_day),
     }
 
 
