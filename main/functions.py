@@ -63,7 +63,8 @@ def _get_plotly_figure(plot_item, left_margin=15):
         barmode='stack',
         plot_bgcolor='rgba(0,0,0,0)',
         height=400,
-        hiddenlabels=[_("Free money")]
+        hiddenlabels=[_("Free money")],
+        yaxis=dict(rangemode='nonnegative',)
     )
     fig = go.Figure(data=[plot_item] if not isinstance(plot_item, list) else plot_item, layout=layout)
     return py.offline.plot(fig, output_type="div", include_plotlyjs=False, config={"showLink": False})
@@ -159,12 +160,19 @@ def build_weekly_spending(start, end):
                 if cat not in tr_week:
                     tr_week[cat] = 0
     traces = []
-    for category in sorted(all_cats):
+    if len(all_cats) > 0:
+        for category in sorted(all_cats):
+            traces.append(go.Bar(
+                                 x=list(tr_per_week.keys()),
+                                 y=[k[category] for k in tr_per_week.values()],
+                                 name=category,
+                                 marker=dict(
+                                    color=Category.objects.get(name=category).color)
+            ))
+    else:
         traces.append(go.Bar(
-                             x=list(tr_per_week.keys()),
-                             y=[k[category] for k in tr_per_week.values()],
-                             name=category,
-                             marker=dict(
-                                color=Category.objects.get(name=category).color)
+            x=list(tr_per_week.keys()),
+            y=[0 for k in tr_per_week.values()],
+            name=_("No data")
         ))
     return _get_plotly_figure(traces, 50)

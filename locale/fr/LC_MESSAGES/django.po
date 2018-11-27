@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-03 23:53+0100\n"
-"PO-Revision-Date: 2018-11-03 23:53+0100\n"
+"POT-Creation-Date: 2018-11-27 21:30+0100\n"
+"PO-Revision-Date: 2018-11-27 21:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -18,9 +18,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.0.6\n"
 
-#: main/functions.py:66 main/functions.py:88 templates/main_content.html:20
+#: main/functions.py:66 main/functions.py:89 templates/main_content.html:20
 msgid "Free money"
 msgstr "Argent libre"
+
+#: main/functions.py:176
+msgid "No data"
+msgstr "Aucune donnée"
 
 #: main/models.py:18
 msgid "name"
