@@ -41,6 +41,7 @@ class Month(models.Model):
     class Meta:
         verbose_name = _("Month")
         verbose_name_plural = _("Months")
+        unique_together = ("month", "year")
 
 
 class CurrentMonth(models.Model):

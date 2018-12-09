@@ -19,6 +19,7 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.utils.translation import ugettext as _
 from django.middleware import csrf
 from django.db import transaction as db_transaction
+from django.db import IntegrityError
 from django.conf import settings
 
 import main.functions as functions
@@ -276,6 +277,7 @@ class ChangeMonthView(View):
                              "html": render_to_string("main_content.html",
                                                       {"view": {"data": content_data(request.user)}})})
 
+
 class MonthView(View):
 
     def get(self, request):
@@ -322,6 +324,8 @@ class MonthView(View):
                         r_file = RecurringCharges.objects.get(user=request.user).file
                         if os.path.exists(r_file):
                             self.add_recurring_charges(r_file, request.user, month_db)
+            except IntegrityError as e:
+                return JsonResponse({"success": False, "message": _("Error: this month already exists")})
             except Exception as e:
                 traceback.print_exc()
                 db_transaction.rollback()
