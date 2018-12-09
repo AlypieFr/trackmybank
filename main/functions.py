@@ -176,3 +176,23 @@ def build_weekly_spending(start, end):
             name=_("No data")
         ))
     return _get_plotly_figure(traces, 50)
+
+
+def build_goodies_pie_chart(salary, total_goodies):
+    """
+    Pie chart for showing proportion of goodies in current month
+
+    :param salary: month's salary
+    :param total_goodies: total of goodies spending
+    :return: plotly figure
+    """
+    values = [total_goodies, salary - total_goodies]
+    labels = [_("Goodies"), _("Other")]
+
+    pie = go.Pie(values=values,
+                 labels=labels,
+                 hoverinfo="label+percent+value",
+                 sort=False,
+                 marker=dict(colors=["#ffbeb3", "#000"]))
+
+    return _get_plotly_figure(pie)

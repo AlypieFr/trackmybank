@@ -127,6 +127,8 @@
         <div id="pie-chart-category">{{ view.data.fig_pie_categories | safe }}</div>
         <h1 class="title-chart">{% trans "Spending per week" %}</h1>
         <div id="hist-spending-week">{{ view.data.fig_hist_week_spending | safe }}</div>
+        <h1 class="title-chart">{% trans "Proportion of goodies spending on month salary" %}</h1>
+        <div id="pie-chart-goodies">{{ view.data.fig_goodies_part | safe }}</div>
         <h1 class="title-chart">{% trans "Transactions by ranges of amount" %}</h1>
         <div id="pie-chart-range">{{ view.data.fig_pie_tranches | safe }}</div>
     </div>

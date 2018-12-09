@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-09 17:27+0100\n"
-"PO-Revision-Date: 2018-12-09 17:28+0100\n"
+"POT-Creation-Date: 2018-12-09 18:11+0100\n"
+"PO-Revision-Date: 2018-12-09 18:07+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -25,6 +25,14 @@ msgstr "Argent libre"
 #: main/functions.py:176
 msgid "No data"
 msgstr "Aucune donnée"
+
+#: main/functions.py:190 templates/main_content.html:27
+msgid "Goodies"
+msgstr "Goodies"
+
+#: main/functions.py:190
+msgid "Other"
+msgstr "Autre"
 
 #: main/models.py:18
 msgid "name"
@@ -118,11 +126,11 @@ msgstr "Transactions"
 msgid "File path"
 msgstr "Chemin du fichier"
 
-#: main/views.py:270
+#: main/views.py:280
 msgid "Selected month does not exists. Please contact the support."
 msgstr "Le mois sélectionné n'existe pas. Veuillez contacter le support."
 
-#: main/views.py:274
+#: main/views.py:284
 msgid ""
 "Internal server error. An unexpected error occurred. Unable to change month. "
 "Please contact the support."
@@ -130,25 +138,25 @@ msgstr ""
 "Erreur serveur. Une erreur inconnue s'est produite. Impossible de changer le "
 "mois. Veuillez contacter le support."
 
-#: main/views.py:293
+#: main/views.py:303
 msgid "Recurring charges file is not valid"
 msgstr "Fichier de frais récurrents invalide"
 
-#: main/views.py:315 main/views.py:358 main/views.py:391
+#: main/views.py:330 main/views.py:373 main/views.py:406
 msgid "Invalid request"
 msgstr "Requête invalide"
 
-#: main/views.py:328
+#: main/views.py:343
 msgid "Error: this month already exists"
 msgstr "Erreur : ce mois existe déjà"
 
-#: main/views.py:338
+#: main/views.py:353
 msgid "An unexpected error occurred. Please contact the support."
 msgstr ""
 "Erreur serveur. Une erreur inconnue s'est produite. Veuillez contacter le "
 "support."
 
-#: main/views.py:369
+#: main/views.py:384
 msgid "Transaction does not exists"
 msgstr "La transaction n'existe pas"
 
@@ -212,10 +220,6 @@ msgstr "Banque"
 msgid "Savings"
 msgstr "Économies"
 
-#: templates/main_content.html:27
-msgid "Goodies"
-msgstr "Goodies"
-
 #: templates/main_content.html:33
 msgid "Set bank date:"
 msgstr "Date (banque) :"
@@ -241,6 +245,10 @@ msgid "Spending per week"
 msgstr "Dépenses par semaine"
 
 #: templates/main_content.html:130
+msgid "Proportion of goodies spending on month salary"
+msgstr "Proportion des goodies sur le salaire du mois"
+
+#: templates/main_content.html:132
 msgid "Transactions by ranges of amount"
 msgstr "Dépenses par groupe de montant"
 

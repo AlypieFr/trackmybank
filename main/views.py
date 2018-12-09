@@ -94,6 +94,7 @@ def content_data(user):
         "fig_pie_categories": functions.build_category_pie_chart(count_by_cat, free_money),
         "fig_pie_tranches": functions.build_tranches_pie_chart(count_by_tranches),
         "fig_hist_week_spending": functions.build_weekly_spending(starting_day, ending_day),
+        "fig_goodies_part": functions.build_goodies_pie_chart(current_month.salary, goodies_part)
     }
 
 
