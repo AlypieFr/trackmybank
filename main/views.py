@@ -71,9 +71,18 @@ def content_data(user):
         if group.date_bank is not None:
             total_bank += total
     free_money = current_month.salary - total_depenses if current_month is not None else 0
-    starting_day = datetime.datetime(current_month.year, current_month.month + settings.NEW_MONTH_INTERVAL,
+    tg_month = current_month.month + settings.NEW_MONTH_INTERVAL
+    tg_year = current_month.year
+    if tg_month < 1:
+        tg_month += 12
+        tg_year -= 1
+    starting_day = datetime.datetime(tg_year, tg_month,
                                      settings.NEW_MONTH_DAY)
-    ending_day = datetime.datetime(current_month.year, current_month.month + settings.NEW_MONTH_INTERVAL + 1,
+    tg_month += 1
+    if tg_month > 12:
+        tg_month -= 12
+        tg_year += 1
+    ending_day = datetime.datetime(tg_year, tg_month,
                                    settings.NEW_MONTH_DAY)
     return {
         "transactions": transactions,
@@ -294,8 +303,13 @@ class MonthView(View):
                     subject = parts[0]
                     amount = float(parts[1].replace(",", "."))
                     category = Category.objects.get(name=parts[2].lower().capitalize())
+                    tg_month = month.month + settings.NEW_MONTH_INTERVAL
+                    tg_year = month.year
+                    if tg_month < 1:
+                        tg_month += 12
+                        tg_year -= 1
                     group = TransactionGroup(date_t="%04d-%02d-%02d" %
-                                                    (month.year, month.month + settings.NEW_MONTH_INTERVAL,
+                                                    (tg_year, tg_month,
                                                      settings.NEW_MONTH_DAY), month=month, ignore_week_filters=True)
                     group.save()
                     transaction = Transaction(subject=subject, amount=amount, category=category, group=group)
