@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-09 18:11+0100\n"
-"PO-Revision-Date: 2018-12-09 18:07+0100\n"
+"POT-Creation-Date: 2019-01-01 21:07+0100\n"
+"PO-Revision-Date: 2019-01-01 21:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -17,6 +17,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.0.6\n"
+
+#: api/authentication.py:14
+msgid "Invalid token"
+msgstr "Token invalide"
+
+#: api/authentication.py:17
+msgid "User inactive or deleted"
+msgstr "Utilisateur inactif ou introuvable"
+
+#: api/authentication.py:23
+msgid "Token has expired"
+msgstr "Le token a expiré"
+
+#: api/views.py:23 main/views.py:338 main/views.py:380 main/views.py:412
+msgid "Invalid request"
+msgstr "Requête invalide"
+
+#: api/views.py:26
+msgid "Unauthorized"
+msgstr "Non autorisé"
+
+#: api/views.py:34
+msgid "Unauthorized user"
+msgstr "Utilisateur non autorisé"
 
 #: main/functions.py:66 main/functions.py:89 templates/main_content.html:20
 msgid "Free money"
@@ -35,102 +59,118 @@ msgid "Other"
 msgstr "Autre"
 
 #: main/models.py:18
+msgid "Id"
+msgstr "Id"
+
+#: main/models.py:19 main/models.py:31
+msgid "Role"
+msgstr "Rôle"
+
+#: main/models.py:28
+msgid "User role"
+msgstr "Rôle utilisateur"
+
+#: main/models.py:30
+msgid "User"
+msgstr "Utilisateur"
+
+#: main/models.py:38
 msgid "name"
 msgstr "nom"
 
-#: main/models.py:19
+#: main/models.py:39
 msgid "color"
 msgstr "couleur"
 
-#: main/models.py:20
+#: main/models.py:40
 msgid "Is goodies?"
 msgstr "Goodies ?"
 
-#: main/models.py:21
+#: main/models.py:41
 msgid "Is saving?"
 msgstr "Économies ?"
 
-#: main/models.py:22 main/models.py:56
+#: main/models.py:42 main/models.py:76
 msgid "ignore weekly spending filters"
 msgstr "ignorer les filtres de dépense par semaine"
 
-#: main/models.py:28 templates/index.html:98 templates/main_content.html:50
+#: main/models.py:48 templates/index.html:98 templates/main_content.html:50
 msgid "Category"
 msgstr "Catégorie"
 
-#: main/models.py:29
+#: main/models.py:49
 msgid "Categories"
 msgstr "Catégories"
 
-#: main/models.py:33 main/models.py:49 main/models.py:55
+#: main/models.py:53 main/models.py:69 main/models.py:75
 msgid "month"
 msgstr "mois"
 
-#: main/models.py:34
+#: main/models.py:54
 msgid "year"
 msgstr "année"
 
-#: main/models.py:35
+#: main/models.py:55
 msgid "salary"
 msgstr "Salaire"
 
-#: main/models.py:42 templates/index.html:39
+#: main/models.py:62 templates/index.html:39
 msgid "Month"
 msgstr "Mois"
 
-#: main/models.py:43
+#: main/models.py:63
 msgid "Months"
 msgstr "Mois"
 
-#: main/models.py:53
+#: main/models.py:73
 msgid "transaction date"
 msgstr "date de la transaction"
 
-#: main/models.py:54
+#: main/models.py:74
 msgid "bank added date"
 msgstr "date relevé bancaire"
 
-#: main/models.py:63
+#: main/models.py:83
 msgid "Transaction group"
 msgstr "Groupe de transactions"
 
-#: main/models.py:64
+#: main/models.py:84
 msgid "Transaction groups"
 msgstr "Groupes de transactions"
 
-#: main/models.py:68
+#: main/models.py:88
 msgid "subject"
 msgstr "sujet"
 
-#: main/models.py:69
+#: main/models.py:89
 msgid "amount"
 msgstr "montant"
 
-#: main/models.py:70
+#: main/models.py:90
 msgid "category"
 msgstr "catégorie"
 
-#: main/models.py:71
+#: main/models.py:91
 msgid "group"
 msgstr "Groupe"
 
-#: main/models.py:78
+#: main/models.py:98
 msgid "Transaction"
 msgstr "Transaction"
 
-#: main/models.py:79
+#: main/models.py:99
 msgid "Transactions"
 msgstr "Transactions"
 
-#: main/models.py:84
+#: main/models.py:104
 msgid "File path"
 msgstr "Chemin du fichier"
 
-#: main/views.py:280
+#: main/views.py:290
 msgid "Selected month does not exists. Please contact the support."
 msgstr "Le mois sélectionné n'existe pas. Veuillez contacter le support."
 
-#: main/views.py:284
+#: main/views.py:294
 msgid ""
 "Internal server error. An unexpected error occurred. Unable to change month. "
 "Please contact the support."
@@ -138,25 +178,21 @@ msgstr ""
 "Erreur serveur. Une erreur inconnue s'est produite. Impossible de changer le "
 "mois. Veuillez contacter le support."
 
-#: main/views.py:303
+#: main/views.py:313
 msgid "Recurring charges file is not valid"
 msgstr "Fichier de frais récurrents invalide"
 
-#: main/views.py:330 main/views.py:373 main/views.py:406
-msgid "Invalid request"
-msgstr "Requête invalide"
-
-#: main/views.py:343
+#: main/views.py:351
 msgid "Error: this month already exists"
 msgstr "Erreur : ce mois existe déjà"
 
-#: main/views.py:353
+#: main/views.py:361
 msgid "An unexpected error occurred. Please contact the support."
 msgstr ""
 "Erreur serveur. Une erreur inconnue s'est produite. Veuillez contacter le "
 "support."
 
-#: main/views.py:384
+#: main/views.py:391
 msgid "Transaction does not exists"
 msgstr "La transaction n'existe pas"
 
@@ -254,3 +290,10 @@ msgstr "Dépenses par groupe de montant"
 
 #~ msgid "Logout"
 #~ msgstr "Se déconnecter"
+
+# data
+#~ msgid "Website user"
+#~ msgstr "Utilisateur du site web"
+
+#~ msgid "API user"
+#~ msgstr "Utilisateur de l'API"

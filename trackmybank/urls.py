@@ -21,7 +21,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic.base import RedirectView
 from django.contrib.auth.decorators import login_required
@@ -42,5 +42,6 @@ urlpatterns = [
     url(r'^month/', MonthView.as_view(), name='month'),
     url(r'^bank-date', BankDateView.as_view(), name='bank_date'),
     url(r'^jsi18n/$', JavaScriptCatalog.as_view(), name='javascript-catalog'),
+    url(r'^api/', include('api.urls')),
     url(r'^$', login_required(IndexView.as_view(), login_url="/admin/login/"), name='login'),
 ]

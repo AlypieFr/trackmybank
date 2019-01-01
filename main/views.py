@@ -14,7 +14,7 @@ import datetime
 from django.views.generic import TemplateView, View
 from django.template.loader import render_to_string
 from django.contrib.auth import logout
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponseForbidden, JsonResponse
 from django.utils.translation import ugettext as _
 from django.middleware import csrf
@@ -25,6 +25,7 @@ from django.conf import settings
 import main.functions as functions
 import traceback
 from main.models import Category, Month, TransactionGroup, Transaction, RecurringCharges
+from consts import ROLE_WEB
 
 
 def content_data(user):
@@ -102,6 +103,7 @@ def basic_context_data(user):
     current_month = functions.get_current_month(user)
     with calendar.different_locale(settings.LOCALE):
         all_months = [{"id": m, "name": calendar.month_name[m].capitalize()} for m in range(1, 13)]
+    all_cats = Category.objects.all().order_by("name")
     months = sorted(Month.objects.all(), key=lambda m: (-m.year, -m.month))
     next_month = None
     next_year = None
@@ -111,7 +113,7 @@ def basic_context_data(user):
         next_year = months[0].year if months[0].month < 12 else months[0].year + 1
         next_salary = months[0].salary
     return {
-        "categories": Category.objects.all().order_by("name"),
+        "categories": all_cats,
         "months": months,
         "next_month": next_month,
         "next_year": next_year,
@@ -126,18 +128,27 @@ def format_date(date):
     return datetime.datetime.strptime(date, "%d/%m/%Y").strftime("%Y-%m-%d")
 
 
-class IndexView(TemplateView):
-    template_name = "index.html"
+def check_access(f):
+    def wrapper(self, *args):
+        if not self.request.user.is_authenticated:
+            return HttpResponseForbidden()
+        else:
+            allowed = False
+            for userrole in self.request.user.userrole_set.all():
+                if userrole.role.id == ROLE_WEB:
+                    allowed = True
+                    break
+            if not allowed:
+                return HttpResponseForbidden()
+        return f(self, *args)
+    return wrapper
 
-    user = None
-    data = None
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        c = super().get_context_data(**kwargs)
-        self.user = self.request.user
-        self.data = basic_context_data(self.user)
-        return c
+class IndexView(View):
+
+    @check_access
+    def get(self, request):
+        return render(request, "index.html", {"user": request.user, "data": basic_context_data(request.user)})
 
 
 class LogoutView(View):
@@ -150,16 +161,16 @@ class LogoutView(View):
 
 class TransactionView(View):
 
+    @check_access
     def get(self, request):
         if not self.request.user.is_authenticated:
             return HttpResponseForbidden()
         return JsonResponse({"success": True,
                              "html": render_to_string("main_content.html",
-                                                      {"view": {"data": content_data(request.user)}})})
+                                                      {"data": content_data(request.user)})})
 
+    @check_access
     def post(self, request):
-        if not self.request.user.is_authenticated:
-            return HttpResponseForbidden()
         try:
             date_t = request.POST["date_t"] if "date_t" in request.POST else None
             date_bank = request.POST["date_bank"] if "date_bank" in request.POST else None
@@ -261,7 +272,7 @@ class TransactionView(View):
 
         return JsonResponse({"success": True,
                              "html": render_to_string("main_content.html",
-                                                      {"view": {"data": content_data(request.user)}}),
+                                                      {"data": content_data(request.user)}),
                              "tr_id": tr_id})
 
 
@@ -270,9 +281,8 @@ class ChangeMonthView(View):
     def get(self, request):
         return HttpResponseForbidden()
 
+    @check_access
     def post(self, request):
-        if not self.request.user.is_authenticated:
-            return HttpResponseForbidden()
         try:
             c_month = Month.objects.filter(pk=request.POST["month"])
             if c_month is None:
@@ -285,7 +295,7 @@ class ChangeMonthView(View):
                                                                 "Unable to change month. Please contact the support.")})
         return JsonResponse({"success": True,
                              "html": render_to_string("main_content.html",
-                                                      {"view": {"data": content_data(request.user)}})})
+                                                      {"data": content_data(request.user)})})
 
 
 class MonthView(View):
@@ -316,10 +326,8 @@ class MonthView(View):
                     transaction = Transaction(subject=subject, amount=amount, category=category, group=group)
                     transaction.save()
 
+    @check_access
     def post(self, request):
-        if not self.request.user.is_authenticated:
-            return HttpResponseForbidden()
-
         try:
             try:
                 month = int(request.POST["month"])
@@ -358,9 +366,8 @@ class BankDateView(View):
     def get(self, request):
         return HttpResponseForbidden()
 
+    @check_access
     def post(self, request):
-        if not self.request.user.is_authenticated:
-            return HttpResponseForbidden()
         try:
             date_b = request.POST["date_b"]
             transactions = list(map(int, request.POST["transactions"].split("|")))
@@ -388,7 +395,7 @@ class BankDateView(View):
             return JsonResponse({"success": False, "message": str(e)})
         return JsonResponse({"success": True,
                              "html": render_to_string("main_content.html",
-                                                      {"view": {"data": content_data(request.user)}})})
+                                                      {"data": content_data(request.user)})})
 
 
 class DeleteTransaction(View):
@@ -396,9 +403,8 @@ class DeleteTransaction(View):
     def get(self, request):
         return HttpResponseForbidden()
 
+    @check_access
     def post(self, request):
-        if not self.request.user.is_authenticated:
-            return HttpResponseForbidden()
         try:
             transactions = list(map(int, request.POST["transactions"].split("|")))
         except (KeyError, ValueError):
@@ -417,5 +423,5 @@ class DeleteTransaction(View):
 
         return JsonResponse({"success": True,
                              "html": render_to_string("main_content.html",
-                                                      {"view": {"data": content_data(request.user)}})})
+                                                      {"data": content_data(request.user)})})
 

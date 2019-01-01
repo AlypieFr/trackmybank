@@ -8,24 +8,24 @@
         {% localize on %}
             <div class="top-info salary">
                 <span class="info-label">{% trans "Salary" %}</span><span
-                    class="info-value">{{ view.data.current_month.salary }} €</span>
+                    class="info-value">{{ data.current_month.salary }} €</span>
             </div>
             <div class="top-info bank">
                 <span class="info-label">{% trans "Bank" %}</span><span
-                    class="info-value {% if view.data.bank_status < 0 %}error{% endif %}">{{ view.data.bank_status }} €</span>
+                    class="info-value {% if data.bank_status < 0 %}error{% endif %}">{{ data.bank_status }} €</span>
             </div>
             <div class="top-info economy">
                     <span class="info-label">
-                        {% if view.data.savings == 0 %}
-                            {% trans "Free money" %}</span><span class="info-value">{{ view.data.free_money }}
+                        {% if data.savings == 0 %}
+                            {% trans "Free money" %}</span><span class="info-value">{{ data.free_money }}
                         {% else %}
-                            {% trans "Savings" %}</span><span class="info-value">{{ view.data.savings }}
+                            {% trans "Savings" %}</span><span class="info-value">{{ data.savings }}
                         {% endif %}
                      €</span>
             </div>
             <div class="top-info goodies-part">
                 <span class="info-label">{% trans "Goodies" %}</span><span
-                    class="info-value">{{ view.data.goodies_part }} €</span>
+                    class="info-value">{{ data.goodies_part }} €</span>
             </div>
         {% endlocalize %}
         <div class="top-form on-select" style="display: none;">
@@ -66,7 +66,7 @@
         <table class="transactions table thead-dark" id="list-tr">
             <tbody>
             {% set odd = True %}
-            {% for group in view.data.transactions %}
+            {% for group in data.transactions %}
                 {% if odd %}
                     {% set class = "odd" %}
                     {% set odd = False %}
@@ -124,12 +124,12 @@
     <div id="filters"></div>
     <div class="graphs">
         <h1 class="title-chart">{% trans "Transactions by category" %}</h1>
-        <div id="pie-chart-category">{{ view.data.fig_pie_categories | safe }}</div>
+        <div id="pie-chart-category">{{ data.fig_pie_categories | safe }}</div>
         <h1 class="title-chart">{% trans "Spending per week" %}</h1>
-        <div id="hist-spending-week">{{ view.data.fig_hist_week_spending | safe }}</div>
+        <div id="hist-spending-week">{{ data.fig_hist_week_spending | safe }}</div>
         <h1 class="title-chart">{% trans "Proportion of goodies spending on month salary" %}</h1>
-        <div id="pie-chart-goodies">{{ view.data.fig_goodies_part | safe }}</div>
+        <div id="pie-chart-goodies">{{ data.fig_goodies_part | safe }}</div>
         <h1 class="title-chart">{% trans "Transactions by ranges of amount" %}</h1>
-        <div id="pie-chart-range">{{ view.data.fig_pie_tranches | safe }}</div>
+        <div id="pie-chart-range">{{ data.fig_pie_tranches | safe }}</div>
     </div>
 </div>

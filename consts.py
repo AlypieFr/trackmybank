@@ -1,0 +1,2 @@
+ROLE_WEB = 1
+ROLE_API = 2

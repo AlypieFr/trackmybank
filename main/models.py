@@ -14,6 +14,26 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 
 
+class Role(models.Model):
+    id = models.IntegerField(verbose_name=_("Id"), primary_key=True)
+    name = models.CharField(max_length=20, verbose_name=_("Role"))
+
+    def __str__(self):
+        return _(self.name)
+
+
+class UserRole(models.Model):
+    class Meta:
+        unique_together = (("user", "role"),)
+        verbose_name = _("User role")
+
+    user = models.ForeignKey(User, verbose_name=_("User"))
+    role = models.ForeignKey(Role, verbose_name=_("Role"))
+
+    def __str__(self):
+        return self.user.username + " - " + _(self.role.name)
+
+
 class Category(models.Model):
     name = models.CharField(max_length=50, verbose_name=_("name"))
     color = models.CharField(max_length=50, verbose_name=_("color"))

@@ -8,7 +8,7 @@
 
 from django.contrib import admin
 
-from main.models import TransactionGroup, Transaction, Category, Month, RecurringCharges
+from main.models import TransactionGroup, Transaction, Category, Month, RecurringCharges, UserRole
 
 # Register your models here.
 
@@ -17,6 +17,7 @@ admin.site.register(Transaction)
 admin.site.register(Category)
 admin.site.register(Month)
 admin.site.register(RecurringCharges)
+admin.site.register(UserRole)
 
 admin.site.site_header = "Track My Bank!"
 admin.site.site_title = "Track My Bank!"
