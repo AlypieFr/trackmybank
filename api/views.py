@@ -18,10 +18,8 @@ from consts import ROLE_API
 class ObtainExpiringAuthToken(ObtainAuthToken):
 
     def post(self, request, **kwargs):
-        print(request.data, "username" in request.data)
         if "username" not in request.data or "password" not in request.data or "authorized_key" not in request.data:
             return HttpResponseBadRequest(json.dumps({"success": False, "message": _("Invalid request")}))
-        print(settings.API_AUTHORIZED_KEYS)
         if request.data["authorized_key"] not in settings.API_AUTHORIZED_KEYS:
             return HttpResponseForbidden(json.dumps({"success": False, "message": _("Unauthorized")}))
         user = authenticate(username=request.data["username"], password=request.data["password"])
