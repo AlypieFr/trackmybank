@@ -37,12 +37,11 @@ class ObtainExpiringAuthToken(ObtainAuthToken):
         if user is not None:
             token, created = Token.objects.get_or_create(user=user)
 
-            utc = pytz.UTC
-            utc_now = utc.localize(datetime.datetime.utcnow())
-            if not created and utc.localize(token.created.replace(tzinfo=None)) < utc_now - datetime.timedelta(hours=1):
+            now = datetime.datetime.now(pytz.utc)
+            if not created or token.created < now - datetime.timedelta(hours=1):
                 token.delete()
                 token = Token.objects.create(user=user)
-                token.created = datetime.datetime.utcnow()
+                token.created = now
                 token.save()
 
             all_cats = [{"name": c.name, "id": c.pk} for c in Category.objects.all().order_by("name")]
