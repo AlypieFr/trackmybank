@@ -144,6 +144,8 @@ NEW_MONTH_INTERVAL = -1
 STATIC_URL = '/static/'
 STATIC_ROOT="static"
 
+AUTH_PASSWORD_VALIDATORS = []
+
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 from trackmybank.local_settings import *
