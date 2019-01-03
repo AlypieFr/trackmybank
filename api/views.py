@@ -56,3 +56,13 @@ class Index(APIView):
 
     def get(self, request):
         return Response("Bienvenue sur l'API")
+
+
+class Transactions(APIView):
+
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request):
+        print(request.POST)
+        response_data = {'success': True}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
