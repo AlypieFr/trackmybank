@@ -25,6 +25,8 @@ class ObtainExpiringAuthToken(ObtainAuthToken):
         if request.data["authorized_key"] not in settings.API_AUTHORIZED_KEYS:
             return HttpResponseForbidden(json.dumps({"success": False, "message": _("Unauthorized")}))
         user = authenticate(username=request.data["username"], password=request.data["password"])
+        if user is None:
+            return HttpResponseForbidden(json.dumps({"success": False, "message": _("Bad username or password")}))
         allowed = False
         for userrole in user.userrole_set.all():
             if userrole.role.id == ROLE_API:
