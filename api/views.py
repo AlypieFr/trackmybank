@@ -14,6 +14,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 
 from consts import ROLE_API
 
+from main.models import Category
+
 
 class ObtainExpiringAuthToken(ObtainAuthToken):
 
@@ -41,7 +43,9 @@ class ObtainExpiringAuthToken(ObtainAuthToken):
                 token.created = datetime.datetime.utcnow()
                 token.save()
 
-            response_data = {'token': token.key}
+            all_cats = [{"name": c.name, "id": c.pk} for c in Category.objects.all().order_by("name")]
+
+            response_data = {'success': True, 'token': token.key, "categories": all_cats}
             return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
