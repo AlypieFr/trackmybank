@@ -31,7 +31,7 @@
     <script type="application/javascript" src="{% static 'js/plotly-latest.min.js' %}" defer></script>
     <script type="application/javascript" src="{% static 'js/trackmybank.js' %}" defer></script>
 </head>
-<body onload='trackmybank.init("{{ csrf_token }}", "{{ view.data.lang }}");'>
+<body onload='trackmybank.init("{{ csrf_token }}", "{{ data.lang }}");'>
 {% block body %}
 {% endblock %}
 </body>
