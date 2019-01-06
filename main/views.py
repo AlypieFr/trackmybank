@@ -29,7 +29,8 @@ from consts import ROLE_WEB
 
 
 def content_data(user):
-    current_month = functions.get_current_month(user)
+    u_group = user.usergroup.group
+    current_month = functions.get_current_month(u_group)
     transactions = sorted(TransactionGroup.objects.filter(month=current_month),
                           key=lambda t: (t.date_t,
                                          t.date_bank if t.date_bank is not None else datetime.date(1900, 1, 1),
@@ -100,11 +101,12 @@ def content_data(user):
 
 
 def basic_context_data(user):
-    current_month = functions.get_current_month(user)
+    u_group = user.usergroup.group
+    current_month = functions.get_current_month(u_group)
     with calendar.different_locale(settings.LOCALE):
         all_months = [{"id": m, "name": calendar.month_name[m].capitalize()} for m in range(1, 13)]
     all_cats = Category.objects.all().order_by("name")
-    months = sorted(Month.objects.all(), key=lambda m: (-m.year, -m.month))
+    months = sorted(Month.objects.filter(ugroup=u_group), key=lambda m: (-m.year, -m.month))
     next_month = None
     next_year = None
     next_salary = None
@@ -122,10 +124,6 @@ def basic_context_data(user):
         "current_month": current_month,
         "lang": settings.LANGUAGE_CODE
     }
-
-
-def format_date(date):
-    return datetime.datetime.strptime(date, "%d/%m/%Y").strftime("%Y-%m-%d")
 
 
 def check_access(f):
@@ -207,13 +205,13 @@ class TransactionView(View):
                 if date_t is not None:
                     if not re.match(date_regex, date_t):
                         raise ValueError("Invalid date: %s" % date_t)
-                    date_t = format_date(date_t)
+                    date_t = functions.format_date(date_t)
                 else:
                     raise ValueError("Date is required")
                 if date_bank is not None and date_bank != "":
                     if not re.match(date_regex, date_bank):
                         raise ValueError("Invalid date: %s" % date_bank)
-                    date_bank = format_date(date_bank)
+                    date_bank = functions.format_date(date_bank)
             except ValueError as e:
                 return JsonResponse({"success": False, "message": str(e)})
 
@@ -288,7 +286,7 @@ class ChangeMonthView(View):
             if c_month is None:
                 return JsonResponse(
                     {"success": False, "message": _("Selected month does not exists. Please contact the support.")})
-            functions.set_current_month(month=c_month.first(), user=request.user)
+            functions.set_current_month(month=c_month.first(), group=request.user.usergroup.group)
         except:
             traceback.print_exc()
             return JsonResponse({"success": False, "message": _("Internal server error. An unexpected error occurred. "
@@ -339,12 +337,12 @@ class MonthView(View):
 
             try:
                 with db_transaction.atomic():
-                    month_db = Month(month=month, year=year, salary=salary)
+                    group = request.user.usergroup.group
+                    month_db = Month(month=month, year=year, salary=salary, ugroup=group)
                     month_db.save()
-                    functions.set_current_month(month_db, self.request.user)
-
-                    if RecurringCharges.objects.filter(user=request.user).exists():
-                        r_file = RecurringCharges.objects.get(user=request.user).file
+                    functions.set_current_month(month_db, group)
+                    if RecurringCharges.objects.filter(group=group).exists():
+                        r_file = RecurringCharges.objects.get(group=group).file
                         if os.path.exists(r_file):
                             self.add_recurring_charges(r_file, request.user, month_db)
             except IntegrityError as e:
@@ -374,7 +372,7 @@ class BankDateView(View):
             date_regex = r"^\d\d/\d\d/\d\d\d\d$"
             if not re.match(date_regex, date_b):
                 raise ValueError("Invalid date: %s" % date_b)
-            date_b = format_date(date_b)
+            date_b = functions.format_date(date_b)
         except (KeyError, ValueError):
             traceback.print_exc()
             return JsonResponse({"success": False, "message": _("Invalid request")})

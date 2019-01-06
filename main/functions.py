@@ -16,7 +16,7 @@ import plotly as py
 import plotly.graph_objs as go
 
 
-def get_current_month(user):
+def get_current_month(group):
     """
     Return the current month
 
@@ -25,17 +25,17 @@ def get_current_month(user):
     :return: current month object
     :rtype: Month
     """
-    month = CurrentMonth.objects.filter(user=user).first()
+    month = CurrentMonth.objects.filter(group=group).first()
     if month is None:
         month = Month.objects.last()
         if month is not None:
-            c_month = CurrentMonth(month=month, user=user)
+            c_month = CurrentMonth(month=month, group=group)
             c_month.save()
         return month
     return month.month
 
 
-def set_current_month(month, user):
+def set_current_month(month, group):
     """
     Set current month for a user
 
@@ -43,10 +43,10 @@ def set_current_month(month, user):
     :param user:
     :return:
     """
-    c_month = CurrentMonth.objects.filter(user=user)
+    c_month = CurrentMonth.objects.filter(group=group)
     if month is not None:
         c_month.delete()
-    c_month = CurrentMonth(month=month, user=user)
+    c_month = CurrentMonth(month=month, group=group)
     c_month.save()
 
 
@@ -196,3 +196,7 @@ def build_goodies_pie_chart(salary, total_goodies):
                  marker=dict(colors=["#ffbeb3", "#000"]))
 
     return _get_plotly_figure(pie)
+
+
+def format_date(date):
+    return datetime.datetime.strptime(date, "%d/%m/%Y").strftime("%Y-%m-%d")
