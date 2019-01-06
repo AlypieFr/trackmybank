@@ -124,7 +124,7 @@ class Transactions(APIView):
             if valid:
                 transactions[i] = tr_or_message
             else:
-                return HttpResponseBadRequest(json.dumps({"success": False, "message": _("At least one transaction"
+                return HttpResponseBadRequest(json.dumps({"success": False, "message": _("At least one transaction "
                                                                                          "is not valid") + \
                                                           ("" if tr_or_message is None else tr_or_message)}))
 
