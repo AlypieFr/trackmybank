@@ -16,7 +16,7 @@
             </div>
             <div class="top-info economy">
                     <span class="info-label">
-                        {% if data.savings == 0 %}
+                        {% if data.savings == 0 or data.bank_status != 0 %}
                             {% trans "Free money" %}</span><span class="info-value">{{ data.free_money }}
                         {% else %}
                             {% trans "Savings" %}</span><span class="info-value">{{ data.savings }}
