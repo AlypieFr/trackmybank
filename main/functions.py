@@ -60,7 +60,7 @@ def _get_plotly_figure(plot_item, left_margin=15):
             pad=4
         ),
         paper_bgcolor='rgba(0,0,0,0)',
-        barmode='stack',
+        barmode='relative',
         plot_bgcolor='rgba(0,0,0,0)',
         height=400,
         hiddenlabels=[_("Free money")],
