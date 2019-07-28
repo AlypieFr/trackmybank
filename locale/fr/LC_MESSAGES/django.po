@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-06 16:46+0100\n"
-"PO-Revision-Date: 2019-01-06 16:48+0100\n"
+"POT-Creation-Date: 2019-07-28 11:41+0200\n"
+"PO-Revision-Date: 2019-07-28 11:44+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -31,7 +31,7 @@ msgid "Token has expired"
 msgstr "Le token a expiré"
 
 #: api/views.py:28 api/views.py:111 api/views.py:116 api/views.py:120
-#: api/views.py:133 main/views.py:336 main/views.py:378 main/views.py:410
+#: api/views.py:133 main/views.py:373 main/views.py:415 main/views.py:447
 msgid "Invalid request"
 msgstr "Requête invalide"
 
@@ -71,7 +71,7 @@ msgstr "Erreur serveur non prévue"
 msgid "Free money"
 msgstr "Argent libre"
 
-#: main/functions.py:176
+#: main/functions.py:176 main/views.py:113
 msgid "No data"
 msgstr "Aucune donnée"
 
@@ -83,7 +83,7 @@ msgstr "Goodies"
 msgid "Other"
 msgstr "Autre"
 
-#: main/models.py:18 main/models.py:38
+#: main/models.py:18 main/models.py:42
 msgid "Id"
 msgstr "Id"
 
@@ -95,123 +95,131 @@ msgstr "Rôle"
 msgid "User role"
 msgstr "Rôle utilisateur"
 
-#: main/models.py:30 main/models.py:49
+#: main/models.py:30 main/models.py:54
 msgid "User"
 msgstr "Utilisateur"
 
-#: main/models.py:39 main/models.py:50
+#: main/models.py:39 main/models.py:43 main/models.py:55
 msgid "Group"
 msgstr "Groupe"
 
-#: main/models.py:47
+#: main/models.py:40
+msgid "Groups"
+msgstr "Groupes"
+
+#: main/models.py:51
 msgid "User group"
 msgstr "Groupe utilisateur"
 
-#: main/models.py:57
+#: main/models.py:52
+msgid "User groups"
+msgstr "Groupes utilisateur"
+
+#: main/models.py:62
 msgid "name"
 msgstr "nom"
 
-#: main/models.py:58
+#: main/models.py:63
 msgid "color"
 msgstr "couleur"
 
-#: main/models.py:59
+#: main/models.py:64
 msgid "Is goodies?"
 msgstr "Goodies ?"
 
-#: main/models.py:60
+#: main/models.py:65
 msgid "Is saving?"
 msgstr "Économies ?"
 
-#: main/models.py:61 main/models.py:96
+#: main/models.py:66 main/models.py:101
 msgid "ignore weekly spending filters"
 msgstr "ignorer les filtres de dépense par semaine"
 
-#: main/models.py:67 templates/index.html:98 templates/main_content.html:50
+#: main/models.py:72 templates/index.html:100 templates/main_content.html:50
 msgid "Category"
 msgstr "Catégorie"
 
-#: main/models.py:68
+#: main/models.py:73
 msgid "Categories"
 msgstr "Catégories"
 
-#: main/models.py:72 main/models.py:89 main/models.py:95
+#: main/models.py:77 main/models.py:94 main/models.py:100
 msgid "month"
 msgstr "mois"
 
-#: main/models.py:73
+#: main/models.py:78
 msgid "year"
 msgstr "année"
 
-#: main/models.py:74
+#: main/models.py:79
 msgid "salary"
 msgstr "Salaire"
 
-#: main/models.py:75
+#: main/models.py:80
 msgid "user group"
 msgstr "groupe de l'utilisateur"
 
-#: main/models.py:82 templates/index.html:39
+#: main/models.py:87 templates/index.html:41
 msgid "Month"
 msgstr "Mois"
 
-#: main/models.py:83
+#: main/models.py:88
 msgid "Months"
 msgstr "Mois"
 
-#: main/models.py:93
+#: main/models.py:98
 msgid "transaction date"
 msgstr "date de la transaction"
 
-#: main/models.py:94
+#: main/models.py:99
 msgid "bank added date"
 msgstr "date relevé bancaire"
 
-#: main/models.py:103
+#: main/models.py:108
 msgid "Transaction group"
 msgstr "Groupe de transactions"
 
-#: main/models.py:104
+#: main/models.py:109
 msgid "Transaction groups"
 msgstr "Groupes de transactions"
 
-#: main/models.py:108
+#: main/models.py:113
 msgid "subject"
 msgstr "sujet"
 
-#: main/models.py:109
+#: main/models.py:114
 msgid "amount"
 msgstr "montant"
 
-#: main/models.py:110
+#: main/models.py:115
 msgid "category"
 msgstr "catégorie"
 
-#: main/models.py:111
+#: main/models.py:116
 msgid "group"
 msgstr "Groupe"
 
-#: main/models.py:118
+#: main/models.py:123
 msgid "Transaction"
 msgstr "Transaction"
 
-#: main/models.py:119
+#: main/models.py:124
 msgid "Transactions"
 msgstr "Transactions"
 
-#: main/models.py:124
+#: main/models.py:129
 msgid "File path"
 msgstr "Chemin du fichier"
 
-#: main/models.py:130 main/models.py:131
+#: main/models.py:135 main/models.py:136
 msgid "Recurring charges"
 msgstr "Charges récurrentes"
 
-#: main/views.py:288
+#: main/views.py:325
 msgid "Selected month does not exists. Please contact the support."
 msgstr "Le mois sélectionné n'existe pas. Veuillez contacter le support."
 
-#: main/views.py:292
+#: main/views.py:329
 msgid ""
 "Internal server error. An unexpected error occurred. Unable to change month. "
 "Please contact the support."
@@ -219,73 +227,73 @@ msgstr ""
 "Erreur serveur. Une erreur inconnue s'est produite. Impossible de changer le "
 "mois. Veuillez contacter le support."
 
-#: main/views.py:311
+#: main/views.py:348
 msgid "Recurring charges file is not valid"
 msgstr "Fichier de frais récurrents invalide"
 
-#: main/views.py:349
+#: main/views.py:386
 msgid "Error: this month already exists"
 msgstr "Erreur : ce mois existe déjà"
 
-#: main/views.py:359
+#: main/views.py:396
 msgid "An unexpected error occurred. Please contact the support."
 msgstr ""
 "Erreur serveur. Une erreur inconnue s'est produite. Veuillez contacter le "
 "support."
 
-#: main/views.py:389
+#: main/views.py:426
 msgid "Transaction does not exists"
 msgstr "La transaction n'existe pas"
 
-#: templates/index.html:48
+#: templates/index.html:50
 msgid "Year"
 msgstr "Année"
 
-#: templates/index.html:54 templates/main_content.html:10
+#: templates/index.html:56 templates/main_content.html:10
 msgid "Salary"
 msgstr "Salaire"
 
-#: templates/index.html:67
+#: templates/index.html:69
 msgid "Add a new transaction"
 msgstr "Ajouter une transaction"
 
-#: templates/index.html:70 templates/main_content.html:59
+#: templates/index.html:72 templates/main_content.html:59
 msgid "Date"
 msgstr "Date"
 
-#: templates/index.html:78
+#: templates/index.html:80
 msgid "Bank added date"
 msgstr "Date relevé bancaire"
 
-#: templates/index.html:86 templates/main_content.html:53
+#: templates/index.html:88 templates/main_content.html:53
 msgid "Amount"
 msgstr "Montant"
 
-#: templates/index.html:92 templates/main_content.html:56
+#: templates/index.html:94 templates/main_content.html:56
 msgid "Subject"
 msgstr "Sujet"
 
-#: templates/index.html:109
+#: templates/index.html:111
 msgid "Yes"
 msgstr "Oui"
 
-#: templates/index.html:110
+#: templates/index.html:112
 msgid "No"
 msgstr "Non"
 
-#: templates/index.html:111
+#: templates/index.html:113
 msgid "Link to selection"
 msgstr "Lier à la sélection"
 
-#: templates/index.html:113
+#: templates/index.html:115
 msgid "Add"
 msgstr "Ajouter"
 
-#: templates/index.html:114 templates/index.html:130
+#: templates/index.html:116 templates/index.html:132
 msgid "Cancel"
 msgstr "Annuler"
 
-#: templates/index.html:129
+#: templates/index.html:131
 msgid "Delete"
 msgstr "Supprimer"
 

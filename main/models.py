@@ -35,6 +35,10 @@ class UserRole(models.Model):
 
 
 class Group(models.Model):
+    class Meta:
+        verbose_name = _("Group")
+        verbose_name_plural = _("Groups")
+
     id = models.IntegerField(verbose_name=_("Id"), primary_key=True)
     name = models.CharField(max_length=20, verbose_name=_("Group"))
 
@@ -45,6 +49,7 @@ class Group(models.Model):
 class UserGroup(models.Model):
     class Meta:
         verbose_name = _("User group")
+        verbose_name_plural = _("User groups")
 
     user = models.OneToOneField(User, primary_key=True, verbose_name=_("User"))
     group = models.ForeignKey(Group, verbose_name=_("Group"))
