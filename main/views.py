@@ -31,73 +31,87 @@ from consts import ROLE_WEB
 def content_data(user):
     u_group = user.usergroup.group
     current_month = functions.get_current_month(u_group)
-    transactions = sorted(TransactionGroup.objects.filter(month=current_month),
-                          key=lambda t: (t.date_t,
-                                         t.date_bank if t.date_bank is not None else datetime.date(1900, 1, 1),
-                                         t.transaction_set.first().subject.lower()))
-    total_depenses = 0
-    goodies_part = 0
-    total_bank = 0
-    total_savings = 0
-    count_by_cat = {}
-    count_by_tranches = {
-        (0, 2): 0,
-        (2, 5): 0,
-        (5, 10): 0,
-        (10, 20): 0,
-        (20, 50): 0,
-        (50, 100): 0,
-        (100, 200): 0,
-        (200, 500): 0,
-        (500, -1): 0
-    }
-    for group in transactions:
-        total = 0
-        for transaction in group.transaction_set.all():
-            total += transaction.amount
-            if transaction.category.is_goodies:
-                goodies_part += transaction.amount
-            elif transaction.category.is_saving:
-                total_savings += transaction.amount
-            if transaction.category.name not in count_by_cat:
-                count_by_cat[transaction.category.name] = 0
-            count_by_cat[transaction.category.name] += transaction.amount
-            for tranche in count_by_tranches:
-                min_t = tranche[0]
-                max_t = tranche[1] if tranche[1] > 0 else 1000000000000000000
-                if min_t <= transaction.amount < max_t:
-                    count_by_tranches[tranche] += 1
-                    break
-        group.total = total
-        total_depenses += total
-        if group.date_bank is not None:
-            total_bank += total
-    free_money = current_month.salary - total_depenses if current_month is not None else 0
-    tg_month = current_month.month + settings.NEW_MONTH_INTERVAL
-    tg_year = current_month.year
-    if tg_month < 1:
-        tg_month += 12
-        tg_year -= 1
-    starting_day = datetime.datetime(tg_year, tg_month,
-                                     settings.NEW_MONTH_DAY)
-    tg_month += 1
-    if tg_month > 12:
-        tg_month -= 12
-        tg_year += 1
-    ending_day = datetime.datetime(tg_year, tg_month,
-                                   settings.NEW_MONTH_DAY)
-    return {
-        "transactions": transactions,
-        "free_money": free_money,
-        "goodies_part": goodies_part,
-        "bank_status": current_month.salary - total_bank if current_month is not None else 0,
-        "savings": total_savings,
-        "current_month": current_month,
-        "fig_pie_categories": functions.build_category_pie_chart(count_by_cat, free_money),
-        "fig_pie_tranches": functions.build_tranches_pie_chart(count_by_tranches),
-        "fig_hist_week_spending": functions.build_weekly_spending(starting_day, ending_day),
-        "fig_goodies_part": functions.build_goodies_pie_chart(current_month.salary, goodies_part)
-    }
+    if current_month is not None:  # If not empty data
+        transactions = sorted(TransactionGroup.objects.filter(month=current_month),
+                              key=lambda t: (t.date_t,
+                                             t.date_bank if t.date_bank is not None else datetime.date(1900, 1, 1),
+                                             t.transaction_set.first().subject.lower()))
+        total_depenses = 0
+        goodies_part = 0
+        total_bank = 0
+        total_savings = 0
+        count_by_cat = {}
+        count_by_tranches = {
+            (0, 2): 0,
+            (2, 5): 0,
+            (5, 10): 0,
+            (10, 20): 0,
+            (20, 50): 0,
+            (50, 100): 0,
+            (100, 200): 0,
+            (200, 500): 0,
+            (500, -1): 0
+        }
+        for group in transactions:
+            total = 0
+            for transaction in group.transaction_set.all():
+                total += transaction.amount
+                if transaction.category.is_goodies:
+                    goodies_part += transaction.amount
+                elif transaction.category.is_saving:
+                    total_savings += transaction.amount
+                if transaction.category.name not in count_by_cat:
+                    count_by_cat[transaction.category.name] = 0
+                count_by_cat[transaction.category.name] += transaction.amount
+                for tranche in count_by_tranches:
+                    min_t = tranche[0]
+                    max_t = tranche[1] if tranche[1] > 0 else 1000000000000000000
+                    if min_t <= transaction.amount < max_t:
+                        count_by_tranches[tranche] += 1
+                        break
+            group.total = total
+            total_depenses += total
+            if group.date_bank is not None:
+                total_bank += total
+        free_money = current_month.salary - total_depenses if current_month is not None else 0
+        tg_month = current_month.month + settings.NEW_MONTH_INTERVAL
+        tg_year = current_month.year
+        if tg_month < 1:
+            tg_month += 12
+            tg_year -= 1
+        starting_day = datetime.datetime(tg_year, tg_month,
+                                         settings.NEW_MONTH_DAY)
+        tg_month += 1
+        if tg_month > 12:
+            tg_month -= 12
+            tg_year += 1
+        ending_day = datetime.datetime(tg_year, tg_month,
+                                       settings.NEW_MONTH_DAY)
+        return {
+            "transactions": transactions,
+            "free_money": free_money,
+            "goodies_part": goodies_part,
+            "bank_status": current_month.salary - total_bank,
+            "savings": total_savings,
+            "current_month": current_month,
+            "fig_pie_categories": functions.build_category_pie_chart(count_by_cat, free_money),
+            "fig_pie_tranches": functions.build_tranches_pie_chart(count_by_tranches),
+            "fig_hist_week_spending": functions.build_weekly_spending(starting_day, ending_day),
+            "fig_goodies_part": functions.build_goodies_pie_chart(current_month.salary, goodies_part)
+        }
+    else:  # If empty data
+        return {
+            "transactions": [],
+            "free_money": 0,
+            "goodies_part": 0,
+            "bank_status":  0,
+            "savings": 0,
+            "current_month": None,
+            "fig_pie_categories": functions.build_category_pie_chart({}, 0),
+            "fig_pie_tranches": functions.build_tranches_pie_chart({}),
+            "fig_hist_week_spending": _("No data"),
+            "fig_goodies_part": functions.build_goodies_pie_chart(0, 0)
+        }
 
 
 def basic_context_data(user):
