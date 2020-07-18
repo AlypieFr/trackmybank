@@ -534,6 +534,15 @@ trackmybank.show_link_option = function () {
     $("div.link-to-selected").show();
 };
 
+trackmybank.show_continue_the_series = function() {
+    $("div.continue-the-series").show();
+};
+
+trackmybank.hide_continue_the_series = function () {
+    $("div.continue-the-series").hide();
+    $("input#continue-the-series").bootstrapToggle('off');
+};
+
 trackmybank.hide_link_option = function () {
     $("div.link-to-selected").hide();
     $("input#link-to-selected").bootstrapToggle('off');
@@ -601,7 +610,7 @@ trackmybank.init_table_click_events = function () {
         $("table#list-tr tbody tr").removeClass("edited");
         document.getSelection().removeAllRanges();
         trackmybank.edit($(this));
-
+        trackmybank.hide_continue_the_series();
     });
 
     // Remove selection on escape pressed:
@@ -640,6 +649,7 @@ trackmybank.reset_edit = function () {
     $("input.submit-form").val(django.gettext("Add"));
     $("input.cancel-edit").hide();
     trackmybank.reset_form();
+    trackmybank.show_continue_the_series();
 };
 
 trackmybank.init_submit_form = function () {
@@ -685,12 +695,26 @@ trackmybank.init_submit_form = function () {
     }
 };
 
-trackmybank.reset_form = function () {
-    $("input#date_t").val("");
-    $("input#date_b").val("");
+trackmybank.reset_form = function (continue_the_series=false) {
+    if (continue_the_series) {
+        let current_subject = $("textarea#subject").val();
+        let match = current_subject.match(/^(.+) \((\d+)\)$/)
+        let new_subject;
+        if (match) {
+            new_subject = match[1] + " (" + (parseInt(match[2]) + 1).toString() + ")"
+        }
+        else {
+            new_subject = current_subject + " (2)"
+        }
+        $("textarea#subject").val(new_subject);
+    }
+    else {
+        $("input#date_t").val("");
+        $("input#date_b").val("");
+        $("textarea#subject").val("");
+        $("select#category").val("").trigger("change.select2");
+    }
     $("input#amount").val("");
-    $("textarea#subject").val("");
-    $("select#category").val("").trigger("change.select2");
 };
 
 trackmybank.submit_form = function (date, date_bank, amount, subject, category, month, id_group) {
@@ -714,7 +738,7 @@ trackmybank.submit_form = function (date, date_bank, amount, subject, category, 
                     trackmybank.update_content(data["html"]);
                     trackmybank.resize_table();
                     if (trackmybank.in_edition == null) {
-                        trackmybank.reset_form();
+                        trackmybank.reset_form($("input#continue-the-series").prop("checked"));
                     } else {
                         trackmybank.reset_edit();
                     }
