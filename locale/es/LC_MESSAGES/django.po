@@ -1,0 +1,338 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-07-28 11:52+0200\n"
+"PO-Revision-Date: 2020-07-28 11:57+0200\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.3\n"
+
+#: api/authentication.py:14
+msgid "Invalid token"
+msgstr "Token no valido"
+
+#: api/authentication.py:17
+msgid "User inactive or deleted"
+msgstr "Usuario inactiva o eliminado"
+
+#: api/authentication.py:22
+msgid "Token has expired"
+msgstr "El token ha expirado"
+
+#: api/views.py:28 api/views.py:111 api/views.py:116 api/views.py:120
+#: api/views.py:133 main/views.py:350 main/views.py:392 main/views.py:424
+msgid "Invalid request"
+msgstr "Solicitud no valida"
+
+#: api/views.py:30
+msgid "Unauthorized"
+msgstr "No autorizado"
+
+#: api/views.py:33
+msgid "Bad username or password"
+msgstr "Contrasena o usuario no valido"
+
+#: api/views.py:40
+msgid "Unauthorized user"
+msgstr "Usuario no autorizado"
+
+#: api/views.py:102
+msgid "category does not exists"
+msgstr "La categoria no existe"
+
+#: api/views.py:114
+msgid "Invalid date"
+msgstr "Fecha invalida"
+
+#: api/views.py:127
+msgid "At least one transaction is not valid"
+msgstr ""
+
+#: api/views.py:137
+msgid "Invalid month"
+msgstr ""
+
+#: api/views.py:151
+msgid "Unexpected server error"
+msgstr ""
+
+#: main/functions.py:66 main/functions.py:89 templates/main_content.html:20
+msgid "Free money"
+msgstr ""
+
+#: main/functions.py:176 main/views.py:112
+msgid "No data"
+msgstr ""
+
+#: main/functions.py:190 templates/main_content.html:27
+msgid "Goodies"
+msgstr ""
+
+#: main/functions.py:190
+msgid "Other"
+msgstr ""
+
+#: main/models.py:18 main/models.py:42
+msgid "Id"
+msgstr ""
+
+#: main/models.py:19 main/models.py:31
+msgid "Role"
+msgstr ""
+
+#: main/models.py:28
+msgid "User role"
+msgstr ""
+
+#: main/models.py:30 main/models.py:54
+msgid "User"
+msgstr ""
+
+#: main/models.py:39 main/models.py:43 main/models.py:55
+msgid "Group"
+msgstr ""
+
+#: main/models.py:40
+msgid "Groups"
+msgstr ""
+
+#: main/models.py:51
+msgid "User group"
+msgstr ""
+
+#: main/models.py:52
+msgid "User groups"
+msgstr ""
+
+#: main/models.py:62
+msgid "name"
+msgstr ""
+
+#: main/models.py:63
+msgid "color"
+msgstr ""
+
+#: main/models.py:64
+msgid "Is goodies?"
+msgstr ""
+
+#: main/models.py:65
+msgid "Is saving?"
+msgstr ""
+
+#: main/models.py:66 main/models.py:101
+msgid "ignore weekly spending filters"
+msgstr ""
+
+#: main/models.py:72 templates/index.html:98 templates/main_content.html:50
+msgid "Category"
+msgstr ""
+
+#: main/models.py:73
+msgid "Categories"
+msgstr ""
+
+#: main/models.py:77 main/models.py:94 main/models.py:100
+msgid "month"
+msgstr ""
+
+#: main/models.py:78
+msgid "year"
+msgstr ""
+
+#: main/models.py:79
+msgid "salary"
+msgstr ""
+
+#: main/models.py:80
+msgid "user group"
+msgstr ""
+
+#: main/models.py:87 templates/index.html:39
+msgid "Month"
+msgstr ""
+
+#: main/models.py:88
+msgid "Months"
+msgstr ""
+
+#: main/models.py:98
+msgid "transaction date"
+msgstr ""
+
+#: main/models.py:99
+msgid "bank added date"
+msgstr ""
+
+#: main/models.py:108
+msgid "Transaction group"
+msgstr ""
+
+#: main/models.py:109
+msgid "Transaction groups"
+msgstr ""
+
+#: main/models.py:113
+msgid "subject"
+msgstr ""
+
+#: main/models.py:114
+msgid "amount"
+msgstr ""
+
+#: main/models.py:115
+msgid "category"
+msgstr ""
+
+#: main/models.py:116
+msgid "group"
+msgstr ""
+
+#: main/models.py:123
+msgid "Transaction"
+msgstr ""
+
+#: main/models.py:124
+msgid "Transactions"
+msgstr ""
+
+#: main/models.py:129
+msgid "File path"
+msgstr ""
+
+#: main/models.py:135 main/models.py:136
+msgid "Recurring charges"
+msgstr ""
+
+#: main/views.py:302
+msgid "Selected month does not exists. Please contact the support."
+msgstr ""
+
+#: main/views.py:306
+msgid ""
+"Internal server error. An unexpected error occurred. Unable to change month. "
+"Please contact the support."
+msgstr ""
+
+#: main/views.py:325
+msgid "Recurring charges file is not valid"
+msgstr ""
+
+#: main/views.py:363
+msgid "Error: this month already exists"
+msgstr ""
+
+#: main/views.py:373
+msgid "An unexpected error occurred. Please contact the support."
+msgstr ""
+
+#: main/views.py:403
+msgid "Transaction does not exists"
+msgstr ""
+
+#: templates/index.html:48
+msgid "Year"
+msgstr ""
+
+#: templates/index.html:54 templates/main_content.html:10
+msgid "Salary"
+msgstr ""
+
+#: templates/index.html:67
+msgid "Add a new transaction"
+msgstr ""
+
+#: templates/index.html:70 templates/main_content.html:59
+msgid "Date"
+msgstr ""
+
+#: templates/index.html:78
+msgid "Bank added date"
+msgstr ""
+
+#: templates/index.html:86 templates/main_content.html:53
+msgid "Amount"
+msgstr ""
+
+#: templates/index.html:92 templates/main_content.html:56
+msgid "Subject"
+msgstr ""
+
+#: templates/index.html:110 templates/index.html:115
+msgid "Yes"
+msgstr ""
+
+#: templates/index.html:111 templates/index.html:116
+msgid "No"
+msgstr ""
+
+#: templates/index.html:112
+msgid "Continue the series"
+msgstr ""
+
+#: templates/index.html:117
+msgid "Link to selection"
+msgstr ""
+
+#: templates/index.html:119
+msgid "Add"
+msgstr ""
+
+#: templates/index.html:120 templates/index.html:136
+msgid "Cancel"
+msgstr ""
+
+#: templates/index.html:135
+msgid "Delete"
+msgstr ""
+
+#: templates/main_content.html:14
+msgid "Bank"
+msgstr ""
+
+#: templates/main_content.html:22
+msgid "Savings"
+msgstr ""
+
+#: templates/main_content.html:33
+msgid "Set bank date:"
+msgstr ""
+
+#: templates/main_content.html:44
+msgid "Delete selected transactions"
+msgstr ""
+
+#: templates/main_content.html:62
+msgid "Bank date"
+msgstr ""
+
+#: templates/main_content.html:107
+msgid "Total:"
+msgstr ""
+
+#: templates/main_content.html:126
+msgid "Transactions by category"
+msgstr ""
+
+#: templates/main_content.html:128
+msgid "Spending per week"
+msgstr ""
+
+#: templates/main_content.html:130
+msgid "Proportion of goodies spending on month salary"
+msgstr ""
+
+#: templates/main_content.html:132
+msgid "Transactions by ranges of amount"
+msgstr ""
